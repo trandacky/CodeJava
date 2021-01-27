@@ -1,0 +1,37 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "qnu.cntt.dacky"
+    },
+    "jhipsterVersion": "6.10.5",
+    "applicationType": "uaa",
+    "baseName": "UAA",
+    "packageName": "qnu.cntt.dacky",
+    "packageFolder": "qnu/cntt/dacky",
+    "serverPort": "9999",
+    "authenticationType": "uaa",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MjAyMzI1NTE5ZmE4ZDhmZGE4OWE3YmI0YjM4NzUyNWE5ZWY3NjJhMWY5Y2NlZWQzYWMwOTMzOTE3ZDgzMjEwNWEzNWJiNzEyMWU1NTFiNjA1YjQxZDc1MmU5ODIxZDEwZmE4ZWUxNmQxNGUxZDlhYTM5NjA5OTYwOThiYzY1Y2U=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1611714510672,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "blueprints": [],
+    "skipClient": true
+  }
+}
