@@ -1,7 +1,7 @@
 {
   "name": "gateway",
   "version": "0.0.1-SNAPSHOT",
-  "description": "Description for Gateway",
+  "description": "Description for gateway",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [

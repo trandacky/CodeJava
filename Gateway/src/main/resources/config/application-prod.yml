@@ -40,8 +40,8 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/Gateway
-    username: Gateway
+    url: jdbc:postgresql://localhost:5432/gateway
+    username: gateway
     password:
     hikari:
       poolName: Hikari

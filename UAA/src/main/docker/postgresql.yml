@@ -3,9 +3,9 @@ services:
   uaa-postgresql:
     image: postgres:12.3
     # volumes:
-    #     - ~/volumes/jhipster/UAA/postgresql/:/var/lib/postgresql/data/
+    #     - ~/volumes/jhipster/uaa/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=UAA
+      - POSTGRES_USER=uaa
       - POSTGRES_PASSWORD=
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:

@@ -17,18 +17,18 @@ eureka:
   client:
     enabled: false
   instance:
-    appname: UAA
-    instanceId: UAA:${spring.application.instance-id:${random.value}}
+    appname: uaa
+    instanceId: uaa:${spring.application.instance-id:${random.value}}
 
 spring:
   profiles:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
   application:
-    name: UAA
+    name: uaa
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:UAA;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:uaa;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     name:
     username:
     password:
@@ -104,7 +104,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: MjAyMzI1NTE5ZmE4ZDhmZGE4OWE3YmI0YjM4NzUyNWE5ZWY3NjJhMWY5Y2NlZWQzYWMwOTMzOTE3ZDgzMjEwNWEzNWJiNzEyMWU1NTFiNjA1YjQxZDc1MmU5ODIxZDEwZmE4ZWUxNmQxNGUxZDlhYTM5NjA5OTYwOThiYzY1Y2U=
+        base64-secret: NTQ3N2RjNzNhMzgzNTU0NDliMjI1NzlmODc2NTlhNmYwNDYyZDUxMzUzYWZlZjVhZjkzY2I3NmE3ZmY3YTM4NWFlODU5ZDBiNGNiNzAyN2ZkZjkxZWVhOGEzNzRlZjBlOTIyN2FiMjRjYTFjYzI0YjJmOTBmNDFkYjk0ZWQwMGQ=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
     client-authorization:

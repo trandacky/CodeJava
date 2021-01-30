@@ -7,7 +7,7 @@
     <artifactId>uaa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>UAA</name>
+    <name>Uaa</name>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -641,9 +641,9 @@
                         <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
                         <diffChangeLogFile>${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                         <driver>org.postgresql.Driver</driver>
-                        <url>jdbc:postgresql://localhost:5432/UAA</url>
+                        <url>jdbc:postgresql://localhost:5432/uaa</url>
                         <defaultSchemaName></defaultSchemaName>
-                        <username>UAA</username>
+                        <username>uaa</username>
                         <password></password>
                         <referenceUrl>hibernate:spring:qnu.cntt.dacky.domain?dialect=io.github.jhipster.domain.util.FixedPostgreSQL10Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>

@@ -3,9 +3,9 @@ services:
   gateway-postgresql:
     image: postgres:12.3
     # volumes:
-    #     - ~/volumes/jhipster/Gateway/postgresql/:/var/lib/postgresql/data/
+    #     - ~/volumes/jhipster/gateway/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=Gateway
+      - POSTGRES_USER=gateway
       - POSTGRES_PASSWORD=
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
