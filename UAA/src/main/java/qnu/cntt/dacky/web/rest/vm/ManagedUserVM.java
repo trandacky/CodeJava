@@ -1,12 +1,12 @@
 package qnu.cntt.dacky.web.rest.vm;
 
-import qnu.cntt.dacky.service.dto.UserDTO;
+import qnu.cntt.dacky.service.dto.AccountDTO;
 import javax.validation.constraints.Size;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
-public class ManagedUserVM extends UserDTO {
+public class ManagedUserVM extends AccountDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
 

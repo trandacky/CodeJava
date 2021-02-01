@@ -1,8 +1,8 @@
 package qnu.cntt.dacky.service.mapper;
 
 import qnu.cntt.dacky.domain.Authority;
-import qnu.cntt.dacky.domain.User;
-import qnu.cntt.dacky.service.dto.UserDTO;
+import qnu.cntt.dacky.domain.Account;
+import qnu.cntt.dacky.service.dto.AccountDTO;
 
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Mapper for the entity {@link User} and its DTO called {@link UserDTO}.
+ * Mapper for the entity {@link Account} and its DTO called {@link AccountDTO}.
  *
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
@@ -18,39 +18,39 @@ import java.util.stream.Collectors;
 @Service
 public class UserMapper {
 
-    public List<UserDTO> usersToUserDTOs(List<User> users) {
+    public List<AccountDTO> usersToUserDTOs(List<Account> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
-    public UserDTO userToUserDTO(User user) {
-        return new UserDTO(user);
+    public AccountDTO userToUserDTO(Account user) {
+        return new AccountDTO(user);
     }
 
-    public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {
+    public List<Account> userDTOsToUsers(List<AccountDTO> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public User userDTOToUser(UserDTO userDTO) {
+    public Account userDTOToUser(AccountDTO userDTO) {
         if (userDTO == null) {
             return null;
         } else {
-            User user = new User();
-            user.setId(userDTO.getId());
-            user.setLogin(userDTO.getLogin());
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setEmail(userDTO.getEmail());
-            user.setImageUrl(userDTO.getImageUrl());
-            user.setActivated(userDTO.isActivated());
-            user.setLangKey(userDTO.getLangKey());
-            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-            user.setAuthorities(authorities);
+            Account user = new Account();
+			/*
+			 * user.setId(userDTO.getId()); user.setUsername(userDTO.getLogin());
+			 * user.setFirstName(userDTO.getFirstName());
+			 * user.setLastName(userDTO.getLastName()); user.setEmail(userDTO.getEmail());
+			 * user.setImageUrl(userDTO.getImageUrl());
+			 * user.setActivated(userDTO.isActivated());
+			 * user.setLangKey(userDTO.getLangKey()); Set<Authority> authorities =
+			 * this.authoritiesFromStrings(userDTO.getAuthorities());
+			 * user.setAuthorities(authorities);
+			 */
             return user;
         }
     }
@@ -70,12 +70,12 @@ public class UserMapper {
         return authorities;
     }
 
-    public User userFromId(Long id) {
-        if (id == null) {
+    public Account userFromId(UUID UUID) {
+        if (UUID == null) {
             return null;
         }
-        User user = new User();
-        user.setId(id);
-        return user;
+        Account account = new Account();
+        account.setUUID(UUID);
+        return account;
     }
 }

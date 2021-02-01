@@ -1,16 +1,23 @@
 package qnu.cntt.dacky.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.util.UUID;
 
 import java.io.Serializable;
 import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -22,6 +29,10 @@ import javax.persistence.MappedSuperclass;
 public abstract class AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @Column(nullable = false, unique =  true, updatable = false)
+    private UUID UUID;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
@@ -34,14 +45,14 @@ public abstract class AbstractAuditingEntity implements Serializable {
     private Instant createdDate = Instant.now();
 
     @LastModifiedBy
-    @Column(name = "last_modified_by", length = 50)
+    @Column(name = "update_by", length = 50)
     @JsonIgnore
-    private String lastModifiedBy;
+    private String updateBy;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date")
+    @Column(name = "update_date")
     @JsonIgnore
-    private Instant lastModifiedDate = Instant.now();
+    private Instant updateDate = Instant.now();
 
     public String getCreatedBy() {
         return createdBy;
@@ -59,19 +70,31 @@ public abstract class AbstractAuditingEntity implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
+    public String getUpdateBy() {
+        return updateBy;
     }
 
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
     }
 
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
+    public Instant getUpdateDate() {
+        return updateDate;
     }
 
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    public void setUpdateDate(Instant updateDate) {
+        this.updateDate = updateDate;
     }
+
+	public UUID getUUID() {
+		return UUID;
+	}
+
+	public void setUUID(UUID uUID) {
+		UUID = uUID;
+	}
+
+	
+    
+    
 }

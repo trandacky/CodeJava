@@ -1,7 +1,7 @@
 package qnu.cntt.dacky.security;
 
-import qnu.cntt.dacky.domain.User;
-import qnu.cntt.dacky.repository.UserRepository;
+import qnu.cntt.dacky.domain.Account;
+import qnu.cntt.dacky.repository.AccountRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +24,9 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
-    private final UserRepository userRepository;
+    private final AccountRepository userRepository;
 
-    public DomainUserDetailsService(UserRepository userRepository) {
+    public DomainUserDetailsService(AccountRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -48,15 +48,16 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        if (!user.getActivated()) {
-            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
-        }
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-            .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-            .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getLogin(),
-            user.getPassword(),
-            grantedAuthorities);
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, Account user) {
+		/*
+		 * if (!user.getActivated()) { throw new UserNotActivatedException("User " +
+		 * lowercaseLogin + " was not activated"); } List<GrantedAuthority>
+		 * grantedAuthorities = user.getAuthorities().stream() .map(authority -> new
+		 * SimpleGrantedAuthority(authority.getName())) .collect(Collectors.toList());
+		 * return new
+		 * org.springframework.security.core.userdetails.User(user.getLogin(),
+		 * user.getPassword(), grantedAuthorities);
+		 */
+    return null;	
     }
 }

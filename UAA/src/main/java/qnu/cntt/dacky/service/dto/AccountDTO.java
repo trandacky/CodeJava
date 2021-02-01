@@ -3,7 +3,7 @@ package qnu.cntt.dacky.service.dto;
 import qnu.cntt.dacky.config.Constants;
 
 import qnu.cntt.dacky.domain.Authority;
-import qnu.cntt.dacky.domain.User;
+import qnu.cntt.dacky.domain.Account;
 
 import javax.validation.constraints.*;
 import java.time.Instant;
@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
-public class UserDTO {
+public class AccountDTO {
 
-    private Long id;
+    private String UUID;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
+    @Size(min = 6, max = 128)
     private String login;
 
     @Size(max = 50)
@@ -44,43 +44,34 @@ public class UserDTO {
 
     private Instant createdDate;
 
-    private String lastModifiedBy;
+    private String updateBy;
 
-    private Instant lastModifiedDate;
+    private Instant updateDate;
 
     private Set<String> authorities;
 
-    public UserDTO() {
+    public AccountDTO() {
         // Empty constructor needed for Jackson.
     }
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.activated = user.getActivated();
-        this.imageUrl = user.getImageUrl();
-        this.langKey = user.getLangKey();
-        this.createdBy = user.getCreatedBy();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream()
-            .map(Authority::getName)
-            .collect(Collectors.toSet());
-    }
+	/*
+	 * public AccountDTO(Account user) { this.login = user.getLogin();
+	 * this.firstName = user.getFirstName(); this.lastName = user.getLastName();
+	 * this.email = user.getEmail(); this.activated = user.getActivated();
+	 * this.imageUrl = user.getImageUrl(); this.langKey = user.getLangKey();
+	 * this.createdBy = user.getCreatedBy(); this.createdDate =
+	 * user.getCreatedDate(); this.updateBy = user.getUpdateBy(); this.updateDate =
+	 * user.getUpdateDate(); this.authorities = user.getAuthorities().stream()
+	 * .map(Authority::getName) .collect(Collectors.toSet()); }
+	 */
 
-    public Long getId() {
-        return id;
-    }
+   
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public AccountDTO(Account user) {
+		// TODO Auto-generated constructor stub
+	}
 
-    public String getLogin() {
+	public String getLogin() {
         return login;
     }
 
@@ -153,19 +144,19 @@ public class UserDTO {
     }
 
     public String getLastModifiedBy() {
-        return lastModifiedBy;
+        return updateBy;
     }
 
     public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
+        this.updateBy = lastModifiedBy;
     }
 
     public Instant getLastModifiedDate() {
-        return lastModifiedDate;
+        return updateDate;
     }
 
     public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+        this.updateDate = lastModifiedDate;
     }
 
     public Set<String> getAuthorities() {
@@ -189,8 +180,8 @@ public class UserDTO {
             ", langKey='" + langKey + '\'' +
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
+            ", updateBy='" + updateBy + '\'' +
+            ", updateDate=" + updateDate +
             ", authorities=" + authorities +
             "}";
     }
