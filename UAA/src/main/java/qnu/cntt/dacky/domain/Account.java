@@ -56,6 +56,10 @@ public class Account extends AbstractAuditingEntity implements Serializable {
     @Column(name = "reset_key", length = 20)
     @JsonIgnore
     private String resetKey;
+    
+    @Column(name = "reset_date")
+    @JsonIgnore
+    private Instant resetDate;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -178,6 +182,14 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 
 	public void setAvatars(List<Avatar> avatars) {
 		this.avatars = avatars;
+	}
+
+	public Instant getResetDate() {
+		return resetDate;
+	}
+
+	public void setResetDate(Instant resetDate) {
+		this.resetDate = resetDate;
 	}
 
 	

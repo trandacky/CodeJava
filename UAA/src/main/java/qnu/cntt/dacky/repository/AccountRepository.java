@@ -11,13 +11,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.time.Instant;
 
 /**
  * Spring Data JPA repository for the {@link Account} entity.
  */
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, UUID> {
 
     String USERS_BY_USERNAME_CACHE = "usersByUsername";
 
@@ -31,7 +32,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findOneByEmailIgnoreCase(String email);
 
-    Optional<Account> findOneByLogin(String login);
+    Optional<Account> findOneByUserName(String login);
 
     @EntityGraph(attributePaths = "authorities")
     @Cacheable(cacheNames = USERS_BY_USERNAME_CACHE)
@@ -41,5 +42,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     Optional<Account> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
-    Page<Account> findAllByLoginNot(Pageable pageable, String login);
+    Page<Account> findAllByUserNameNot(Pageable pageable, String login);
 }

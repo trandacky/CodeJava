@@ -1,6 +1,8 @@
 package qnu.cntt.dacky.security;
 
 import qnu.cntt.dacky.domain.Account;
+import qnu.cntt.dacky.domain.AccountAuthority;
+import qnu.cntt.dacky.domain.Authority;
 import qnu.cntt.dacky.repository.AccountRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
@@ -22,40 +24,45 @@ import java.util.stream.Collectors;
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
 
-    private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
+	private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
-    private final AccountRepository userRepository;
+	private final AccountRepository userRepository;
 
-    public DomainUserDetailsService(AccountRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+	public DomainUserDetailsService(AccountRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(final String userName) {
-        log.debug("Authenticating {}", userName);
+	@Override
+	@Transactional
+	public UserDetails loadUserByUsername(final String userName) {
+		log.debug("Authenticating {}", userName);
 
-        if (new EmailValidator().isValid(userName, null)) {
-            return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(userName)
-                .map(user -> createSpringSecurityUser(userName, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + userName + " was not found in the database"));
-        }
+		if (new EmailValidator().isValid(userName, null)) {
+			return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(userName)
+					.map(user -> createSpringSecurityUser(userName, user))
+					.orElseThrow(() -> new UsernameNotFoundException(
+							"User with email " + userName + " was not found in the database"));
+		}
 
-        String lowercaseLogin = userName.toLowerCase(Locale.ENGLISH);
-        return userRepository.findOneWithAuthoritiesByUserName(lowercaseLogin)
-            .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+		String lowercaseLogin = userName.toLowerCase(Locale.ENGLISH);
+		return userRepository.findOneWithAuthoritiesByUserName(lowercaseLogin)
+				.map(user -> createSpringSecurityUser(lowercaseLogin, user))
+				.orElseThrow(() -> new UsernameNotFoundException(
+						"User " + lowercaseLogin + " was not found in the database"));
 
-    }
+	}
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, Account user) {
-		
-		  if (!user.getActivated()) { throw new UserNotActivatedException("User " +
-		  lowercaseLogin + " was not activated"); } List<GrantedAuthority>
-		  grantedAuthorities = user.getAccountAuthoritys().stream() .map(authority -> new
-		  SimpleGrantedAuthority(authority.getAuthority().getName())) .collect(Collectors.toList());
-		  return new
-		  org.springframework.security.core.userdetails.User(user.getUserName(),
-		  user.getPassword(), grantedAuthorities);	
-    }
+	private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin,
+			Account user) {
+
+		if (!user.getActivated()) {
+			throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+		}
+		List<AccountAuthority> accountAuthority = user.getAccountAuthoritys();
+		List<GrantedAuthority> grantedAuthorities = accountAuthority.stream()
+				.map(authority -> new SimpleGrantedAuthority(authority.getAuthority().getName()))
+				.collect(Collectors.toList());
+		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+				grantedAuthorities);
+	}
 }

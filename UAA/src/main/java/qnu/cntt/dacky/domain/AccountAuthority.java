@@ -24,8 +24,6 @@ public class AccountAuthority extends AbstractAuditingEntity implements Serializ
 	@JoinColumn(name = "account_uuid", referencedColumnName = "uuid")
 	private Account account;
 	
-	
-	
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "authority_uuid", referencedColumnName = "uuid")

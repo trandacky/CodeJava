@@ -35,8 +35,8 @@ public class Avatar extends AbstractAuditingEntity implements Serializable {
 	private String picture;
 
 	@NotNull
-	@Column(name = "default")
-	private boolean _default;
+	@Column(name = "avatar_default")
+	private boolean avatar_default;
 	
 	@NotNull
 	@ManyToOne
@@ -67,12 +67,13 @@ public class Avatar extends AbstractAuditingEntity implements Serializable {
 		this.picture = picture;
 	}
 
-	public boolean is_default() {
-		return _default;
+	
+	public boolean isAvatar_default() {
+		return avatar_default;
 	}
 
-	public void set_default(boolean _default) {
-		this._default = _default;
+	public void setAvatar_default(boolean avatar_default) {
+		this.avatar_default = avatar_default;
 	}
 
 	public Account getAccount() {

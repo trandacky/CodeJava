@@ -6,7 +6,11 @@ import qnu.cntt.dacky.domain.Authority;
 import qnu.cntt.dacky.domain.Account;
 
 import javax.validation.constraints.*;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,174 +19,161 @@ import java.util.stream.Collectors;
  */
 public class AccountDTO {
 
-    private String UUID;
+	private java.util.UUID UUID;
 
-    @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 6, max = 128)
-    private String login;
-
-    @Size(max = 50)
-    private String firstName;
-
-    @Size(max = 50)
-    private String lastName;
-
-    @Email
-    @Size(min = 5, max = 254)
-    private String email;
-
-    @Size(max = 256)
-    private String imageUrl;
-
-    private boolean activated = false;
-
-    @Size(min = 2, max = 10)
-    private String langKey;
-
-    private String createdBy;
+	
+	private String createdBy;
 
     private Instant createdDate;
 
     private String updateBy;
 
     private Instant updateDate;
+	
+	@NotBlank
+	@Pattern(regexp = Constants.LOGIN_REGEX)
+	@Size(min = 6, max = 128)
+	private String userName;
 
-    private Set<String> authorities;
+	private boolean activated = false;
 
-    public AccountDTO() {
-        // Empty constructor needed for Jackson.
-    }
+	private String displayName;
 
-	/*
-	 * public AccountDTO(Account user) { this.login = user.getLogin();
-	 * this.firstName = user.getFirstName(); this.lastName = user.getLastName();
-	 * this.email = user.getEmail(); this.activated = user.getActivated();
-	 * this.imageUrl = user.getImageUrl(); this.langKey = user.getLangKey();
-	 * this.createdBy = user.getCreatedBy(); this.createdDate =
-	 * user.getCreatedDate(); this.updateBy = user.getUpdateBy(); this.updateDate =
-	 * user.getUpdateDate(); this.authorities = user.getAuthorities().stream()
-	 * .map(Authority::getName) .collect(Collectors.toSet()); }
-	 */
+	private boolean enabled = false;
 
-   
+	private boolean locked = false;
 
-    public AccountDTO(Account user) {
-		// TODO Auto-generated constructor stub
+	private String email;
+	
+	private List<String> authorities;
+	
+	public AccountDTO() {
+		// Empty constructor needed for Jackson.
 	}
 
-	public String getLogin() {
-        return login;
-    }
+	public AccountDTO(Account user) {
+		this.UUID = user.getUUID();
+		this.createdBy = user.getCreatedBy();
+		this.createdDate = user.getCreatedDate();
+		this.updateBy = user.getUpdateBy();
+		this.updateDate = user.getUpdateDate();
+		this.userName = user.getUserName();
+		this.activated = user.getActivated();
+		
+		this.activated = user.getActivated();
+		this.displayName = user.getDisplayName();
+		this.enabled = user.isEnabled();
+		this.locked = user.isLocked();
+		this.email = user.getEmail();
+		this.authorities = user.getAccountAuthoritys().stream().map(authority ->authority.getAuthority().getName()) .collect(Collectors.toList());
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	@Override
+	public String toString() {
+		return "AccountDTO [UUID=" + UUID + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", updateBy="
+				+ updateBy + ", updateDate=" + updateDate + ", userName=" + userName + ", activated=" + activated
+				+ ", displayName=" + displayName + ", enabled=" + enabled + ", locked=" + locked + ", email=" + email
+				+ ", authorities=" + authorities + "]";
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public java.util.UUID getUUID() {
+		return UUID;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public void setUUID(java.util.UUID uUID) {
+		UUID = uUID;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public String getCreatedBy() {
+		return createdBy;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public Instant getCreatedDate() {
+		return createdDate;
+	}
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+	public String getUpdateBy() {
+		return updateBy;
+	}
 
-    public boolean isActivated() {
-        return activated;
-    }
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
+	public Instant getUpdateDate() {
+		return updateDate;
+	}
 
-    public String getLangKey() {
-        return langKey;
-    }
+	public void setUpdateDate(Instant updateDate) {
+		this.updateDate = updateDate;
+	}
 
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+	public boolean isActivated() {
+		return activated;
+	}
 
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
+	public String getDisplayName() {
+		return displayName;
+	}
 
-    public String getLastModifiedBy() {
-        return updateBy;
-    }
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
 
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.updateBy = lastModifiedBy;
-    }
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    public Instant getLastModifiedDate() {
-        return updateDate;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.updateDate = lastModifiedDate;
-    }
+	public boolean isLocked() {
+		return locked;
+	}
 
-    public Set<String> getAuthorities() {
-        return authorities;
-    }
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
 
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", updateBy='" + updateBy + '\'' +
-            ", updateDate=" + updateDate +
-            ", authorities=" + authorities +
-            "}";
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public List<String> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<String> authorities) {
+		this.authorities = authorities;
+	}
+
+	
+	
 }
