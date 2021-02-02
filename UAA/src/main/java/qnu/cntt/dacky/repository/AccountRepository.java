@@ -35,7 +35,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @EntityGraph(attributePaths = "authorities")
     @Cacheable(cacheNames = USERS_BY_USERNAME_CACHE)
-    Optional<Account> findOneWithAuthoritiesByLogin(String login);
+    Optional<Account> findOneWithAuthoritiesByUserName(String userName);
 
     @EntityGraph(attributePaths = "authorities")
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)

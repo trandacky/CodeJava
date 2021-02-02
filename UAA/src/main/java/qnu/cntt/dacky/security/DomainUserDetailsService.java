@@ -32,32 +32,30 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String login) {
-        log.debug("Authenticating {}", login);
+    public UserDetails loadUserByUsername(final String userName) {
+        log.debug("Authenticating {}", userName);
 
-        if (new EmailValidator().isValid(login, null)) {
-            return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(login)
-                .map(user -> createSpringSecurityUser(login, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+        if (new EmailValidator().isValid(userName, null)) {
+            return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(userName)
+                .map(user -> createSpringSecurityUser(userName, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + userName + " was not found in the database"));
         }
 
-        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        return userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin)
+        String lowercaseLogin = userName.toLowerCase(Locale.ENGLISH);
+        return userRepository.findOneWithAuthoritiesByUserName(lowercaseLogin)
             .map(user -> createSpringSecurityUser(lowercaseLogin, user))
             .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
 
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, Account user) {
-		/*
-		 * if (!user.getActivated()) { throw new UserNotActivatedException("User " +
-		 * lowercaseLogin + " was not activated"); } List<GrantedAuthority>
-		 * grantedAuthorities = user.getAuthorities().stream() .map(authority -> new
-		 * SimpleGrantedAuthority(authority.getName())) .collect(Collectors.toList());
-		 * return new
-		 * org.springframework.security.core.userdetails.User(user.getLogin(),
-		 * user.getPassword(), grantedAuthorities);
-		 */
-    return null;	
+		
+		  if (!user.getActivated()) { throw new UserNotActivatedException("User " +
+		  lowercaseLogin + " was not activated"); } List<GrantedAuthority>
+		  grantedAuthorities = user.getAccountAuthoritys().stream() .map(authority -> new
+		  SimpleGrantedAuthority(authority.getAuthority().getName())) .collect(Collectors.toList());
+		  return new
+		  org.springframework.security.core.userdetails.User(user.getUserName(),
+		  user.getPassword(), grantedAuthorities);	
     }
 }

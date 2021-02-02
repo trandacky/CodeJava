@@ -47,16 +47,22 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50)
     private String name;
     
-    @OneToOne(mappedBy = "parentUUID")
-    private Authority parentUUID1;
+    @OneToOne(mappedBy = "parentAuthority")
+    private Authority childAuthority;
     
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="parent_uuid",referencedColumnName = "uuid")
-    private Authority parentUUID;
+    private Authority parentAuthority;
     
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<AccountAuthority> accountAuthorities;
+    
+    @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL)
+    private List<AuthorityMenuClient> authorityMenuClients;
+    
+    @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL)
+    private List<AuthorityMenuAdmintration> authorityMenuAdmintrations;
 
 	public String getAuthority() {
 		return authority;
@@ -98,21 +104,47 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
 		this.name = name;
 	}
 
-	public Authority getParentUUID() {
-		return parentUUID;
+	public Authority getChildAuthority() {
+		return childAuthority;
 	}
 
-	public void setParentUUID(Authority parentUUID) {
-		this.parentUUID = parentUUID;
+	public void setChildAuthority(Authority childAuthority) {
+		this.childAuthority = childAuthority;
 	}
 
-	public Authority getParentUUID1() {
-		return parentUUID1;
+	public Authority getParentAuthority() {
+		return parentAuthority;
 	}
 
-	public void setParentUUID1(Authority parentUUID1) {
-		this.parentUUID1 = parentUUID1;
+	public void setParentAuthority(Authority parentAuthority) {
+		this.parentAuthority = parentAuthority;
 	}
+
+	public List<AccountAuthority> getAccountAuthorities() {
+		return accountAuthorities;
+	}
+
+	public void setAccountAuthorities(List<AccountAuthority> accountAuthorities) {
+		this.accountAuthorities = accountAuthorities;
+	}
+
+	public List<AuthorityMenuClient> getAuthorityMenuClients() {
+		return authorityMenuClients;
+	}
+
+	public void setAuthorityMenuClients(List<AuthorityMenuClient> authorityMenuClients) {
+		this.authorityMenuClients = authorityMenuClients;
+	}
+
+	public List<AuthorityMenuAdmintration> getAuthorityMenuAdmintrations() {
+		return authorityMenuAdmintrations;
+	}
+
+	public void setAuthorityMenuAdmintrations(List<AuthorityMenuAdmintration> authorityMenuAdmintrations) {
+		this.authorityMenuAdmintrations = authorityMenuAdmintrations;
+	}
+
+	
     
     
 }

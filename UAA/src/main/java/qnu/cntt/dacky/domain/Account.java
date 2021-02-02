@@ -61,7 +61,7 @@ public class Account extends AbstractAuditingEntity implements Serializable {
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
-    private String username;
+    private String userName;
    
     @JsonIgnore
     @NotNull
@@ -75,13 +75,13 @@ public class Account extends AbstractAuditingEntity implements Serializable {
     private String email;
     
     @OneToOne(mappedBy = "account")
-    private AccountDetails AccountDetail;
+    private AccountDetails accountDetail;
     
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Avatar> avatars;
     
-    @OneToOne(mappedBy = "account")
-    private AccountAuthority accountAuthority;
+    @OneToMany(mappedBy = "account")
+    private List<AccountAuthority> accountAuthoritys;
     
     public String getPassword() {
         return password;
@@ -140,12 +140,12 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 		this.locked = locked;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getEmail() {
@@ -157,21 +157,19 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	}
 
 	public AccountDetails getAccountDetail() {
-		return AccountDetail;
+		return accountDetail;
 	}
 
 	public void setAccountDetail(AccountDetails accountDetail) {
-		AccountDetail = accountDetail;
+		this.accountDetail = accountDetail;
 	}
 
-
-
-	public AccountAuthority getAccountAuthority() {
-		return accountAuthority;
+	public List<AccountAuthority> getAccountAuthoritys() {
+		return accountAuthoritys;
 	}
 
-	public void setAccountAuthority(AccountAuthority accountAuthority) {
-		this.accountAuthority = accountAuthority;
+	public void setAccountAuthoritys(List<AccountAuthority> accountAuthoritys) {
+		this.accountAuthoritys = accountAuthoritys;
 	}
 
 	public List<Avatar> getAvatars() {

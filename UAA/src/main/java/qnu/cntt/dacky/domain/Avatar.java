@@ -26,6 +26,7 @@ public class Avatar extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "description", length = 50)
 	private String description;
 
+	@NotNull
 	@Column(name = "external")
 	private boolean external;
 
@@ -33,6 +34,7 @@ public class Avatar extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "picture", length = 50)
 	private String picture;
 
+	@NotNull
 	@Column(name = "default")
 	private boolean _default;
 	

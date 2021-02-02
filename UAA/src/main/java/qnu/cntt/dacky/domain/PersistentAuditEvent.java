@@ -14,15 +14,10 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "jhi_persistent_audit_event")
-public class PersistentAuditEvent implements Serializable {
+public class PersistentAuditEvent extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "event_id")
-    private Long id;
 
     @NotNull
     @Column(nullable = false)
@@ -37,16 +32,8 @@ public class PersistentAuditEvent implements Serializable {
     @ElementCollection
     @MapKeyColumn(name = "name")
     @Column(name = "value")
-    @CollectionTable(name = "jhi_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))
+    @CollectionTable(name = "jhi_persistent_audit_evt_data", joinColumns=@JoinColumn(name="uuid"))
     private Map<String, String> data = new HashMap<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getPrincipal() {
         return principal;
@@ -80,16 +67,6 @@ public class PersistentAuditEvent implements Serializable {
         this.data = data;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof PersistentAuditEvent)) {
-            return false;
-        }
-        return id != null && id.equals(((PersistentAuditEvent) o).id);
-    }
 
     @Override
     public int hashCode() {
