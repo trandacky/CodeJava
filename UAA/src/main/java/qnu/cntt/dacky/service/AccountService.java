@@ -11,7 +11,7 @@ import qnu.cntt.dacky.repository.AccountRepository;
 import qnu.cntt.dacky.security.AuthoritiesConstants;
 import qnu.cntt.dacky.security.SecurityUtils;
 import qnu.cntt.dacky.service.dto.AccountDTO;
-
+import qnu.cntt.dacky.web.rest.vm.ManagedUserVM;
 import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;
@@ -84,8 +84,8 @@ public class AccountService {
 		});
 	}
 
-	public Account registerUser(AccountDTO userDTO, String password) {
-		accountRepository.findOneByUserName(userDTO.getUserName().toLowerCase()).ifPresent(existingUser -> {
+	public Account registerUser(ManagedUserVM userDTO, String password) {
+		accountRepository.findOneByUsername(userDTO.getUsername().toLowerCase()).ifPresent(existingUser -> {
 			boolean removed = removeNonActivatedUser(existingUser);
 			if (!removed) {
 				throw new UsernameAlreadyUsedException();
@@ -99,13 +99,14 @@ public class AccountService {
 		});
 		Account newUser = new Account();
 		String encryptedPassword = passwordEncoder.encode(password);
-		newUser.setUserName(userDTO.getUserName().toLowerCase()); // new user gets initially a generated password
+		newUser.setUsername(userDTO.getUsername().toLowerCase()); // new user gets initially a generated password
 		newUser.setPassword(encryptedPassword);
 		newUser.setDisplayName(userDTO.getDisplayName());
 		if (userDTO.getEmail() != null) {
 			newUser.setEmail(userDTO.getEmail().toLowerCase());
 		}
-//		newUser.setCreatedBy();
+		newUser.setCreatedBy("user");
+		newUser.setUpdateBy("user");
 		newUser.setCreatedDate(Instant.now());
 		newUser.setUpdateDate(Instant.now());
 		newUser.setActivated(false); // new user gets registration key
@@ -134,17 +135,19 @@ public class AccountService {
 
 	public Account createUser(AccountDTO userDTO) {
 		Account user = new Account();
-		user.setUserName(userDTO.getUserName().toLowerCase());
+		user.setUsername(userDTO.getUsername().toLowerCase());
 		user.setDisplayName(userDTO.getDisplayName());
 		if (userDTO.getEmail() != null) {
 			user.setEmail(userDTO.getEmail().toLowerCase());
 		}
-
+		
 		String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
 		user.setPassword(encryptedPassword);
 		user.setResetKey(RandomUtil.generateResetKey());
 		user.setResetDate(Instant.now());
 		user.setActivated(true);
+		user.setCreatedBy("user");
+		user.setUpdateBy("user");
 		Set<Authority> authorities = new HashSet<>();
 		if (userDTO.getAuthorities() != null) {
 			authorities = userDTO.getAuthorities().stream().map(authorityRepository::findByAuthorities)
@@ -175,7 +178,7 @@ public class AccountService {
 		return Optional.of(accountRepository.findById(userDTO.getUUID())).filter(Optional::isPresent).map(Optional::get)
 				.map(user -> {
 					this.clearUserCaches(user);
-					user.setUserName(userDTO.getUserName().toLowerCase());
+					user.setUsername(userDTO.getUsername().toLowerCase());
 					user.setDisplayName(userDTO.getDisplayName());
 					if (userDTO.getEmail() != null) {
 						user.setEmail(userDTO.getEmail().toLowerCase());
@@ -197,7 +200,7 @@ public class AccountService {
 	}
 
 	public void deleteUser(String login) {
-		accountRepository.findOneByUserName(login).ifPresent(user -> {
+		accountRepository.findOneByUsername(login).ifPresent(user -> {
 			accountRepository.delete(user);
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
@@ -216,7 +219,7 @@ public class AccountService {
 	 */
 
 	public void updateUser(String displayName, String email) {
-		SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUserName).ifPresent(user -> {
+		SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUsername).ifPresent(user -> {
 			user.setDisplayName(displayName);
 			if (email != null) {
 				user.setEmail(email.toLowerCase());
@@ -228,7 +231,7 @@ public class AccountService {
 
 	@Transactional
 	public void changePassword(String currentClearTextPassword, String newPassword) {
-		SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUserName).ifPresent(user -> {
+		SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUsername).ifPresent(user -> {
 			String currentEncryptedPassword = user.getPassword();
 			if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
 				throw new InvalidPasswordException();
@@ -242,7 +245,7 @@ public class AccountService {
 
 	@Transactional(readOnly = true)
 	public Page<AccountDTO> getAllManagedUsers(Pageable pageable) {
-		return accountRepository.findAllByUserNameNot(pageable, Constants.ANONYMOUS_USER).map(AccountDTO::new);
+		return accountRepository.findAllByUsernameNot(pageable, Constants.ANONYMOUS_USER).map(AccountDTO::new);
 	}
 
 	@Transactional(readOnly = true)
@@ -267,7 +270,7 @@ public class AccountService {
 	public void removeNotActivatedUsers() {
 		accountRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
 				Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
-					log.debug("Deleting not activated user {}", user.getUserName());
+					log.debug("Deleting not activated user {}", user.getUsername());
 					accountRepository.delete(user);
 					this.clearUserCaches(user);
 				});
@@ -285,7 +288,7 @@ public class AccountService {
 
 	private void clearUserCaches(Account user) {
 		Objects.requireNonNull(cacheManager.getCache(AccountRepository.USERS_BY_USERNAME_CACHE))
-				.evict(user.getUserName());
+				.evict(user.getUsername());
 		if (user.getEmail() != null) {
 			Objects.requireNonNull(cacheManager.getCache(AccountRepository.USERS_BY_EMAIL_CACHE))
 					.evict(user.getEmail());

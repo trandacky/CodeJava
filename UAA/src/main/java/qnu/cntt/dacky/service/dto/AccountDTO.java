@@ -33,7 +33,7 @@ public class AccountDTO {
 	@NotBlank
 	@Pattern(regexp = Constants.LOGIN_REGEX)
 	@Size(min = 6, max = 128)
-	private String userName;
+	private String login;
 
 	private boolean activated = false;
 
@@ -57,7 +57,7 @@ public class AccountDTO {
 		this.createdDate = user.getCreatedDate();
 		this.updateBy = user.getUpdateBy();
 		this.updateDate = user.getUpdateDate();
-		this.userName = user.getUserName();
+		this.login = user.getUsername();
 		this.activated = user.getActivated();
 		
 		this.activated = user.getActivated();
@@ -71,12 +71,12 @@ public class AccountDTO {
 	@Override
 	public String toString() {
 		return "AccountDTO [UUID=" + UUID + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", updateBy="
-				+ updateBy + ", updateDate=" + updateDate + ", userName=" + userName + ", activated=" + activated
+				+ updateBy + ", updateDate=" + updateDate + ", userName=" + login + ", activated=" + activated
 				+ ", displayName=" + displayName + ", enabled=" + enabled + ", locked=" + locked + ", email=" + email
 				+ ", authorities=" + authorities + "]";
 	}
 
-	public Account toAccount(AccountDTO accountDTO)
+	public Account toEntity(AccountDTO accountDTO)
 	{
 		Account account = new Account();
 		account.setActivated(accountDTO.isActivated());
@@ -87,7 +87,7 @@ public class AccountDTO {
 		account.setUpdateDate(accountDTO.getUpdateDate());
 		account.setDisplayName(accountDTO.getDisplayName());
 		account.setEmail(accountDTO.getEmail());
-		account.setUserName(accountDTO.getUserName());
+		account.setUsername(accountDTO.getUsername());
 		
 		return account;
 	}
@@ -132,13 +132,7 @@ public class AccountDTO {
 		this.updateDate = updateDate;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+	
 
 	public boolean isActivated() {
 		return activated;
@@ -186,6 +180,14 @@ public class AccountDTO {
 
 	public void setAuthorities(List<String> authorities) {
 		this.authorities = authorities;
+	}
+
+	public String getUsername() {
+		return login;
+	}
+
+	public void setUsername(String username) {
+		this.login = username;
 	}
 
 	

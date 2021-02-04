@@ -34,12 +34,12 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 
 	Optional<Account> findOneByEmailIgnoreCase(String email);
 
-	Optional<Account> findOneByUserName(String login);
+	Optional<Account> findOneByUsername(String login);
 	
 //	@EntityGraph(attributePaths = "authorities")
 	@Cacheable(cacheNames = USERS_BY_USERNAME_CACHE)
-	@Query("SELECT a ,aaa.authorities "
-			+ "FROM Account a, AccountAuthority aa , Authority aaa where a.UUID = aa.account and aa.authority = aaa.UUID and a.userName = :username")
+	@Query("SELECT a "
+			+ "FROM Account a, AccountAuthority aa , Authority aaa where a.UUID = aa.account and aa.authority = aaa.UUID and a.username = :username")
 	Optional<Account> _findOneWithAuthorityByUserName( @Param("username") String userName);
 
 	/*
@@ -51,10 +51,10 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 
 //	@EntityGraph(attributePaths = "authorities")
 	@Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
-	@Query("SELECT a, aaa.authorities "
+	@Query("SELECT a "
 			+ "FROM Account a, AccountAuthority aa , Authority aaa where a.UUID = aa.account and aa.authority = aaa.UUID and a.email = :email")
 	Optional<Account> _findOneWithAuthorityByEmailIgnoreCase(@Param("email") String email);
 //	Optional<Account> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
-	Page<Account> findAllByUserNameNot(Pageable pageable, String login);
+	Page<Account> findAllByUsernameNot(Pageable pageable, String login);
 }

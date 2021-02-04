@@ -43,7 +43,7 @@ public class UserMapper {
     		account.setUpdateDate(accountDTO.getUpdateDate());
     		account.setDisplayName(accountDTO.getDisplayName());
     		account.setEmail(accountDTO.getEmail());
-    		account.setUserName(accountDTO.getUserName());
+    		account.setUsername(accountDTO.getUsername());
     		return account;
         }
     }
