@@ -36,7 +36,7 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 
 	Optional<Account> findOneByUserName(String login);
 	
-	@EntityGraph(attributePaths = "authorities")
+//	@EntityGraph(attributePaths = "authorities")
 	@Cacheable(cacheNames = USERS_BY_USERNAME_CACHE)
 	@Query("SELECT a ,aaa.authorities "
 			+ "FROM Account a, AccountAuthority aa , Authority aaa where a.UUID = aa.account and aa.authority = aaa.UUID and a.userName = :username")
@@ -49,7 +49,7 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 	 * findOneWithAuthoritiesByUserName(String userName);
 	 */
 
-	@EntityGraph(attributePaths = "authorities")
+//	@EntityGraph(attributePaths = "authorities")
 	@Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
 	@Query("SELECT a, aaa.authorities "
 			+ "FROM Account a, AccountAuthority aa , Authority aaa where a.UUID = aa.account and aa.authority = aaa.UUID and a.email = :email")
