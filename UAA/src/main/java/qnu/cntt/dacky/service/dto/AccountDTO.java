@@ -76,8 +76,22 @@ public class AccountDTO {
 				+ ", authorities=" + authorities + "]";
 	}
 
+	public Account toAccount(AccountDTO accountDTO)
+	{
+		Account account = new Account();
+		account.setActivated(accountDTO.isActivated());
+		account.setUUID(accountDTO.getUUID());
+		account.setCreatedBy(accountDTO.getCreatedBy());
+		account.setCreatedDate(accountDTO.getCreatedDate());
+		account.setUpdateBy(accountDTO.getUpdateBy());
+		account.setUpdateDate(accountDTO.getUpdateDate());
+		account.setDisplayName(accountDTO.getDisplayName());
+		account.setEmail(accountDTO.getEmail());
+		account.setUserName(accountDTO.getUserName());
+		
+		return account;
+	}
 	
-
 	public java.util.UUID getUUID() {
 		return UUID;
 	}

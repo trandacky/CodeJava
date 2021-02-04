@@ -4,14 +4,16 @@ import qnu.cntt.dacky.domain.PersistentAuditEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Spring Data JPA repository for the {@link PersistentAuditEvent} entity.
  */
-public interface PersistenceAuditEventRepository extends JpaRepository<PersistentAuditEvent, Long> {
+public interface PersistenceAuditEventRepository extends JpaRepository<PersistentAuditEvent, UUID> {
 
     List<PersistentAuditEvent> findByPrincipal(String principal);
 

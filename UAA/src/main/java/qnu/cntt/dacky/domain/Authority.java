@@ -29,7 +29,7 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Size(max = 50)
     @Column(length = 50)
-    private String authority;
+    private String authorities;
 
     @NotNull
     @Column(name="enable_admin",nullable = false)
@@ -64,12 +64,14 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL)
     private List<AuthorityMenuAdmintration> authorityMenuAdmintrations;
 
-	public String getAuthority() {
-		return authority;
+
+
+	public String getAuthorities() {
+		return authorities;
 	}
 
-	public void setAuthority(String authority) {
-		this.authority = authority;
+	public void setAuthorities(String authorities) {
+		this.authorities = authorities;
 	}
 
 	public boolean isEnableAdmin() {

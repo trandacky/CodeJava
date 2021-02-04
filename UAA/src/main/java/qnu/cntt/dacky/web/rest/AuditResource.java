@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * REST controller for getting the {@link AuditEvent}s.
@@ -73,7 +74,7 @@ public class AuditResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the {@link AuditEvent} in body, or status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id:.+}")
-    public ResponseEntity<AuditEvent> get(@PathVariable Long id) {
+    public ResponseEntity<AuditEvent> get(@PathVariable UUID id) {
         return ResponseUtil.wrapOrNotFound(auditEventService.find(id));
     }
 }

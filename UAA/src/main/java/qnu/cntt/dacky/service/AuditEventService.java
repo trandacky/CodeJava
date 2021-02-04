@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service for managing audit events.
@@ -70,7 +71,7 @@ public class AuditEventService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<AuditEvent> find(Long id) {
+    public Optional<AuditEvent> find(UUID id) {
         return persistenceAuditEventRepository.findById(id)
             .map(auditEventConverter::convertToAuditEvent);
     }

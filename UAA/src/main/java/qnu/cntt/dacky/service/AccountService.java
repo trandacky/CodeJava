@@ -40,25 +40,16 @@ import java.util.stream.Collectors;
 public class AccountService {
 
 	private final Logger log = LoggerFactory.getLogger(AccountService.class);
-
-	private final AccountRepository accountRepository;
-
-	private final PasswordEncoder passwordEncoder;
-
-	private final AuthorityRepository authorityRepository;
-
-	private final CacheManager cacheManager;
-
+	@Autowired
+	private AccountRepository accountRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private AuthorityRepository authorityRepository;
+	@Autowired
+	private CacheManager cacheManager;
 	@Autowired
 	private AccountAuthorityRepository accountAuthorityRepository;
-
-	public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder,
-			AuthorityRepository authorityRepository, CacheManager cacheManager) {
-		this.accountRepository = accountRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.authorityRepository = authorityRepository;
-		this.cacheManager = cacheManager;
-	}
 
 	public Optional<Account> activateRegistration(String key) {
 		log.debug("Activating user for activation key {}", key);
@@ -121,7 +112,7 @@ public class AccountService {
 		newUser.setActivationKey(RandomUtil.generateActivationKey());
 		accountRepository.save(newUser);
 		// them quyen cho user
-		Optional<Authority> authorities = authorityRepository.findByAuthority(AuthoritiesConstants.USER);
+		Optional<Authority> authorities = authorityRepository.findByAuthorities(AuthoritiesConstants.USER);
 		AccountAuthority accountAuthority = new AccountAuthority();
 		accountAuthority.setAccount(newUser);
 		accountAuthority.setAuthority(authorities.get());
@@ -156,7 +147,7 @@ public class AccountService {
 		user.setActivated(true);
 		Set<Authority> authorities = new HashSet<>();
 		if (userDTO.getAuthorities() != null) {
-			authorities = userDTO.getAuthorities().stream().map(authorityRepository::findByAuthority)
+			authorities = userDTO.getAuthorities().stream().map(authorityRepository::findByAuthorities)
 					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
 		}
 
@@ -180,21 +171,30 @@ public class AccountService {
 	 * @return updated user.
 	 */
 
-	/*
-	 * public Optional<AccountDTO> updateUser(AccountDTO userDTO) { return
-	 * Optional.of(accountRepository.findById(userDTO.getUUID())).filter(Optional::
-	 * isPresent).map(Optional::get) .map(user -> { this.clearUserCaches(user);
-	 * user.setUserName(userDTO.getUserName().toLowerCase());
-	 * user.setDisplayName(userDTO.getDisplayName()); if (userDTO.getEmail() !=
-	 * null) { user.setEmail(userDTO.getEmail().toLowerCase()); }
-	 * user.setActivated(userDTO.isActivated()); Set<Authority> managedAuthorities =
-	 * user.getAccountAuthoritys(); managedAuthorities.clear();
-	 * userDTO.getAuthorities().stream().map(authorityRepository::findByAuthority).
-	 * filter(Optional::isPresent)
-	 * .map(Optional::get).forEach(managedAuthorities::add);
-	 * this.clearUserCaches(user); log.debug("Changed Information for User: {}",
-	 * user); return user; }).map(AccountDTO::new); }
-	 */
+	public Optional<AccountDTO> updateUser(AccountDTO userDTO) {
+		return Optional.of(accountRepository.findById(userDTO.getUUID())).filter(Optional::isPresent).map(Optional::get)
+				.map(user -> {
+					this.clearUserCaches(user);
+					user.setUserName(userDTO.getUserName().toLowerCase());
+					user.setDisplayName(userDTO.getDisplayName());
+					if (userDTO.getEmail() != null) {
+						user.setEmail(userDTO.getEmail().toLowerCase());
+					}
+					user.setActivated(userDTO.isActivated());
+					List<AccountAuthority> accAuthor = user.getAccountAuthoritys();
+					List<Authority> authority = new ArrayList<>();
+					for (AccountAuthority author : accAuthor) {
+						authority.add(author.getAuthority());
+					}
+					List<Authority> managedAuthorities = authority;
+					managedAuthorities.clear();
+					userDTO.getAuthorities().stream().map(authorityRepository::findByAuthorities)
+							.filter(Optional::isPresent).map(Optional::get).forEach(managedAuthorities::add);
+					this.clearUserCaches(user);
+					log.debug("Changed Information for User: {}", user);
+					return user;
+				}).map(AccountDTO::new);
+	}
 
 	public void deleteUser(String login) {
 		accountRepository.findOneByUserName(login).ifPresent(user -> {
@@ -215,16 +215,16 @@ public class AccountService {
 	 * @param imageUrl  image URL of user.
 	 */
 
-	/*
-	 * public void updateUser(String firstName, String lastName, String email,
-	 * String langKey, String imageUrl) {
-	 * SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByLogin
-	 * ).ifPresent(user -> { user.setFirstName(firstName);
-	 * user.setLastName(lastName); if (email != null) {
-	 * user.setEmail(email.toLowerCase()); } user.setLangKey(langKey);
-	 * user.setImageUrl(imageUrl); this.clearUserCaches(user);
-	 * log.debug("Changed Information for User: {}", user); }); }
-	 */
+	public void updateUser(String displayName, String email) {
+		SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUserName).ifPresent(user -> {
+			user.setDisplayName(displayName);
+			if (email != null) {
+				user.setEmail(email.toLowerCase());
+			}
+			this.clearUserCaches(user);
+			log.debug("Changed Information for User: {}", user);
+		});
+	}
 
 	@Transactional
 	public void changePassword(String currentClearTextPassword, String newPassword) {
@@ -246,13 +246,15 @@ public class AccountService {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<Account> getUserWithAuthoritiesByLogin(String userName) {
-		return accountRepository.findOneWithAuthoritiesByUserName(userName);
+	public Optional<Account> getUserWithAuthoritiesByUserName(String userName) {
+		return accountRepository._findOneWithAuthorityByUserName(userName);
+//		return accountRepository.findOneByUserName(userName);
 	}
 
 	@Transactional(readOnly = true)
 	public Optional<Account> getUserWithAuthorities() {
-		return SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneWithAuthoritiesByUserName);
+		return SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::_findOneWithAuthorityByUserName);
+//		return SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUserName);
 	}
 
 	/**

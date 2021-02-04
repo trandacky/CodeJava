@@ -29,29 +29,22 @@ public class UserMapper {
         return new AccountDTO(user);
     }
 
-    public List<Account> userDTOsToUsers(List<AccountDTO> userDTOs) {
-        return userDTOs.stream()
-            .filter(Objects::nonNull)
-            .map(this::userDTOToUser)
-            .collect(Collectors.toList());
-    }
-
-    public Account userDTOToUser(AccountDTO userDTO) {
-        if (userDTO == null) {
+   
+    public Account userDTOToUser(AccountDTO accountDTO) {
+        if (accountDTO == null) {
             return null;
         } else {
-            Account user = new Account();
-			/*
-			 * user.setId(userDTO.getId()); user.setUsername(userDTO.getLogin());
-			 * user.setFirstName(userDTO.getFirstName());
-			 * user.setLastName(userDTO.getLastName()); user.setEmail(userDTO.getEmail());
-			 * user.setImageUrl(userDTO.getImageUrl());
-			 * user.setActivated(userDTO.isActivated());
-			 * user.setLangKey(userDTO.getLangKey()); Set<Authority> authorities =
-			 * this.authoritiesFromStrings(userDTO.getAuthorities());
-			 * user.setAuthorities(authorities);
-			 */
-            return user;
+        	Account account = new Account();
+    		account.setActivated(accountDTO.isActivated());
+    		account.setUUID(accountDTO.getUUID());
+    		account.setCreatedBy(accountDTO.getCreatedBy());
+    		account.setCreatedDate(accountDTO.getCreatedDate());
+    		account.setUpdateBy(accountDTO.getUpdateBy());
+    		account.setUpdateDate(accountDTO.getUpdateDate());
+    		account.setDisplayName(accountDTO.getDisplayName());
+    		account.setEmail(accountDTO.getEmail());
+    		account.setUserName(accountDTO.getUserName());
+    		return account;
         }
     }
 
