@@ -163,6 +163,7 @@ public class AccountService {
 			accountAuthorityRepository.save(accAuthor);
 		}
 		// luu user truoc khi luu quyen do tinh chat database
+		
 		this.clearUserCaches(user);
 		log.debug("Created Information for User: {}", user);
 		return user;
