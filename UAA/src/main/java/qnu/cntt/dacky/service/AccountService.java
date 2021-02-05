@@ -84,13 +84,14 @@ public class AccountService {
 		});
 	}
 
-	public Account registerUser(ManagedUserVM userDTO, String password) {
+	public Account registerUser(AccountDTO userDTO, String password) {
 		accountRepository.findOneByUsername(userDTO.getUsername().toLowerCase()).ifPresent(existingUser -> {
 			boolean removed = removeNonActivatedUser(existingUser);
 			if (!removed) {
 				throw new UsernameAlreadyUsedException();
 			}
 		});
+		
 		accountRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
 			boolean removed = removeNonActivatedUser(existingUser);
 			if (!removed) {
@@ -250,14 +251,14 @@ public class AccountService {
 
 	@Transactional(readOnly = true)
 	public Optional<Account> getUserWithAuthoritiesByUserName(String userName) {
-		return accountRepository._findOneWithAuthorityByUserName(userName);
-//		return accountRepository.findOneByUserName(userName);
+		return accountRepository.findOneWithAuthoritiesByUsername(userName);
+//		return accountRepository.findOneByUsername(userName);
 	}
 
 	@Transactional(readOnly = true)
 	public Optional<Account> getUserWithAuthorities() {
-		return SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::_findOneWithAuthorityByUserName);
-//		return SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUserName);
+		return SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneWithAuthoritiesByUsername);
+//		return SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUsername);
 	}
 
 	/**

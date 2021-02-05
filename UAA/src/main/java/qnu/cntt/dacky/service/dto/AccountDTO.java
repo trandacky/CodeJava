@@ -3,13 +3,17 @@ package qnu.cntt.dacky.service.dto;
 import qnu.cntt.dacky.config.Constants;
 
 import qnu.cntt.dacky.domain.Authority;
+import qnu.cntt.dacky.repository.AuthorityRepository;
 import qnu.cntt.dacky.domain.Account;
+import qnu.cntt.dacky.domain.AccountAuthority;
 
 import javax.validation.constraints.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,22 +23,47 @@ import java.util.stream.Collectors;
  */
 public class AccountDTO {
 
+	@Autowired
+	private AuthorityRepository authorityRepository;
+
+	public AccountDTO(Account user) {
+		this.UUID = user.getUUID();
+		this.createdBy = user.getCreatedBy();
+		this.createdDate = user.getCreatedDate();
+		this.updateBy = user.getUpdateBy();
+		this.updateDate = user.getUpdateDate();
+		this.username = user.getUsername();
+		this.activated = user.getActivated();
+
+		this.displayName = user.getDisplayName();
+		this.enabled = user.isEnabled();
+		this.locked = user.isLocked();
+		this.email = user.getEmail();
+		List<String> author = new ArrayList<>();
+
+		for (AccountAuthority accountAuthority : user.getAccountAuthoritys()) {
+
+			author.add(accountAuthority.getAuthority().getAuthorities());
+			System.out.println(accountAuthority.getAuthority().getAuthorities());
+		}
+		this.authorities = author;
+	}
+
 	private java.util.UUID UUID;
 
-	
-	private String createdBy;
-
-    private Instant createdDate;
-
-    private String updateBy;
-
-    private Instant updateDate;
-	
 	@NotBlank
 	@Pattern(regexp = Constants.LOGIN_REGEX)
 	@Size(min = 6, max = 128)
-	private String login;
+	private String username;
+	
+	private String createdBy;
 
+	private Instant createdDate;
+
+	private String updateBy;
+
+	private Instant updateDate;
+	
 	private boolean activated = false;
 
 	private String displayName;
@@ -44,40 +73,22 @@ public class AccountDTO {
 	private boolean locked = false;
 
 	private String email;
-	
+
 	private List<String> authorities;
-	
+
 	public AccountDTO() {
 		// Empty constructor needed for Jackson.
-	}
-
-	public AccountDTO(Account user) {
-		this.UUID = user.getUUID();
-		this.createdBy = user.getCreatedBy();
-		this.createdDate = user.getCreatedDate();
-		this.updateBy = user.getUpdateBy();
-		this.updateDate = user.getUpdateDate();
-		this.login = user.getUsername();
-		this.activated = user.getActivated();
-		
-		this.activated = user.getActivated();
-		this.displayName = user.getDisplayName();
-		this.enabled = user.isEnabled();
-		this.locked = user.isLocked();
-		this.email = user.getEmail();
-		this.authorities = user.getAccountAuthoritys().stream().map(authority ->authority.getAuthority().getName()) .collect(Collectors.toList());
 	}
 
 	@Override
 	public String toString() {
 		return "AccountDTO [UUID=" + UUID + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", updateBy="
-				+ updateBy + ", updateDate=" + updateDate + ", userName=" + login + ", activated=" + activated
+				+ updateBy + ", updateDate=" + updateDate + ", userName=" + username + ", activated=" + activated
 				+ ", displayName=" + displayName + ", enabled=" + enabled + ", locked=" + locked + ", email=" + email
 				+ ", authorities=" + authorities + "]";
 	}
 
-	public Account toEntity(AccountDTO accountDTO)
-	{
+	public Account toEntity(AccountDTO accountDTO) {
 		Account account = new Account();
 		account.setActivated(accountDTO.isActivated());
 		account.setUUID(accountDTO.getUUID());
@@ -86,12 +97,22 @@ public class AccountDTO {
 		account.setUpdateBy(accountDTO.getUpdateBy());
 		account.setUpdateDate(accountDTO.getUpdateDate());
 		account.setDisplayName(accountDTO.getDisplayName());
-		account.setEmail(accountDTO.getEmail());
 		account.setUsername(accountDTO.getUsername());
-		
+		if (accountDTO.getEmail() != null) {
+			account.setEmail(accountDTO.getEmail().toLowerCase());
+		}
+		List<AccountAuthority> accountAuthoritys = new ArrayList<>();
+		for (String acc : accountDTO.getAuthorities()) {
+			Authority authority = authorityRepository.findByAuthorities(acc).get();
+
+			AccountAuthority accountAuthority = new AccountAuthority();
+			accountAuthority.setAuthority(authority);
+			accountAuthoritys.add(accountAuthority);
+		}
+		account.setAccountAuthoritys(accountAuthoritys);
 		return account;
 	}
-	
+
 	public java.util.UUID getUUID() {
 		return UUID;
 	}
@@ -131,8 +152,6 @@ public class AccountDTO {
 	public void setUpdateDate(Instant updateDate) {
 		this.updateDate = updateDate;
 	}
-
-	
 
 	public boolean isActivated() {
 		return activated;
@@ -183,13 +202,11 @@ public class AccountDTO {
 	}
 
 	public String getUsername() {
-		return login;
+		return username;
 	}
 
 	public void setUsername(String username) {
-		this.login = username;
+		this.username = username;
 	}
 
-	
-	
 }
