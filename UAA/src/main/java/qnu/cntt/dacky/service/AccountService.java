@@ -128,6 +128,7 @@ public class AccountService {
 		if (existingUser.getActivated()) {
 			return false;
 		}
+		accountAuthorityRepository.deleteAll(existingUser.getAccountAuthoritys());
 		accountRepository.delete(existingUser);
 		accountRepository.flush();
 		this.clearUserCaches(existingUser);
