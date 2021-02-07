@@ -44,7 +44,6 @@ public class AccountDTO {
 		for (AccountAuthority accountAuthority : user.getAccountAuthoritys()) {
 
 			author.add(accountAuthority.getAuthority().getAuthorities());
-			System.out.println(accountAuthority.getAuthority().getAuthorities());
 		}
 		this.authorities = author;
 	}
