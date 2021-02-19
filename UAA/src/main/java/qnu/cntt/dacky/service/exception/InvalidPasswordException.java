@@ -1,4 +1,4 @@
-package qnu.cntt.dacky.service;
+package qnu.cntt.dacky.service.exception;
 
 public class InvalidPasswordException extends RuntimeException {
 

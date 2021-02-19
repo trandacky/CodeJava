@@ -84,6 +84,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
             .and()
                 .authorizeRequests()
                 .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/public").permitAll()
+//api public
                 .antMatchers("/api/activate").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/account/reset-password/init").permitAll()
