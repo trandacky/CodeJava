@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import qnu.cntt.dacky.domain.AccountDetails;
@@ -17,7 +18,7 @@ import qnu.cntt.dacky.repository.AccountRepository;
 import qnu.cntt.dacky.service.AccountDetailService;
 import qnu.cntt.dacky.service.dto.AccountDTO;
 import qnu.cntt.dacky.service.dto.AccountDetailDTO;
-
+@Service
 public class AccountDetailImpl implements AccountDetailService{
 	private final Logger log = LoggerFactory.getLogger(AccountDetailService.class);
 	@Autowired
@@ -31,9 +32,15 @@ public class AccountDetailImpl implements AccountDetailService{
 	}
 	
 	
-	public AccountDetails getAccountDetailByUsername(String username)
+	public AccountDetailDTO getAccountDetailByUsername(String username)
 	{
-		return accountRepository.findOneByUsername(username).get().getAccountDetail();
+		AccountDetails accountDetail=accountRepository.findOneByUsername(username).get().getAccountDetail();
+		AccountDetailDTO accountDetailDTO= new AccountDetailDTO();
+		accountDetailDTO.setAbout(accountDetail.getAbout());
+		accountDetailDTO.setAccount(username);
+		accountDetailDTO.setName(accountDetail.getName());
+		accountDetailDTO.setPhoneNumber(accountDetail.getPhoneNumber());
+		return accountDetailDTO;
 	}
 	
 	public Optional<AccountDetails> updateAccountDetail(AccountDetailDTO accountDetailDTO)
@@ -57,8 +64,8 @@ public class AccountDetailImpl implements AccountDetailService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<AccountDetailDTO> getAllAccountDetail(Pageable pageable) {
-	return	accountDetailRepository.findAll(pageable).map(AccountDetailDTO::new);
+	public List<AccountDetails> getAllAccountDetail() {
+	return	accountDetailRepository.findAll();
 
 	}
 	

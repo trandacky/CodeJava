@@ -12,8 +12,8 @@ import qnu.cntt.dacky.service.dto.AccountDetailDTO;
 public interface AccountDetailService {
 
 	public AccountDetails createAccountDetail(AccountDetailDTO accountDetailDTO);
-	public Page<AccountDetailDTO> getAllAccountDetail(Pageable pageable);
-	public AccountDetails getAccountDetailByUsername(String username);
+	public AccountDetailDTO getAccountDetailByUsername(String username);
 	public Optional<AccountDetails> updateAccountDetail(AccountDetailDTO accountDetailDTO);
 	public void delete(String username);
+	public List<AccountDetails> getAllAccountDetail();
 }

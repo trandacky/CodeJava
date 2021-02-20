@@ -33,14 +33,16 @@ public class AccountDetailDTO {
 		
 	}
 	
-	public AccountDetailDTO() {
-	}
+	
 	public AccountDetailDTO(AccountDetails accountDetails) {
 		this.about= accountDetails.getAbout();
 		this.name = accountDetails.getName();
 		this.phoneNumber = accountDetails.getPhoneNumber();
 		this.account = accountDetails.getAccount().getUsername();
 		this.UUID= accountDetails.getUUID();
+	}
+	
+	public AccountDetailDTO() {
 	}
 
 	public String getAbout() {

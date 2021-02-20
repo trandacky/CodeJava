@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, String> {
 
-	Optional<Authority> findByAuthorities(String user);
+	Optional<Authority> findByAuthorities(String authority);
 }
