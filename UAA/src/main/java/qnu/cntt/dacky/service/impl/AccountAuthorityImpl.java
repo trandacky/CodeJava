@@ -37,7 +37,7 @@ public class AccountAuthorityImpl implements AccountAuthorityService{
 		Account account= accountRepository.findOneByUsername(username).get();
 		Authority authority= authorityRepository.findByAuthorities(role).get();
 		
-		accountAuthorityRepository.findByUsernameAndRoleLike(account, authority).ifPresent(accountAuthority -> {
+		accountAuthorityRepository.findByAccountAndAuthorityLike(account, authority).ifPresent(accountAuthority -> {
 			accountAuthorityRepository.delete(accountAuthority);
 		});
 	}

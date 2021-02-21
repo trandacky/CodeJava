@@ -130,6 +130,7 @@ public class AccountImpl implements AccountService{
 		accountAuthorityRepository.save(accountAuthority);
 		
 		AccountDetails accountDetail= new AccountDetails();
+		accountDetail.setAccount(newUser);
 		accountDetailRepository.save(accountDetail);
 		//them detail cho user
 		this.clearUserCaches(newUser);
@@ -179,6 +180,8 @@ public class AccountImpl implements AccountService{
 		// luu user truoc khi luu quyen do tinh chat database
 		
 		AccountDetails accountDetail= new AccountDetails();
+
+		accountDetail.setAccount(user);
 		accountDetailRepository.save(accountDetail);
 		//them detail cho user
 		

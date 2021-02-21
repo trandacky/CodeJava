@@ -12,6 +12,6 @@ import qnu.cntt.dacky.domain.Authority;
 @Repository
 public interface AccountAuthorityRepository extends JpaRepository<AccountAuthority, UUID>{
 
-	Optional<AccountAuthority> findByUsernameAndRoleLike(Account account, Authority authority);
+	Optional<AccountAuthority> findByAccountAndAuthorityLike(Account account, Authority authority);
 	
 }

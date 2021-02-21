@@ -27,8 +27,8 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    @Size(max = 50)
-    @Column(length = 50)
+    @Size(min = 1, max = 50)
+    @Column(length = 50, unique = true, nullable = false)
     private String authorities;
 
     @NotNull
