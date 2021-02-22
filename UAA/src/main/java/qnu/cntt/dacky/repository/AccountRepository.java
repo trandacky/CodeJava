@@ -35,6 +35,7 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 	Optional<Account> findOneByEmailIgnoreCase(String email);
 
 	Optional<Account> findOneByUsername(String login);
+	Optional<Account> findByUsername(String login);
 	
 	@EntityGraph(attributePaths = "accountAuthoritys.authority.authorities")
 	@Cacheable(cacheNames = USERS_BY_USERNAME_CACHE)

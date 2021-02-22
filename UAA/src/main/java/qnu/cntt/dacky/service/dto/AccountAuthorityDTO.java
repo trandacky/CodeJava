@@ -29,7 +29,7 @@ public class AccountAuthorityDTO {
 		this.username = accountAuthority.getAccount().getUsername();
 		this.role = accountAuthority.getAuthority().getAuthorities();
 	}
-	public AccountAuthority toEntity(AccountAuthorityDTO accountAuthorityDTO)
+	public AccountAuthority toNewEntity(AccountAuthorityDTO accountAuthorityDTO)
 	{
 		AccountAuthority accountAuthority = new AccountAuthority();
 		Account account= accountRepository.findOneByUsername(accountAuthorityDTO.getUsername()).get();

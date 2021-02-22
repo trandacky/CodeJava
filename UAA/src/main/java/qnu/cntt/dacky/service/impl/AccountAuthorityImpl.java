@@ -29,7 +29,7 @@ public class AccountAuthorityImpl implements AccountAuthorityService{
 	@Override
 	public AccountAuthority createAccountAuthority(AccountAuthorityDTO accountAuthorityDTO) {
 		
-		return accountAuthorityRepository.save(accountAuthorityDTO.toEntity(accountAuthorityDTO));
+		return accountAuthorityRepository.save(accountAuthorityDTO.toNewEntity(accountAuthorityDTO));
 	}
 
 	@Override
