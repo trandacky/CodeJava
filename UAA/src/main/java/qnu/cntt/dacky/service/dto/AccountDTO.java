@@ -26,26 +26,28 @@ public class AccountDTO {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 
-	public AccountDTO(Account user) {
-		this.UUID = user.getUUID();
-		this.createdBy = user.getCreatedBy();
-		this.createdDate = user.getCreatedDate();
-		this.updateBy = user.getUpdateBy();
-		this.updateDate = user.getUpdateDate();
-		this.username = user.getUsername();
-		this.activated = user.getActivated();
+	
 
-		this.displayName = user.getDisplayName();
-		this.enabled = user.isEnabled();
-		this.locked = user.isLocked();
-		this.email = user.getEmail();
-		List<String> author = new ArrayList<>();
-
-		for (AccountAuthority accountAuthority : user.getAccountAuthoritys()) {
-
-			author.add(accountAuthority.getAuthority().getAuthorities());
+	public AccountDTO(Account account) {
+		super();
+		this.UUID = account.getUUID();
+		this.username = account.getUsername();
+		this.createdBy = account.getCreatedBy();
+		this.createdDate = account.getCreatedDate();
+		this.updateBy = account.getUpdateBy();
+		this.updateDate = account.getUpdateDate();
+		this.activated = account.getActivated();
+		this.firstName = account.getFirstName();
+		this.lastName = account.getLastName();
+		this.enabled = account.isEnabled();
+		this.locked = account.isLocked();
+		this.email = account.getEmail();
+		List<String> authority = new ArrayList<>();
+		for(AccountAuthority accAuthor: account.getAccountAuthoritys())
+		{
+			authority.add(accAuthor.getAuthority().getAuthorities());
 		}
-		this.authorities = author;
+		this.authorities = authority;
 	}
 
 	private java.util.UUID UUID;
@@ -65,9 +67,11 @@ public class AccountDTO {
 	
 	private boolean activated = false;
 
-	private String displayName;
+	private String firstName="";
+	
+	private String lastName="";
 
-	private boolean enabled = false;
+	private boolean enabled = true;
 
 	private boolean locked = false;
 
@@ -79,13 +83,15 @@ public class AccountDTO {
 		// Empty constructor needed for Jackson.
 	}
 
+
 	@Override
 	public String toString() {
-		return "AccountDTO [UUID=" + UUID + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", updateBy="
-				+ updateBy + ", updateDate=" + updateDate + ", userName=" + username + ", activated=" + activated
-				+ ", displayName=" + displayName + ", enabled=" + enabled + ", locked=" + locked + ", email=" + email
-				+ ", authorities=" + authorities + "]";
+		return "AccountDTO [UUID=" + UUID + ", username=" + username + ", createdBy=" + createdBy + ", createdDate="
+				+ createdDate + ", updateBy=" + updateBy + ", updateDate=" + updateDate + ", activated=" + activated
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", enabled=" + enabled + ", locked=" + locked
+				+ ", email=" + email + ", authorities=" + authorities + "]";
 	}
+
 
 	public Account toEntity(AccountDTO accountDTO) {
 		Account account = new Account();
@@ -95,7 +101,8 @@ public class AccountDTO {
 		account.setCreatedDate(accountDTO.getCreatedDate());
 		account.setUpdateBy(accountDTO.getUpdateBy());
 		account.setUpdateDate(accountDTO.getUpdateDate());
-		account.setDisplayName(accountDTO.getDisplayName());
+		account.setFirstName(accountDTO.getFirstName());
+		account.setLastName(accountDTO.getLastName());
 		account.setUsername(accountDTO.getUsername());
 		if (accountDTO.getEmail() != null) {
 			account.setEmail(accountDTO.getEmail().toLowerCase());
@@ -160,13 +167,27 @@ public class AccountDTO {
 		this.activated = activated;
 	}
 
-	public String getDisplayName() {
-		return displayName;
+	
+
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 
 	public boolean isEnabled() {
 		return enabled;

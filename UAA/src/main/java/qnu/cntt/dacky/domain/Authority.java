@@ -30,39 +30,9 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
     private String authorities;
-
-    @NotNull
-    @Column(name="enable_admin",nullable = false)
-    private boolean enableAdmin = false;
-    
-    @NotNull
-    @Column(name="enable_client",nullable = false)
-    private boolean enableClient = false;
-    
-    @NotNull
-    @Column(name="is_root",nullable = false)
-    private boolean isRoot = false;
-    
-    @Size(max = 50)
-    @Column(length = 50)
-    private String name;
-    
-    @OneToOne(mappedBy = "parentAuthority")
-    private Authority childAuthority;
-    
-    
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="parent_uuid",referencedColumnName = "uuid")
-    private Authority parentAuthority;
     
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<AccountAuthority> accountAuthorities;
-    
-    @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL)
-    private List<AuthorityMenuClient> authorityMenuClients;
-    
-    @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL)
-    private List<AuthorityMenuAdmintration> authorityMenuAdmintrations;
 
 
 
@@ -74,54 +44,6 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
 		this.authorities = authorities;
 	}
 
-	public boolean isEnableAdmin() {
-		return enableAdmin;
-	}
-
-	public void setEnableAdmin(boolean enableAdmin) {
-		this.enableAdmin = enableAdmin;
-	}
-
-	public boolean isEnableClient() {
-		return enableClient;
-	}
-
-	public void setEnableClient(boolean enableClient) {
-		this.enableClient = enableClient;
-	}
-
-	public boolean isRoot() {
-		return isRoot;
-	}
-
-	public void setRoot(boolean isRoot) {
-		this.isRoot = isRoot;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Authority getChildAuthority() {
-		return childAuthority;
-	}
-
-	public void setChildAuthority(Authority childAuthority) {
-		this.childAuthority = childAuthority;
-	}
-
-	public Authority getParentAuthority() {
-		return parentAuthority;
-	}
-
-	public void setParentAuthority(Authority parentAuthority) {
-		this.parentAuthority = parentAuthority;
-	}
-
 	public List<AccountAuthority> getAccountAuthorities() {
 		return accountAuthorities;
 	}
@@ -129,24 +51,4 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
 	public void setAccountAuthorities(List<AccountAuthority> accountAuthorities) {
 		this.accountAuthorities = accountAuthorities;
 	}
-
-	public List<AuthorityMenuClient> getAuthorityMenuClients() {
-		return authorityMenuClients;
-	}
-
-	public void setAuthorityMenuClients(List<AuthorityMenuClient> authorityMenuClients) {
-		this.authorityMenuClients = authorityMenuClients;
-	}
-
-	public List<AuthorityMenuAdmintration> getAuthorityMenuAdmintrations() {
-		return authorityMenuAdmintrations;
-	}
-
-	public void setAuthorityMenuAdmintrations(List<AuthorityMenuAdmintration> authorityMenuAdmintrations) {
-		this.authorityMenuAdmintrations = authorityMenuAdmintrations;
-	}
-
-	
-    
-    
 }

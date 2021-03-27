@@ -40,8 +40,12 @@ public class Account extends AbstractAuditingEntity implements Serializable {
     private String activationKey;
     
     @Size(max = 30)
-    @Column(name = "display_name", length = 30)
-    private String displayName;
+    @Column(name = "first_name", length = 30)
+    private String firstName;
+    
+    @Size(max = 30)
+    @Column(name = "last_name", length = 30)
+    private String lastName;
     
     @NotNull
     @Column(nullable = false)
@@ -119,13 +123,20 @@ public class Account extends AbstractAuditingEntity implements Serializable {
     public void setResetKey(String resetKey) {
         this.resetKey = resetKey;
     }
-
-	public String getDisplayName() {
-		return displayName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public boolean isEnabled() {

@@ -53,6 +53,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @Column(name = "update_date")
     @JsonIgnore
     private Instant updateDate = Instant.now();
+    
 
     public String getCreatedBy() {
         return createdBy;
@@ -94,7 +95,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 		UUID = uUID;
 	}
 
-	
     
     
 }

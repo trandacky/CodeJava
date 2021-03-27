@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import qnu.cntt.dacky.domain.AccountDetails;
 import qnu.cntt.dacky.domain.Authority;
-import qnu.cntt.dacky.domain.AuthorityMenuAdmintration;
 import qnu.cntt.dacky.security.AuthoritiesConstants;
 import qnu.cntt.dacky.service.AccountAuthorityService;
 import qnu.cntt.dacky.service.AccountDetailService;
-import qnu.cntt.dacky.service.AuthorityMenuAdminService;
 import qnu.cntt.dacky.service.AuthorityService;
 import qnu.cntt.dacky.service.dto.AccountAuthorityDTO;
 import qnu.cntt.dacky.service.dto.AuthorityDTO;
@@ -29,8 +27,6 @@ import qnu.cntt.dacky.service.dto.AuthorityDTO;
 public class AdminResource {
 	@Autowired
 	private AuthorityService authorityService;
-	@Autowired
-	private AuthorityMenuAdminService authorityMenuAdminService;
 
 	@Autowired
 	private AccountDetailService accountDetailService;
@@ -71,19 +67,6 @@ public class AdminResource {
 	@GetMapping("/get-all-account-detail")
 	public List<AccountDetails> getAllAccountDetails() {
 		return accountDetailService.getAllAccountDetail();
-	}
-
-	@GetMapping("/get-all-authority-menu-admin")
-	public List<AuthorityMenuAdmintration> getAllauthorityAdminMenu() {
-		return authorityMenuAdminService.getAllAuthorityMenuAdmin();
-	}
-	
-	// delete authority admin menu do sometime
-
-	@GetMapping("/get-authority-menu-admin")
-	public List<AuthorityMenuAdmintration> getauthorityMenuAdmin() {
-		return authorityMenuAdminService.getAuthorityMenuAdmin("admin");
-		// change it
 	}
 	@PostMapping("/create-authority-menu-admin")
 	public void createAuthorityMenuAdmin()

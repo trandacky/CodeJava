@@ -68,10 +68,14 @@ public class AccountResource {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+		AccountDTO acc = managedUserVM;
+		log.debug(acc.toString());
 		if (!checkPasswordLength(managedUserVM.getPassword())) {
 			throw new InvalidPasswordException();
 		}
+		
 		Account user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+		
 		mailService.sendActivationEmail(user);
 	}
 
@@ -141,7 +145,7 @@ public class AccountResource {
 		if (!user.isPresent()) {
 			throw new AccountResourceException("User could not be found");
 		}
-		userService.updateUser(userDTO.getDisplayName(), userDTO.getEmail());
+		userService.updateUser(userDTO.getFirstName(),userDTO.getLastName(), userDTO.getEmail());
 	}
 
 	/**

@@ -41,7 +41,8 @@ public class UserMapper {
     		account.setCreatedDate(accountDTO.getCreatedDate());
     		account.setUpdateBy(accountDTO.getUpdateBy());
     		account.setUpdateDate(accountDTO.getUpdateDate());
-    		account.setDisplayName(accountDTO.getDisplayName());
+    		account.setFirstName(accountDTO.getFirstName());
+    		account.setLastName(accountDTO.getLastName());
     		account.setEmail(accountDTO.getEmail());
     		account.setUsername(accountDTO.getUsername());
     		return account;
@@ -55,7 +56,7 @@ public class UserMapper {
         if (authoritiesAsString != null) {
             authorities = authoritiesAsString.stream().map(string -> {
                 Authority auth = new Authority();
-                auth.setName(string);
+                auth.setAuthorities(string);
                 return auth;
             }).collect(Collectors.toSet());
         }

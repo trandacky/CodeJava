@@ -111,14 +111,13 @@ public class AccountImpl implements AccountService{
 		String encryptedPassword = passwordEncoder.encode(password);
 		newUser.setUsername(userDTO.getUsername().toLowerCase()); // new user gets initially a generated password
 		newUser.setPassword(encryptedPassword);
-		newUser.setDisplayName(userDTO.getDisplayName());
+		newUser.setFirstName(userDTO.getFirstName());
+		newUser.setLastName(userDTO.getLastName());
 		if (userDTO.getEmail() != null) {
 			newUser.setEmail(userDTO.getEmail().toLowerCase());
 		}
 		newUser.setCreatedBy("user");
 		newUser.setUpdateBy("user");
-		newUser.setCreatedDate(Instant.now());
-		newUser.setUpdateDate(Instant.now());
 		newUser.setActivated(false); // new user gets registration key
 		newUser.setActivationKey(RandomUtil.generateActivationKey());
 		accountRepository.save(newUser);
@@ -152,7 +151,8 @@ public class AccountImpl implements AccountService{
 	public Account createUser(AccountDTO userDTO) {
 		Account user = new Account();
 		user.setUsername(userDTO.getUsername().toLowerCase());
-		user.setDisplayName(userDTO.getDisplayName());
+		user.setFirstName(userDTO.getFirstName());
+		user.setLastName(userDTO.getLastName());
 		if (userDTO.getEmail() != null) {
 			user.setEmail(userDTO.getEmail().toLowerCase());
 		}
@@ -202,7 +202,8 @@ public class AccountImpl implements AccountService{
 				.map(user -> {
 					this.clearUserCaches(user);
 					user.setUsername(userDTO.getUsername().toLowerCase());
-					user.setDisplayName(userDTO.getDisplayName());
+					user.setFirstName(userDTO.getFirstName());
+					user.setLastName(userDTO.getLastName());
 					if (userDTO.getEmail() != null) {
 						user.setEmail(userDTO.getEmail().toLowerCase());
 					}
@@ -242,9 +243,10 @@ public class AccountImpl implements AccountService{
 	 * @param imageUrl  image URL of user.
 	 */
 
-	public void updateUser(String displayName, String email) {
+	public void updateUser(String firstName, String lastName, String email) {
 		SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUsername).ifPresent(user -> {
-			user.setDisplayName(displayName);
+			user.setFirstName(firstName);
+			user.setLastName(lastName);
 			if (email != null) {
 				user.setEmail(email.toLowerCase());
 			}

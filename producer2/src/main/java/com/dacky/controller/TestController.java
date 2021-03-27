@@ -18,11 +18,10 @@ public class TestController {
 		emp.setDesignation("manager");
 		emp.setEmpId("1");
 		emp.setSalary(3000);
-		//
-		/*
-		 * if (emp.getName().equalsIgnoreCase("emp1")) throw new RuntimeException();
-		 */
-		//
+
+		if (emp.getName().equalsIgnoreCase("emp1"))
+			throw new RuntimeException();
+
 		return emp;
 	}
 

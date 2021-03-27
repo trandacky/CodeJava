@@ -16,7 +16,7 @@ public interface AccountService {
 	public Account registerUser(AccountDTO userDTO, String password);
 	public Optional<AccountDTO> updateUser(AccountDTO userDTO);
 	public void deleteUser(String login);
-	public void updateUser(String displayName, String email);
+	public void updateUser(String firstName, String lastName, String string);
 	
 	
 	public Optional<Account> activateRegistration(String key);
