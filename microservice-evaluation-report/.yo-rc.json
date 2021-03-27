@@ -1,0 +1,39 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "qnu.cntt.dacky"
+    },
+    "jhipsterVersion": "6.10.5",
+    "applicationType": "microservice",
+    "baseName": "MicroserviceEvaluationReport",
+    "packageName": "qnu.cntt.dacky",
+    "packageFolder": "qnu/cntt/dacky",
+    "serverPort": "0",
+    "authenticationType": "uaa",
+    "uaaBaseName": "uaa",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MzE2NjliODJhZThjM2E3ODNlNjIyNDg5ZTlhMzBhYzU5Y2E3MGExNjJjMDRmNzMzMTE3MDlhZTU5ZTk4N2ZkY2NkNjIyNDE2YTY3MGU2Yjk3NThlZTExODM1ZDlkZGI2OGRiMGEzNzI1YTA5NjE1ZjU1ZjVkYjMzYjc0OGM3MDE=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1616859617281,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
