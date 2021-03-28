@@ -85,11 +85,10 @@ public class Account extends AbstractAuditingEntity implements Serializable {
     
     @OneToOne(mappedBy = "account")
     private AccountDetails accountDetail;
-    
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<Avatar> avatars;
-    
-    @Null
+	/*
+	 * @OneToMany(mappedBy = "account", cascade = CascadeType.ALL) private
+	 * List<Avatar> avatars;
+	 */
     @OneToMany(mappedBy = "account")
     private List<AccountAuthority> accountAuthoritys;
     
@@ -191,13 +190,6 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 		this.accountAuthoritys = accountAuthoritys;
 	}
 
-	public List<Avatar> getAvatars() {
-		return avatars;
-	}
-
-	public void setAvatars(List<Avatar> avatars) {
-		this.avatars = avatars;
-	}
 
 	public Instant getResetDate() {
 		return resetDate;

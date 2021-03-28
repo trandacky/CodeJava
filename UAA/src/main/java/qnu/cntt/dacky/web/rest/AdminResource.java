@@ -68,12 +68,4 @@ public class AdminResource {
 	public List<AccountDetails> getAllAccountDetails() {
 		return accountDetailService.getAllAccountDetail();
 	}
-	@PostMapping("/create-authority-menu-admin")
-	public void createAuthorityMenuAdmin()
-	{
-		
-	}
-	
-	// create do it with DTO
-	
 }

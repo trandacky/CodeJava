@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 @Entity
 @Table(name = "account_details")
@@ -33,10 +35,14 @@ public class AccountDetails extends AbstractAuditingEntity implements Serializab
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
-	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_uuid", referencedColumnName = "uuid")
 	private Account account;
+	/*
+	 * @ManyToOne
+	 * 
+	 * @JoinColumn(name = "class_id") private ClaSs class1;
+	 */
 
 	public String getAbout() {
 		return about;

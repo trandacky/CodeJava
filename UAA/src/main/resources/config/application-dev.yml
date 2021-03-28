@@ -112,8 +112,8 @@ jhipster:
       client-id: internal
       client-secret: internal
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    #base-url: http://127.0.0.1:9000
-    base-url: http://localhost:8080
+    base-url: http://127.0.0.1:8080
+#    base-url: http://localhost:8080
   metrics:
     logs: # Reports metrics in the logs
       enabled: false
