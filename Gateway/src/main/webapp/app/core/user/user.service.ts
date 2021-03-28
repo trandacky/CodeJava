@@ -20,8 +20,8 @@ export class UserService {
     return this.http.put<IUser>(this.resourceUrl, user);
   }
 
-  find(login: string): Observable<IUser> {
-    return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
+  find(username: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.resourceUrl}/${username}`);
   }
 
   query(req?: Pagination): Observable<HttpResponse<IUser[]>> {

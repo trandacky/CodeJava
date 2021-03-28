@@ -1,5 +1,5 @@
 export interface IUser {
-  id?: any;
+  uuid?: any;
   username?: string;
   firstName?: string;
   lastName?: string;
@@ -9,14 +9,14 @@ export interface IUser {
   authorities?: string[];
   createdBy?: string;
   createdDate?: Date;
-  lastModifiedBy?: string;
-  lastModifiedDate?: Date;
+  updatedBy?: string;
+  updateDate?: Date;
   password?: string;
 }
 
 export class User implements IUser {
   constructor(
-    public id?: any,
+    public uuid?: any,
     public username?: string,
     public firstName?: string,
     public lastName?: string,
@@ -26,8 +26,8 @@ export class User implements IUser {
     public authorities?: string[],
     public createdBy?: string,
     public createdDate?: Date,
-    public lastModifiedBy?: string,
-    public lastModifiedDate?: Date,
+    public updateBy?: string,
+    public updateDate?: Date,
     public password?: string
   ) {}
 }

@@ -6,7 +6,7 @@
             </h2>
 
             <dl class="row-md jh-entity-details">
-                <dt><span>username</span></dt>
+                <dt><span>Username</span></dt>
                 <dd>
                     <span>{{ user.username }}</span>
                     <jhi-boolean
@@ -29,13 +29,13 @@
                 <dd>{{ user.createdBy }}</dd>
 
                 <dt><span>Created Date</span></dt>
-                <dd>{{ user.createdDate | date:'dd/MM/yy HH:mm' }}</dd>
+                <dd>{{ user.createdDate | date:'dd/MM/yy HH:mm:ss' }}</dd>
 
-                <dt><span>Last Modified By</span></dt>
-                <dd>{{ user.lastModifiedBy }}</dd>
+                <dt><span>Update By</span></dt>
+                <dd>{{ user.updateBy }}</dd>
 
-                <dt><span>Last Modified Date</span></dt>
-                <dd>{{ user.lastModifiedDate | date:'dd/MM/yy HH:mm' }}</dd>
+                <dt><span>Update Date</span></dt>
+                <dd>{{ user.updateDate | date:'dd/MM/yy HH:mm:ss' }}</dd>
 
                 <dt><span>Profiles</span></dt>
                 <dd>

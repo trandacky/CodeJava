@@ -11,25 +11,25 @@
 
     <jhi-alert></jhi-alert>
 
-    <div class="table-responsive" *ngIf="users">
+    <div class="table-responsive text-center" *ngIf="users">
         <table class="table table-striped" aria-describedby="user-management-page-heading">
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)">
-                    <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="username"><span>username</span> <fa-icon icon="sort"></fa-icon></th>
+                    <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                    <th scope="col"  jhiSortBy="username"><span>Username</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"></th>
-                    <th scope="col"><span>Profiles</span></th>
+                    <th scope="col">Active</th>
+                    <th scope="col"><span>Role</span></th>
                     <th scope="col" jhiSortBy="createdDate"><span>Created Date</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col" jhiSortBy="lastModifiedBy"><span>Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col" jhiSortBy="lastModifiedDate"><span>Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" jhiSortBy="updateBy"><span>Update By</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" jhiSortBy="updateDate"><span>Update Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody *ngIf="users">
                 <tr *ngFor="let user of users; trackBy: trackIdentity">
-                    <td><a [routerLink]="['./', user.username, 'view']">{{ user.id }}</a></td>
-                    <td>{{ user.username }}</td>
+                    <!-- <td>{{ user.uuid }}</td> -->
+                    <td><a [routerLink]="['./', user.username, 'view']">{{ user.username }}</a></td>
                     <td>{{ user.email }}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated">Deactivated</button>
@@ -41,9 +41,9 @@
                             <span class="badge badge-info">{{ authority }}</span>
                         </div>
                     </td>
-                    <td>{{ user.createdDate | date:'dd/MM/yy HH:mm' }}</td>
-                    <td>{{ user.lastModifiedBy }}</td>
-                    <td>{{ user.lastModifiedDate | date:'dd/MM/yy HH:mm' }}</td>
+                    <td>{{ user.createdDate | date:'dd/MM/yy HH:mm:ss' }}</td>
+                    <td>{{ user.updateBy }}</td>
+                    <td>{{ user.updateDate | date:'dd/MM/yy HH:mm:ss' }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

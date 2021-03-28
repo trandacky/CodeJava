@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 @Service
 
 @Transactional
-public class AccountImpl implements AccountService{
+public class AccountImpl implements AccountService {
 
 	private final Logger log = LoggerFactory.getLogger(AccountService.class);
 	@Autowired
@@ -56,7 +56,7 @@ public class AccountImpl implements AccountService{
 	private CacheManager cacheManager;
 	@Autowired
 	private AccountAuthorityRepository accountAuthorityRepository;
-	
+
 	@Autowired
 	private AccountDetailRepository accountDetailRepository;
 
@@ -100,7 +100,7 @@ public class AccountImpl implements AccountService{
 				throw new UsernameAlreadyUsedException();
 			}
 		});
-		
+
 		accountRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
 			boolean removed = removeNonActivatedUser(existingUser);
 			if (!removed) {
@@ -127,11 +127,11 @@ public class AccountImpl implements AccountService{
 		accountAuthority.setAccount(newUser);
 		accountAuthority.setAuthority(authorities.get());
 		accountAuthorityRepository.save(accountAuthority);
-		
-		AccountDetails accountDetail= new AccountDetails();
+
+		AccountDetails accountDetail = new AccountDetails();
 		accountDetail.setAccount(newUser);
 		accountDetailRepository.save(accountDetail);
-		//them detail cho user
+		// them detail cho user
 		this.clearUserCaches(newUser);
 		log.debug("Created Information for User: {}", newUser);
 		return newUser;
@@ -156,7 +156,7 @@ public class AccountImpl implements AccountService{
 		if (userDTO.getEmail() != null) {
 			user.setEmail(userDTO.getEmail().toLowerCase());
 		}
-		
+
 		String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
 		user.setPassword(encryptedPassword);
 		user.setResetKey(RandomUtil.generateResetKey());
@@ -178,13 +178,13 @@ public class AccountImpl implements AccountService{
 			accountAuthorityRepository.save(accAuthor);
 		}
 		// luu user truoc khi luu quyen do tinh chat database
-		
-		AccountDetails accountDetail= new AccountDetails();
+
+		AccountDetails accountDetail = new AccountDetails();
 
 		accountDetail.setAccount(user);
 		accountDetailRepository.save(accountDetail);
-		//them detail cho user
-		
+		// them detail cho user
+
 		this.clearUserCaches(user);
 		log.debug("Created Information for User: {}", user);
 		return user;
@@ -214,6 +214,20 @@ public class AccountImpl implements AccountService{
 						authority.add(author.getAuthority());
 					}
 					List<Authority> managedAuthorities = authority;
+					Set<Authority> authorities = new HashSet<>();
+					if (userDTO.getAuthorities() != null) {
+						authorities = userDTO.getAuthorities().stream().map(authorityRepository::findByAuthorities)
+								.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+					}
+					accountRepository.save(user);
+					for (Authority author : authorities) {
+						if (!managedAuthorities.contains(author)) {
+							AccountAuthority accAuthor2 = new AccountAuthority();
+							accAuthor2.setAccount(user);
+							accAuthor2.setAuthority(author);
+							accountAuthorityRepository.save(accAuthor2);
+						}
+					}
 					managedAuthorities.clear();
 					userDTO.getAuthorities().stream().map(authorityRepository::findByAuthorities)
 							.filter(Optional::isPresent).map(Optional::get).forEach(managedAuthorities::add);
@@ -225,8 +239,12 @@ public class AccountImpl implements AccountService{
 
 	public void deleteUser(String login) {
 		accountRepository.findOneByUsername(login).ifPresent(user -> {
-			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
-			accountRepository.delete(user);
+			for(AccountAuthority accAu:user.getAccountAuthoritys())
+			{
+				accountAuthorityRepository.deleteById(accAu.getUUID());
+			}
+				
+	//		accountRepository.delete(user);
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});

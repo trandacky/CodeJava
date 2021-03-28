@@ -15,7 +15,7 @@ export class UserManagementUpdateComponent implements OnInit {
   isSaving = false;
 
   editForm = this.fb.group({
-    id: [],
+    uuid: [],
     username: [
       '',
       [
@@ -39,7 +39,7 @@ export class UserManagementUpdateComponent implements OnInit {
     this.route.data.subscribe(({ user }) => {
       if (user) {
         this.user = user;
-        if (this.user.id === undefined) {
+        if (this.user.uuid === undefined) {
           this.user.activated = true;
         }
         this.updateForm(user);
@@ -57,7 +57,7 @@ export class UserManagementUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     this.updateUser(this.user);
-    if (this.user.id !== undefined) {
+    if (this.user.uuid !== undefined) {
       this.userService.update(this.user).subscribe(
         () => this.onSaveSuccess(),
         () => this.onSaveError()
@@ -73,7 +73,7 @@ export class UserManagementUpdateComponent implements OnInit {
 
   private updateForm(user: User): void {
     this.editForm.patchValue({
-      id: user.id,
+      uuid: user.uuid,
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -85,7 +85,8 @@ export class UserManagementUpdateComponent implements OnInit {
   }
 
   private updateUser(user: User): void {
-    user.username = this.editForm.get(['login'])!.value;
+    user.uuid=this.editForm.get(['uuid'])!.value;
+    user.username = this.editForm.get(['username'])!.value;
     user.firstName = this.editForm.get(['firstName'])!.value;
     user.lastName = this.editForm.get(['lastName'])!.value;
     user.email = this.editForm.get(['email'])!.value;

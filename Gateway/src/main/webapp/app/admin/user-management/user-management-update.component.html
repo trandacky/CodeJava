@@ -2,19 +2,19 @@
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="myUserLabel">
-                Create or edit a User
+            Update Create or edit a User
             </h2>
 
             <div *ngIf="user">
                 <jhi-alert-error></jhi-alert-error>
 
-                <div class="form-group" [hidden]="!user.id">
-                    <label>ID</label>
-                    <input type="text" class="form-control" name="id" formControlName="id" readonly>
+                <div class="form-group" [hidden]="!user.uuid">
+                    <label>UUID</label>
+                    <input type="text" class="form-control" name="uuid" formControlName="uuid" readonly>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label">username</label>
+                    <label class="form-control-label">Username</label>
                     <input type="text" class="form-control" name="username"
                            formControlName="username">
 
@@ -91,7 +91,7 @@
 
                 <div class="form-check">
                     <label class="form-check-label" for="activated">
-                        <input class="form-check-input" [attr.disabled]="user.id === undefined ? 'disabled' : null"
+                        <input class="form-check-input" [attr.disabled]="user.uuid === undefined ? 'disabled' : null"
                                type="checkbox" id="activated" name="activated" formControlName="activated">
                         <span>Activated</span>
                     </label>

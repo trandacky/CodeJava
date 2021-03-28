@@ -11,6 +11,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -88,6 +89,7 @@ public class Account extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Avatar> avatars;
     
+    @Null
     @OneToMany(mappedBy = "account")
     private List<AccountAuthority> accountAuthoritys;
     

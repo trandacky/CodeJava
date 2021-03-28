@@ -52,7 +52,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   trackIdentity(index: number, item: User): any {
-    return item.id;
+    return item.uuid;
   }
 
   deleteUser(user: User): void {
@@ -93,8 +93,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   private sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
-    if (this.predicate !== 'id') {
-      result.push('id');
+    if (this.predicate !== 'UUID') {
+      result.push('UUID');
     }
     return result;
   }

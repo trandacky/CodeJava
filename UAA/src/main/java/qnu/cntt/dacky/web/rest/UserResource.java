@@ -19,6 +19,8 @@ import qnu.cntt.dacky.web.rest.errors.LoginAlreadyUsedException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import liquibase.util.ObjectUtil;
+import net.logstash.logback.encoder.org.apache.commons.lang3.ObjectUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +75,7 @@ import java.util.*;
 @RequestMapping("/api")
 public class UserResource {
 	private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections
-			.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
+			.unmodifiableList(Arrays.asList("UUID", "username", "firstName", "lastName", "email", "activated", "langKey"));
 
 	private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
@@ -113,7 +115,7 @@ public class UserResource {
 	public ResponseEntity<Account> createUser(@Valid @RequestBody AccountDTO userDTO) throws URISyntaxException {
 		log.debug("REST request to save User : {}", userDTO);
 
-		if (userDTO.getUUID() != null) {
+		if (!ObjectUtils.isEmpty(userDTO.getUUID())) {
 			throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists"); 
 			// Lowercase the user login before comparing with database																														 
 		} else if (userRepository.findOneByUsername(userDTO.getUsername().toLowerCase()).isPresent()) {
@@ -210,10 +212,10 @@ public class UserResource {
 	 *         the "login" user, or with status {@code 404 (Not Found)}.
 	 */
 
-	@GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
-	public ResponseEntity<AccountDTO> getUser(@PathVariable String login) {
-		log.debug("REST request to get User : {}", login);
-		return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByUserName(login).map(AccountDTO::new));
+	@GetMapping("/users/{username:" + Constants.LOGIN_REGEX + "}")
+	public ResponseEntity<AccountDTO> getUser(@PathVariable String username) {
+		log.debug("REST request to get User : {}", username);
+		return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByUserName(username).map(AccountDTO::new));
 	}
 
 	/**
