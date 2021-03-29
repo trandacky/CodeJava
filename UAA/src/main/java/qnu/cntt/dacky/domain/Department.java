@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "department")
 public class Department extends AbstractAuditingEntity implements Serializable {
 
-	private static final long serialVersionUID = -600510717971235059L;
+	private static final long serialVersionUID = 1L;
 
 	@OneToMany(mappedBy = "department")
 	private List<CourseAndDepartment> courseAndDepartments= new ArrayList<>();

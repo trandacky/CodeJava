@@ -245,6 +245,7 @@ public class AccountImpl implements AccountService {
 			}
 				
 	//		accountRepository.delete(user);
+			user.setActivated(false);
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});

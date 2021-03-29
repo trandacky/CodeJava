@@ -14,14 +14,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "class")
-public class ClaSs extends AbstractAuditingEntity implements Serializable{
+public class ClaSs extends AbstractAuditingEntity implements Serializable {
 
-	private static final long serialVersionUID = 202341175745135787L;
+	private static final long serialVersionUID = 1L;
 
-	/*
-	 * @OneToMany(mappedBy = "class1") private List<AccountDetails> accountDetails=
-	 * new ArrayList<>();
-	 */
+	@OneToMany(mappedBy = "class1")
+	private List<AccountDetails> accountDetails = new ArrayList<>();
 
 	@Column(name = "name")
 	private String name;
@@ -56,4 +54,13 @@ public class ClaSs extends AbstractAuditingEntity implements Serializable{
 	public void setEnable(Boolean enable) {
 		this.enable = enable;
 	}
+ 
+	public List<AccountDetails> getAccountDetails() {
+		return accountDetails;
+	}
+
+	public void setAccountDetails(List<AccountDetails> accountDetails) {
+		this.accountDetails = accountDetails;
+	}
+	
 }

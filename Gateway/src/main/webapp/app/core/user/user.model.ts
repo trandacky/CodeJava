@@ -1,3 +1,4 @@
+import { AccountDetailDTO } from 'app/core/user/AccountDetail';
 export interface IUser {
   uuid?: any;
   username?: string;
@@ -28,6 +29,7 @@ export class User implements IUser {
     public createdDate?: Date,
     public updateBy?: string,
     public updateDate?: Date,
-    public password?: string
+    public password?: string,
+    public accountDetailDTO?: AccountDetailDTO,
   ) {}
 }

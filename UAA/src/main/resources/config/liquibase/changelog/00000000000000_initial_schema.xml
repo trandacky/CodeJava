@@ -79,7 +79,7 @@
                                 columnDataType="varchar(60)"
                                 tableName="jhi_user"/>
         <loadData
-                  file="config/liquibase/data/user.csv"
+                  file="config/liquibase/data/account.csv"
                   separator=";"
                   tableName="jhi_user">
             <column name="id" type="numeric"/>
@@ -95,7 +95,7 @@
         </loadData>
 
         <loadData
-                  file="config/liquibase/data/user_authority.csv"
+                  file="config/liquibase/data/account_authority.csv"
                   separator=";"
                   tableName="jhi_user_authority">
             <column name="user_id" type="numeric"/>

@@ -11,6 +11,7 @@ import java.util.Collections;
 
 import qnu.cntt.dacky.service.AccountService;
 import qnu.cntt.dacky.service.dto.AccountDTO;
+import qnu.cntt.dacky.service.dto.AccountDTOToReturnDetailAccount;
 import qnu.cntt.dacky.service.MailService;
 import qnu.cntt.dacky.web.rest.errors.BadRequestAlertException;
 import qnu.cntt.dacky.web.rest.errors.EmailAlreadyUsedException;
@@ -213,9 +214,9 @@ public class UserResource {
 	 */
 
 	@GetMapping("/users/{username:" + Constants.LOGIN_REGEX + "}")
-	public ResponseEntity<AccountDTO> getUser(@PathVariable String username) {
+	public ResponseEntity<AccountDTOToReturnDetailAccount> getUser(@PathVariable String username) {
 		log.debug("REST request to get User : {}", username);
-		return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByUserName(username).map(AccountDTO::new));
+		return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByUserName(username).map(AccountDTOToReturnDetailAccount::new));
 	}
 
 	/**

@@ -42,6 +42,13 @@ public class AccountDetailDTO {
 		this.UUID= accountDetails.getUUID();
 	}
 	
+	@Override
+	public String toString() {
+		return "AccountDetailDTO [UUID=" + UUID + ", about=" + about + ", name=" + name + ", phoneNumber=" + phoneNumber
+				+ ", account=" + account + "]";
+	}
+
+
 	public AccountDetailDTO() {
 	}
 

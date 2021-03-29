@@ -1,6 +1,5 @@
 package qnu.cntt.dacky.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import qnu.cntt.dacky.config.Constants;
@@ -29,103 +28,110 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Account extends AbstractAuditingEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @NotNull
-    @Column(nullable = false)
-    private boolean activated = false;
+	@NotNull
+	@Column(nullable = false)
+	private boolean activated = false;
 
-    @Size(max = 20)
-    @Column(name = "activation_key", length = 20)
-    @JsonIgnore
-    private String activationKey;
-    
-    @Size(max = 30)
-    @Column(name = "first_name", length = 30)
-    private String firstName;
-    
-    @Size(max = 30)
-    @Column(name = "last_name", length = 30)
-    private String lastName;
-    
-    @NotNull
-    @Column(nullable = false)
-    private boolean enabled = false;
-    
-    @NotNull
-    @Column(nullable = false)
-    private boolean locked = false;
-    
-   
-    @Size(max = 20)
-    @Column(name = "reset_key", length = 20)
-    @JsonIgnore
-    private String resetKey;
-    
-    @Column(name = "reset_date")
-    @JsonIgnore
-    private Instant resetDate;
+	@Size(max = 20)
+	@Column(name = "activation_key", length = 20)
+	@JsonIgnore
+	private String activationKey;
 
-    @NotNull
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    @Column(length = 50, unique = true, nullable = false)
-    private String username;
-   
-    @JsonIgnore
-    @NotNull
-    @Size(min = 6, max = 128)
-    @Column(name = "password", length = 128, nullable = false)
-    private String password;
-    
-    @Email
-    @Size(min = 5, max = 254)
-    @Column(length = 254, unique = true)
-    private String email;
-    
-    @OneToOne(mappedBy = "account")
-    private AccountDetails accountDetail;
-	/*
-	 * @OneToMany(mappedBy = "account", cascade = CascadeType.ALL) private
-	 * List<Avatar> avatars;
-	 */
-    @OneToMany(mappedBy = "account")
-    private List<AccountAuthority> accountAuthoritys;
-    
-    public String getPassword() {
-        return password;
-    }
+	@Size(max = 30)
+	@Column(name = "first_name", length = 30)
+	private String firstName;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	@Size(max = 30)
+	@Column(name = "last_name", length = 30)
+	private String lastName;
 
-   
-    public boolean getActivated() {
-        return activated;
-    }
+	@NotNull
+	@Column(nullable = false)
+	private boolean enabled = false;
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
+	@NotNull
+	@Column(nullable = false)
+	private boolean locked = false;
 
-    public String getActivationKey() {
-        return activationKey;
-    }
+	@Size(max = 20)
+	@Column(name = "reset_key", length = 20)
+	@JsonIgnore
+	private String resetKey;
 
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
+	@Column(name = "reset_date")
+	@JsonIgnore
+	private Instant resetDate;
 
-    public String getResetKey() {
-        return resetKey;
-    }
+	@NotNull
+	@Pattern(regexp = Constants.LOGIN_REGEX)
+	@Size(min = 1, max = 50)
+	@Column(length = 50, unique = true, nullable = false)
+	private String username;
 
-    public void setResetKey(String resetKey) {
-        this.resetKey = resetKey;
-    }
+	@JsonIgnore
+	@NotNull
+	@Size(min = 6, max = 128)
+	@Column(name = "password", length = 128, nullable = false)
+	private String password;
+
+	@Email
+	@Size(min = 5, max = 254)
+	@Column(length = 254, unique = true)
+	private String email;
+
+	@OneToOne(mappedBy = "account")
+	private AccountDetails accountDetail;
+
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+	private List<Avatar> avatars;
+
+	@OneToMany(mappedBy = "account")
+	private List<AccountAuthority> accountAuthoritys;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean getActivated() {
+		return activated;
+	}
+
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+
+	public String getActivationKey() {
+		return activationKey;
+	}
+
+	public void setActivationKey(String activationKey) {
+		this.activationKey = activationKey;
+	}
+
+	public String getResetKey() {
+		return resetKey;
+	}
+
+	public void setResetKey(String resetKey) {
+		this.resetKey = resetKey;
+	}
+
 	public String getFirstName() {
 		return firstName;
+	}
+
+	public List<Avatar> getAvatars() {
+		return avatars;
+	}
+
+	public void setAvatars(List<Avatar> avatars) {
+		this.avatars = avatars;
 	}
 
 	public void setFirstName(String firstName) {
@@ -155,8 +161,6 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
-
-	
 
 	public String getUsername() {
 		return username;
@@ -190,7 +194,6 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 		this.accountAuthoritys = accountAuthoritys;
 	}
 
-
 	public Instant getResetDate() {
 		return resetDate;
 	}
@@ -199,7 +202,4 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 		this.resetDate = resetDate;
 	}
 
-	
-   
-  
 }

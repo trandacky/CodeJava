@@ -4,8 +4,8 @@
             <h2>
                 <span>User</span> [<b>{{ user.username }}</b>]
             </h2>
-
-            <dl class="row-md jh-entity-details">
+            <div class="row">
+            <dl class="col-md jh-entity-details">
                 <dt><span>Username</span></dt>
                 <dd>
                     <span>{{ user.username }}</span>
@@ -37,6 +37,30 @@
                 <dt><span>Update Date</span></dt>
                 <dd>{{ user.updateDate | date:'dd/MM/yy HH:mm:ss' }}</dd>
 
+                <dt><span>Role</span></dt>
+                <dd>
+                    <ul class="list-unstyled">
+                        <li *ngFor="let authority of user.authorities">
+                            <span class="badge badge-info">{{ authority }}</span>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl class="col-md jh-entity-details">
+                <dt><span>About</span></dt>
+                <dd>
+                    <span>{{ user?.accountDetailDTO?.about }}</span>
+                </dd>
+
+                <dt><span>Phone Number</span></dt>
+                <dd>{{user?.accountDetailDTO?.phoneNumber }}</dd>
+
+                <dt><span>Name</span></dt>
+                <dd>{{ user?.accountDetailDTO?.name }}</dd>
+
+                <dt><span>Class</span></dt>
+                <dd>{{ user|json }}</dd>
+
                 <dt><span>Profiles</span></dt>
                 <dd>
                     <ul class="list-unstyled">
@@ -46,7 +70,7 @@
                     </ul>
                 </dd>
             </dl>
-
+</div>
             <button type="submit" routerLink="../../" class="btn btn-info">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
             </button>
