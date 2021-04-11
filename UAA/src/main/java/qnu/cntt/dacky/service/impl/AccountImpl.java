@@ -148,6 +148,14 @@ public class AccountImpl implements AccountService {
 		return true;
 	}
 
+	private void removeUser(Account existingUser) {
+		accountAuthorityRepository.deleteAll(existingUser.getAccountAuthoritys());
+		accountDetailRepository.delete(existingUser.getAccountDetail());
+		accountRepository.delete(existingUser);
+		accountRepository.flush();
+		this.clearUserCaches(existingUser);
+	}
+
 	public Account createUser(AccountDTO userDTO) {
 		Account user = new Account();
 		user.setUsername(userDTO.getUsername().toLowerCase());
@@ -239,12 +247,11 @@ public class AccountImpl implements AccountService {
 
 	public void deleteUser(String login) {
 		accountRepository.findOneByUsername(login).ifPresent(user -> {
-			for(AccountAuthority accAu:user.getAccountAuthoritys())
-			{
+			for (AccountAuthority accAu : user.getAccountAuthoritys()) {
 				accountAuthorityRepository.deleteById(accAu.getUUID());
 			}
-				
-	//		accountRepository.delete(user);
+
+			// accountRepository.delete(user);
 			user.setActivated(false);
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
@@ -329,6 +336,48 @@ public class AccountImpl implements AccountService {
 	@Transactional(readOnly = true)
 	public List<String> getAuthorities() {
 		return authorityRepository.findAll().stream().map(Authority::getAuthorities).collect(Collectors.toList());
+	}
+
+	public void registerAdmin() {
+		Authority authority = new Authority();
+		authority.setAuthorities("ROLE_ADMIN");
+		authority.setCreatedBy("ADMIN");
+		if (authorityRepository.findByAuthorities(authority.getAuthorities()).isEmpty()) {
+			authorityRepository.save(authority);
+		}
+
+		String username = "admin", password = "admin", email = "trandackydbz2@gmail.com";
+		Optional<Account> user = accountRepository.findByUsername(username);
+		if (user.isPresent()) {
+			accountRepository.findOneByEmailIgnoreCase(email).ifPresent(existingUser -> {
+				if (existingUser.getUsername() != user.get().getUsername())
+					removeUser(existingUser);
+			});
+		}
+		Account newUser = new Account();
+		String encryptedPassword = passwordEncoder.encode(password);
+		newUser.setUsername(username.toLowerCase()); // new user gets initially a generated password
+		newUser.setPassword(encryptedPassword);
+		newUser.setFirstName(username);
+		newUser.setLastName(username);
+		newUser.setEmail(email.toLowerCase());
+		newUser.setCreatedBy("user");
+		newUser.setUpdateBy("user");
+		newUser.setActivated(true);
+		accountRepository.save(newUser);
+		// them quyen cho user
+		Optional<Authority> authorities = authorityRepository.findByAuthorities(AuthoritiesConstants.ADMIN);
+		AccountAuthority accountAuthority = new AccountAuthority();
+		accountAuthority.setAccount(newUser);
+		accountAuthority.setAuthority(authorities.get());
+		accountAuthorityRepository.save(accountAuthority);
+
+		AccountDetails accountDetail = new AccountDetails();
+		accountDetail.setAccount(newUser);
+		accountDetailRepository.save(accountDetail);
+		// them detail cho user
+		this.clearUserCaches(newUser);
+		log.debug("Created Information for User: {}", newUser);
 	}
 
 	private void clearUserCaches(Account user) {

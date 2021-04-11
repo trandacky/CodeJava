@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import qnu.cntt.dacky.domain.Authority;
 import qnu.cntt.dacky.repository.AuthorityRepository;
@@ -17,19 +18,19 @@ public class AuthorityImpl implements AuthorityService {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 
-	@Override
+	@Transactional
 	public Authority createAuthority(AuthorityDTO authorityDTO) {
 
 		return authorityRepository.save(authorityDTO.toNewEntity(authorityDTO));
 	}
 
-	@Override
+	@Transactional
 	public Authority updateAuthority(AuthorityDTO authorityDTO) {
 
 		return authorityRepository.save(authorityDTO.toEntity(authorityDTO));
 	}
 
-	@Override
+	@Transactional
 	public void deleteAuthority(String authority) {
 		authorityRepository.findByAuthorities(authority).ifPresent(authorityDelete -> {
 			authorityRepository.delete(authorityDelete);
@@ -37,12 +38,12 @@ public class AuthorityImpl implements AuthorityService {
 
 	}
 
-	@Override
+	@Transactional(readOnly = true)
 	public List<Authority> getAllAuthority() {
 		return authorityRepository.findAll();
 	}
 
-	@Override
+	@Transactional(readOnly = true)
 	public Optional<Authority> getAuthority(String authorities) {
 		return authorityRepository.findByAuthorities(authorities);
 	}

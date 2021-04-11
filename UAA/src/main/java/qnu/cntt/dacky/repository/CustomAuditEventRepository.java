@@ -58,8 +58,10 @@ public class CustomAuditEventRepository implements AuditEventRepository {
             persistentAuditEvent.setPrincipal(event.getPrincipal());
             persistentAuditEvent.setAuditEventType(event.getType());
             persistentAuditEvent.setAuditEventDate(event.getTimestamp());
-            persistentAuditEvent.setCreatedBy("SystemDacKy");
-            persistentAuditEvent.setUpdateBy("SystemDacKy");
+			/*
+			 * persistentAuditEvent.setCreatedBy("SystemDacKy");
+			 * persistentAuditEvent.setUpdateBy("SystemDacKy");
+			 */
             Map<String, String> eventData = auditEventConverter.convertDataToStrings(event.getData());
             persistentAuditEvent.setData(truncate(eventData));
             persistenceAuditEventRepository.save(persistentAuditEvent);

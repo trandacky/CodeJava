@@ -14,6 +14,13 @@ import { RouterModule } from '@angular/router';
         },
       },
       {
+        path: 'role',
+        loadChildren: () => import('./role/role.module').then(m => m.RoleModule),
+        data: {
+          pageTitle: 'Role',
+        },
+      },
+      {
         path: 'audits',
         loadChildren: () => import('./audits/audits.module').then(m => m.AuditsModule),
       },

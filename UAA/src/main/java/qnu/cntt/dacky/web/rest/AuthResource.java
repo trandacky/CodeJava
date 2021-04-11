@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +36,7 @@ public class AuthResource {
 	@Autowired
 	private AccountDetailService accountDetailService;
 
-	@PostMapping("/change-account-detail")
+	@PutMapping("/change-account-detail")
 	public void changeAccountDetail(AccountDetailDTO accountDetailDTO) {
 		accountDetailService.updateAccountDetail(accountDetailDTO);
 		log.debug("changed account detail");

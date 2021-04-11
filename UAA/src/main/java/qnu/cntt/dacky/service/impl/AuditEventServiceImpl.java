@@ -74,7 +74,7 @@ public class AuditEventServiceImpl implements AuditEventService{
     }
 
     @Transactional(readOnly = true)
-    public Optional<AuditEvent> find(UUID id) {
+    public Optional<AuditEvent> find(Long id) {
         return persistenceAuditEventRepository.findById(id)
             .map(auditEventConverter::convertToAuditEvent);
     }

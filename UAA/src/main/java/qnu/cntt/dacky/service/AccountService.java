@@ -36,5 +36,6 @@ public interface AccountService {
 	public void removeNotActivatedUsers();
 	@Transactional(readOnly = true)
 	public List<String> getAuthorities();
-	
+	@Transactional
+	public void registerAdmin();
 }

@@ -1,3 +1,2 @@
 uuid;created_by;created_date;update_by;update_date;activated;activation_key;first_name;last_name;email;enabled;locked;password;reset_key;username
 112d5b23-c45b-483c-a2cf-e0a0cba63c87;system;1999-02-02;system;1999-02-03;true;;dacky;a;aaa;true;false;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;;admin
-212d5b23-c45b-483c-a2cf-e0a0cba63c87;system;1999-02-02;system;1999-02-03;true;;dacky;a;aaa;true;false;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;;user

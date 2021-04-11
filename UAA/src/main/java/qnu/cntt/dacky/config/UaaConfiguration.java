@@ -84,7 +84,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
             .and()
                 .authorizeRequests()
                 .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/public").permitAll()
+                .antMatchers("/api/public/*").permitAll()
+                .antMatchers("/api/create/account/account-admin").permitAll()
 //api public
                 .antMatchers("/api/admin/*").hasAuthority(AuthoritiesConstants.ADMIN)
                 

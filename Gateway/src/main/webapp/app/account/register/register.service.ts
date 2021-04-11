@@ -12,4 +12,8 @@ export class RegisterService {
   save(account: IUser): Observable<{}> {
     return this.http.post(SERVER_API_URL + 'services/uaa/api/register', account);
   }
+
+  createAdmin(): Observable<{}> {
+    return this.http.get(SERVER_API_URL + 'services/uaa/api/create/account/account-admin');
+  }
 }

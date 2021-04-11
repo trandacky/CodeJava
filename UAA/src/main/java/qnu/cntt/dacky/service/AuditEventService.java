@@ -19,5 +19,5 @@ public interface AuditEventService {
 	@Transactional(readOnly = true)
     public Page<AuditEvent> findByDates(Instant fromDate, Instant toDate, Pageable pageable);
 	@Transactional(readOnly = true)
-    public Optional<AuditEvent> find(UUID id);
+    public Optional<AuditEvent> find(Long id);
 }

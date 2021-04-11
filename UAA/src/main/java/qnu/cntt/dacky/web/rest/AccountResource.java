@@ -95,6 +95,11 @@ public class AccountResource {
 		}
 	}
 
+	@GetMapping("/create/account/account-admin")
+	public String createAdmin() {
+		userService.registerAdmin(); 
+		return "dmmmmmmmmmmm";
+	}
 	/**
 	 * {@code GET  /authenticate} : check if the user is authenticated, and return
 	 * its login.

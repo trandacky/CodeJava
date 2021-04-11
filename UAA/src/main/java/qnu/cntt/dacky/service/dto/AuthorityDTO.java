@@ -12,6 +12,13 @@ public class AuthorityDTO {
 	private AuthorityRepository authorityRepository;
 
 	private String authorities;
+	
+	
+
+	public AuthorityDTO(String authorities) {
+		super();
+		this.authorities = authorities;
+	}
 
 	public Authority toEntity(AuthorityDTO authorityDTO) {
 

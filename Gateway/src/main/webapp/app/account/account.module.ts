@@ -5,6 +5,7 @@ import { GatewaySharedModule } from 'app/shared/shared.module';
 
 import { PasswordStrengthBarComponent } from './password/password-strength-bar.component';
 import { RegisterComponent } from './register/register.component';
+import { RegisterAdminComponent } from './register/register-admin.component';
 import { ActivateComponent } from './activate/activate.component';
 import { PasswordComponent } from './password/password.component';
 import { PasswordResetInitComponent } from './password-reset/init/password-reset-init.component';
@@ -16,6 +17,7 @@ import { accountState } from './account.route';
   imports: [GatewaySharedModule, RouterModule.forChild(accountState)],
   declarations: [
     ActivateComponent,
+    RegisterAdminComponent,
     RegisterComponent,
     PasswordComponent,
     PasswordStrengthBarComponent,

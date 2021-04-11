@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import qnu.cntt.dacky.domain.AccountDetails;
@@ -59,8 +61,8 @@ public class AdminResource {
 		authorityService.createAuthority(authorityDTO);
 	}
 
-	@DeleteMapping("/delete-authority")
-	public void deleteAuthority(String authorities) {
+	@DeleteMapping("/delete-authority/{authorities}")
+	public void deleteAuthority(@PathVariable String authorities) {
 		authorityService.deleteAuthority(authorities);
 	}
 

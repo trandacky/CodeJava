@@ -13,7 +13,7 @@ import java.util.UUID;
 /**
  * Spring Data JPA repository for the {@link PersistentAuditEvent} entity.
  */
-public interface PersistenceAuditEventRepository extends JpaRepository<PersistentAuditEvent, UUID> {
+public interface PersistenceAuditEventRepository extends JpaRepository<PersistentAuditEvent, Long> {
 
     List<PersistentAuditEvent> findByPrincipal(String principal);
 
