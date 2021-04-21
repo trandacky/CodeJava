@@ -24,7 +24,7 @@ import qnu.cntt.dacky.service.ReportService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/class/teacher")
+@RequestMapping("/api/class/teacher")
 public class TeacherRestController {
 	private final int sizePage = 20;
 

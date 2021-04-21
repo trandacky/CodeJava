@@ -45,8 +45,8 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/MicroserviceEvaluationReport
-    username: MicroserviceEvaluationReport
-    password:
+    username: postgres
+    password: 123
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -76,7 +76,7 @@ spring:
         enabled: true
 
 server:
-  port: 0
+  port: 8082
 
 # ===================================================================
 # JHipster specific properties
@@ -109,7 +109,7 @@ jhipster:
       client-id: internal
       client-secret: internal
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:0
+    base-url: http://127.0.0.1:8082
   metrics:
     logs: # Reports metrics in the logs
       enabled: false
