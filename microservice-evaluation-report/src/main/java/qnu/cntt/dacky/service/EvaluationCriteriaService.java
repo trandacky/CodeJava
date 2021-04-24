@@ -6,14 +6,14 @@ import org.springframework.data.domain.Pageable;
 
 import qnu.cntt.dacky.domain.EvaluationCriteria;
 import qnu.cntt.dacky.service.dto.EvaluationCriteriaDTO;
+import qnu.cntt.dacky.service.dto.EvaluationCriteriaUpdateDTO;
 
 public interface EvaluationCriteriaService {
 
-	List<EvaluationCriteria> getAll();
+List<EvaluationCriteria> getAll();
 	
 	List<EvaluationCriteria> getAllByPageable(Pageable pageable);
 	
-	List<EvaluationCriteria> getAllEnable();
 
 	List<EvaluationCriteria> getByTypeReportId(Long typeReportId);
 
@@ -21,7 +21,7 @@ public interface EvaluationCriteriaService {
 
 	EvaluationCriteria createEvaluaCriteria(EvaluationCriteriaDTO evaluationCriteriaDTO);
 
-	EvaluationCriteria updateEvaluaCriteria(EvaluationCriteriaDTO evaluationCriteriaDTO);
+	EvaluationCriteria updateEvaluaCriteria(EvaluationCriteriaUpdateDTO evaluationCriteriaUpdateDTO);
 
 	EvaluationCriteria updateContentById(Long id, String content);
 
@@ -29,7 +29,8 @@ public interface EvaluationCriteriaService {
 
 	EvaluationCriteria updateParentId(Long id, Long parentId);
 
-	EvaluationCriteria updateEnableById(Long id, boolean enable);
 
 	EvaluationCriteria updateTypeReportId(Long id, Long typeReport);
+
+	void deleteEvaluationReport(Long id);
 }

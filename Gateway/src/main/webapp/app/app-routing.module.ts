@@ -22,14 +22,21 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         },
         {
-          path: 'student',
+          path: 'sinhvien',
           data: {
             authorities: [Authority.SV],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         }
-        ,
+        ,{
+          path: 'khoa',
+          data: {
+            authorities: [Authority.SV],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () => import('./khoa/khoa-routing.module').then(m => m.KhoaRoutingModule),
+        },
         {
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),

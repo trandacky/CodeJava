@@ -1,0 +1,67 @@
+<div class="text-center">
+      <div *ngIf="add">
+          <div *ngIf="formNewEvaluationCriteria">
+              <div class="card">
+                  <div class="card-body">
+                      <form (ngSubmit)="createEvaluation()" [formGroup]="formNewEvaluationCriteria">
+                          <div class="row">
+                                <input formControlName="content" 
+                                value="{{formNewEvaluationCriteria?.value?.parentId}}">
+                                
+                              <div class="col-md-8">
+                                  <input class="form-control" formControlName="content"
+                                      placeholder="Enter type name to save">
+                              </div>
+                              <div class="col-md-1">
+                                  <input class="form-control" formControlName="maxScore"
+                                      placeholder="Enter type name to save">
+                              </div>
+                              <div class="col">
+                                  <button type="submit" [disabled]="!formNewEvaluationCriteria.valid" class="btn btn-primary">Save</button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        
+              {{node.content}}: ({{node.maxScore}})
+              <button mat-icon-button (click)=" deleteEvaluation(node.id)">
+                  <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-icon-button (click)="editButton(node.id, node.content, node.maxScore)">
+                  <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="addButton(node.id)">
+                  <mat-icon>add</mat-icon>
+              </button>
+      </mat-tree-node>
+  
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+              <div class="mat-tree-node">
+                  {{node.content}}: ({{node.maxScore}})
+                  <button mat-icon-button (click)="deleteEvaluation(node.id)">
+                      <mat-icon>delete</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="editButton(node.id, node.content, node.maxScore)">
+                      <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="addButton(node.id)">
+                      <mat-icon>add</mat-icon>
+                  </button>
+              </div>
+              <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                  <ng-container matTreeNodeOutlet></ng-container>
+              </ul>          
+      </mat-nested-tree-node>
+  </mat-tree>
+  
+  <button mat-icon-button (click)="addButton(0)">
+      <mat-icon>add</mat-icon>
+  </button>
+  

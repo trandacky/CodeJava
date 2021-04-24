@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -34,13 +35,15 @@ public class EvaluationCriteria extends AbtractEntity{
     @OneToMany(mappedBy = "evaluationCriteria", cascade = CascadeType.ALL)
     private List<DetailReport> detailReports;
     
+    
+    
+    @OneToMany(mappedBy = "parentEvaluationCriteria", cascade = CascadeType.ALL, fetch = FetchType.EAGER) 
+    private List<EvaluationCriteria> childEvaluationCriterias;
+    
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
     private EvaluationCriteria parentEvaluationCriteria;
-    
-    @OneToMany(mappedBy = "parentEvaluationCriteria", cascade = CascadeType.ALL)
-    private List<EvaluationCriteria> childEvaluationCriterias;
 
 	public String getContent() {
 		return content;

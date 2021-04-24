@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import qnu.cntt.dacky.domain.TypeReport;
 import qnu.cntt.dacky.repository.TypeReportRepository;
@@ -17,7 +20,8 @@ public class TypeReportImpl implements TypeReportService {
 
 	@Autowired
 	private TypeReportRepository typeReportRepository;
-
+	
+	@Transactional(readOnly = true)
 	@Override
 	public Optional<TypeReport> getTypeReportById(long id) {
 		return typeReportRepository.findById(id);
@@ -85,6 +89,12 @@ public class TypeReportImpl implements TypeReportService {
 		typeReport.setEnable(true);
 		typeReport.setTypeName(typeName);
 		return typeReportRepository.save(typeReport);
+	}
+
+	@Override
+	public Page<TypeReport> getAllTypeReportPageable(Pageable pageable) {
+		
+		return typeReportRepository.findAll(pageable);
 	}
 
 }

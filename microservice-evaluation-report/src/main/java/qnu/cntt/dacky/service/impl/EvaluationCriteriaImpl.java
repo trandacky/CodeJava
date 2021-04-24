@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import qnu.cntt.dacky.domain.EvaluationCriteria;
 import qnu.cntt.dacky.domain.TypeReport;
@@ -13,6 +14,7 @@ import qnu.cntt.dacky.repository.EvaluationCriteriaRepository;
 import qnu.cntt.dacky.repository.TypeReportRepository;
 import qnu.cntt.dacky.service.EvaluationCriteriaService;
 import qnu.cntt.dacky.service.dto.EvaluationCriteriaDTO;
+import qnu.cntt.dacky.service.dto.EvaluationCriteriaUpdateDTO;
 
 @Service
 public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
@@ -28,17 +30,13 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 		return evaluationCriteriaRepository.findAll();
 	}
 
-	@Override
-	public List<EvaluationCriteria> getAllEnable() {
-		return evaluationCriteriaRepository.findByEnableTrue();
-	}
-
+	@Transactional(readOnly = true)
 	@Override
 	public List<EvaluationCriteria> getByTypeReportId(Long typeReportId) {
 		Optional<TypeReport> typeReportOptional = typeReportRepository.findById(typeReportId);
 		if (typeReportOptional.isPresent()) {
 			TypeReport typeReport = typeReportOptional.get();
-			return typeReport.getEvaluationCriterias();
+			return evaluationCriteriaRepository.findByTypeReport(typeReport);
 		}
 		return null;
 	}
@@ -57,12 +55,13 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 		if(parentEvaluationCriteriaOptional.isPresent())
 		{
 			evaluationCriteria.setParentEvaluationCriteria(parentEvaluationCriteriaOptional.get());
+			evaluationCriteria.setTypeReport(parentEvaluationCriteriaOptional.get().getTypeReport());
 		}
 		return evaluationCriteriaRepository.save(evaluationCriteria);
 	}
 
 	@Override
-	public EvaluationCriteria updateEvaluaCriteria(EvaluationCriteriaDTO evaluationCriteriaDTO) {
+	public EvaluationCriteria updateEvaluaCriteria(EvaluationCriteriaUpdateDTO evaluationCriteriaDTO) {
 
 		Optional<EvaluationCriteria> evaluationCriteriaOptional = evaluationCriteriaRepository
 				.findById(evaluationCriteriaDTO.getId());
@@ -72,7 +71,6 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 			EvaluationCriteria evaluationCriteria = evaluationCriteriaOptional.get();
 			evaluationCriteria.setContent(evaluationCriteriaDTO.getContent());
 			evaluationCriteria.setMaxScore(evaluationCriteriaDTO.getMaxScore());
-			evaluationCriteria.setEnable(evaluationCriteriaDTO.getEnable());
 			evaluationCriteria.setUpdateDate(Instant.now());
 			return evaluationCriteriaRepository.save(evaluationCriteria);
 		}
@@ -126,20 +124,6 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 	}
 
 	@Override
-	public EvaluationCriteria updateEnableById(Long id, boolean enable) {
-
-		Optional<EvaluationCriteria> evaluationCriteriaOptional = evaluationCriteriaRepository.findById(id);
-		if (evaluationCriteriaOptional.isPresent()) {
-			EvaluationCriteria evaluationCriteria = evaluationCriteriaOptional.get();
-			evaluationCriteria.setEnable(enable);
-			evaluationCriteria.setUpdateDate(Instant.now());
-			return evaluationCriteriaRepository.save(evaluationCriteria);
-
-		}
-		return null;
-	}
-
-	@Override
 	public EvaluationCriteria updateTypeReportId(Long id, Long idTypeReport) {
 
 		Optional<TypeReport> typeReportOptional = typeReportRepository.findById(idTypeReport);
@@ -162,5 +146,10 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 	public List<EvaluationCriteria> getAllByPageable(Pageable pageable) {
 		
 		return evaluationCriteriaRepository.findAllByPageable(pageable);
+	}
+
+	@Override
+	public void deleteEvaluationReport(Long id) {
+		 evaluationCriteriaRepository.deleteById(id);
 	}
 }

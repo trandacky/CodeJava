@@ -4,7 +4,32 @@
 /* ==========================================================================
 Navbar
 ========================================================================== */
+.center-block {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+.pointer {cursor: pointer;}
+.hide {
+  display: none;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.myDIV:hover + .hide {
+  display: block;
+  color: red;
+}
 
+.center-loading { 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  width: 100px;
+  height: 100px;
+}
 .navbar-version {
   font-size: 0.65em;
   color: $navbar-dark-color;
