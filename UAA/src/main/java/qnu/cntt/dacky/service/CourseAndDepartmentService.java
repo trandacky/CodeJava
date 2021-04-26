@@ -1,6 +1,7 @@
 package qnu.cntt.dacky.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import qnu.cntt.dacky.domain.CourseAndDepartment;
 
@@ -13,7 +14,7 @@ public interface CourseAndDepartmentService {
 
 	String addCourseAndDepartment(CourseAndDepartment courseAndDepartment);
 
-	String deleteCourseAndDepartment(long id);
+	String deleteCourseAndDepartment(UUID id);
 
-	boolean isCourseAndDepartmentExist(long id);
+	boolean isCourseAndDepartmentExist(UUID uuid);
 }

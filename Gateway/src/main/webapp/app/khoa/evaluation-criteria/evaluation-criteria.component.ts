@@ -13,13 +13,11 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 export class EvaluationCriteriaComponent implements OnInit {
   idTypeReport: Number| null = null;
   evaluationArray!: Evaluation[];
-  add=false;
   formEvaluationCriteria!: FormGroup;
   formNewEvaluationCriteria!: FormGroup;
   formTypeReport!: FormGroup;
   treeControl = new NestedTreeControl<Evaluation>(node => node.childEvaluationCriterias);
   dataSource = new MatTreeNestedDataSource<Evaluation>();
-  parentId:Number=0;
 
   constructor(private route: ActivatedRoute,private formBuilder: FormBuilder, private evaluationService: KhoaService) { }
   hasChild = (_: number, node: Evaluation) => !!node.childEvaluationCriterias && node.childEvaluationCriterias.length > 0;
@@ -38,11 +36,11 @@ export class EvaluationCriteriaComponent implements OnInit {
     return this.formBuilder.group
       (
         {
-          id: ['0'],
+          id: ['0', Validators.required],
           content: ['', Validators.required],
           maxScore: ['0', Validators.required],
-          typeReport: [this.idTypeReport],
-          parentId: [this.parentId],
+          typeReport: [this.idTypeReport, Validators.required],
+          parentId: ['', Validators.required],
         }
       )
   }
@@ -77,14 +75,10 @@ export class EvaluationCriteriaComponent implements OnInit {
       () => { alert("save failed");});
   }
   addButton(parentId: Number) :void{
-    this.add=true;
-    this.parentId=parentId;
-    this.formNewEvaluationCriteria.value.parentId = parentId;
-    this.formNewEvaluationCriteria.value.parentId = this.parentId;
+    this.formNewEvaluationCriteria.get('parentId')?.setValue(parentId);
   }
   editButton(id: any,content: any,maxScore: any): void
   {
-    this.add=true;
     this.formEvaluationCriteria.value.id = id;
     this.formEvaluationCriteria.value.content=content;
     this.formEvaluationCriteria.value.maxScore=maxScore;

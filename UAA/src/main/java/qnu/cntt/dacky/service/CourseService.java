@@ -2,6 +2,10 @@ package qnu.cntt.dacky.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import qnu.cntt.dacky.domain.Course;
 
@@ -9,15 +13,19 @@ import qnu.cntt.dacky.domain.Course;
 public interface CourseService {
 	List<Course> getAllCourse();
 
-	Course getCourseById(long id);
+	Course getCourseById(UUID id);
 
 	Optional<Course> getCourseByName(String name);
 
-	String addCourse(Course course);
+	Course addCourse(Course course);
 
-	String deleteCourseById(long id);
+	boolean isCourseExistById(UUID id);
 
-	String deleteCourseByName(String name);
+	Page<Course> getPageable(Pageable paging);
 
-	boolean isCourseExistById(long id);
+	List<Course> getCourseEnable();
+
+	Course updateEnable(UUID uuid, boolean enable);
+
+	Course updateCourse(UUID uuid, String course);
 }

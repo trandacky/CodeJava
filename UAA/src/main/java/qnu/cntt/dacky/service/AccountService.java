@@ -11,9 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.service.dto.AccountDTO;
 import qnu.cntt.dacky.service.dto.AccountDTOToReturnDetailAccount;
+import qnu.cntt.dacky.web.rest.vm.ManagedUserVM;
 
 public interface AccountService {
-	public Account createUser(AccountDTO userDTO);
+	public Account createUser(ManagedUserVM userDTO);
 	public Account registerUser(AccountDTO userDTO, String password);
 	public Optional<AccountDTO> updateUser(AccountDTO userDTO);
 	public void deleteUser(String login);

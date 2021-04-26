@@ -1,5 +1,6 @@
 package qnu.cntt.dacky.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,5 +16,7 @@ public interface ClassRepository extends JpaRepository<ClaSs, UUID> {
 	Optional<ClaSs> findByName(String name);
 
 	void deleteByName(String classname);
+
+	//List<ClaSs> findByIsDeletedFalse();
 
 }

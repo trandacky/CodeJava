@@ -1,13 +1,13 @@
 <div class="text-center">
-      <div *ngIf="add">
+      <div>
           <div *ngIf="formNewEvaluationCriteria">
               <div class="card">
                   <div class="card-body">
                       <form (ngSubmit)="createEvaluation()" [formGroup]="formNewEvaluationCriteria">
                           <div class="row">
-                                <input formControlName="content" 
-                                value="{{formNewEvaluationCriteria?.value?.parentId}}">
-                                
+                              <div class="col-md-2">
+                                <input formControlName="parentId" class="form-control" readonly >
+                            </div>
                               <div class="col-md-8">
                                   <input class="form-control" formControlName="content"
                                       placeholder="Enter type name to save">

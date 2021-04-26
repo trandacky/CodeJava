@@ -1,0 +1,79 @@
+<h2>Quản lý khoa:</h2>
+<div class="text-center">
+    <form  (ngSubmit)="update()" [formGroup]="updateForm" *ngIf="edit">
+        <div class="row text-center">
+            <div class="col-md-9">
+                <input class="form-control" placeholder="Nhập tên khoa" formControlName="departmentName">
+            </div>
+            <div class="col-md-3 row">
+                <div class="col">
+                    <button type="submit" [disabled]="!updateForm.valid" 
+                    onclick="return confirm('Do you want update it?');"
+                     class="btn btn-success">Cập nhật</button>
+                     <button (click)="cancel()" type="submit" class="btn btn-danger">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form  (ngSubmit)="addNew()" [formGroup]="addForm" *ngIf="!edit">
+        <div class="row">
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Nhập tên khoa" formControlName="departmentName">
+            </div>
+            <div class="col-md-2 row">
+                <div class="col">
+                    <button type="submit" [disabled]="!addForm.valid" 
+                    onclick="return confirm('Do you want add it?');"
+                     class="btn btn-success">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive text-center" *ngIf="departments">
+        <table class="table table-striped" aria-describedby="user-management-page-heading">
+            <thead>
+                <tr>
+                    <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                    <th><span>Tên khoa</span>
+                    </th>
+                    <th><span>Tình trạng</span>
+                    </th>
+                    <th><span>Ngày tạo</span></th>
+                    <th><span>Ngày Cập nhật</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody *ngIf="departments">
+                <tr *ngFor="let department of departments">
+                    <td ><a>{{ department.departmentName }}</a></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" *ngIf="!department.enable"(click)="updateEnable(department.uuid,!department.enable)">Đã Dừng</button>
+                        <button class="btn btn-success btn-sm" *ngIf="department.enable" (click)="updateEnable(department.uuid,!department.enable)">Đang Hoạt Động</button>
+                        <!--(click)=""-->
+                    </td>
+                    <td>{{ department.createdDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td>{{ department.updateDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <button type="button" (click)="editClick(department.uuid,department.departmentName)" class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div *ngIf="departments">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+    
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+                [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
+        </div>
+    </div>
+</div>

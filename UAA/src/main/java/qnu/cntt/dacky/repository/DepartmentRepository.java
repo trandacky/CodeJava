@@ -1,5 +1,6 @@
 package qnu.cntt.dacky.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,5 +15,7 @@ public interface DepartmentRepository extends JpaRepository<Department, UUID> {
 	Optional<Department> findByDepartmentName(String name);
 
 	void deleteByDepartmentName(String name);
+
+	List<Department> findByEnableTrue();
 
 }

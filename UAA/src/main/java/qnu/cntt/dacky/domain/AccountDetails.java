@@ -41,19 +41,7 @@ public class AccountDetails extends AbstractAuditingEntity implements Serializab
 	@JoinColumn(name = "account_uuid", referencedColumnName = "uuid")
 	private Account account;
 
-	@ManyToOne
-	@JoinColumn(name = "class_id")
-	private ClaSs class1;
-
 	
-	public ClaSs getClass1() {
-		return class1;
-	}
-
-	public void setClass1(ClaSs class1) {
-		this.class1 = class1;
-	}
-
 	public String getAbout() {
 		return about;
 	}

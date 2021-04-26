@@ -4,7 +4,7 @@ public class EvaluationCriteriaDTO {
 
 	
 
-	public EvaluationCriteriaDTO(Long id, String content, Integer maxScore, Boolean enable, String typeReport,
+	public EvaluationCriteriaDTO(Long id, String content, Integer maxScore, Boolean enable, Long typeReport,
 			Long parentId) {
 		super();
 		this.id = id;
@@ -27,7 +27,7 @@ public class EvaluationCriteriaDTO {
 
 	private Boolean enable;
 
-	private String typeReport;
+	private Long typeReport;
 
 	private Long parentId;
 	
@@ -64,11 +64,13 @@ public class EvaluationCriteriaDTO {
 		this.enable = enable;
 	}
 
-	public String getTypeReport() {
+	
+
+	public Long getTypeReport() {
 		return typeReport;
 	}
 
-	public void setTypeReport(String typeReport) {
+	public void setTypeReport(Long typeReport) {
 		this.typeReport = typeReport;
 	}
 

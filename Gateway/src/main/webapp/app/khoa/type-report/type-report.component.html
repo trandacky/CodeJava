@@ -17,8 +17,7 @@
             <div class="col-md-3 row">
                 <div class="col">
                     <button type="submit" [disabled]="!formUpdateTypeReport.valid"
-                        onclick="return confirm('Do you want update it?');" class="btn btn-success">Update type
-                        report</button>
+                        onclick="return confirm('Do you want update it?');" class="btn btn-success">Update</button>
                 </div>
                 <div class="col">
                     <input type="button" (click)="clickCancelEdit()" class="btn btn-danger"
@@ -46,14 +45,14 @@
         </thead>
         <tbody *ngIf="typeReports">
             <tr *ngFor="let typeReport of typeReports">
-                <td [routerLink]="['/khoa/evaluation-criteria', typeReport.id ,'edit']">{{ typeReport.typeName }}</td>
+                <td ><a [routerLink]="['/khoa/evaluation-criteria', typeReport.id ,'edit']">{{ typeReport.typeName }}</a></td>
                 <td>
                     <button class="btn btn-danger btn-sm" *ngIf="!typeReport.enable" (click)="updateStatus(typeReport.id,!typeReport.enable)">Đã Dừng</button>
                     <button class="btn btn-success btn-sm" *ngIf="typeReport.enable"(click)="updateStatus(typeReport.id,!typeReport.enable)">Đang Hoạt Động</button>
                     <!--(click)=""-->
                 </td>
-                <td>{{ typeReport.createDate | date:'dd/MM/yy HH:mm:ss' }}</td>
-                <td>{{ typeReport.updateDate | date:'dd/MM/yy HH:mm:ss' }}</td>
+                <td>{{ typeReport.createDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td>{{ typeReport.updateDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                 <td class="text-center">
                     <div class="btn-group">
                         <button type="button" (click)="clickEdit(typeReport.id,typeReport.typeName,typeReport.enable)" class="btn btn-primary btn-sm">

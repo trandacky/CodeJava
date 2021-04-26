@@ -1,5 +1,6 @@
 package qnu.cntt.dacky.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,5 +15,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 	Optional<Course> findByCourse(String name);
 
 	void deleteByCourse(String name);
+
+	List<Course> findByEnableTrue();
 
 }

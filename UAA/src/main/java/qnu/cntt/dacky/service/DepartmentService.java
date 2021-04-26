@@ -2,6 +2,10 @@ package qnu.cntt.dacky.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import qnu.cntt.dacky.domain.Department;
 
@@ -10,15 +14,17 @@ public interface DepartmentService {
 
 	List<Department> getAllDepartment();
 
-	Department getDepartmentById(long id);
+	Department getDepartmentById(UUID id);
 
 	Optional<Department> getDepartmentByName(String name);
 
-	String addDepartment(Department department);
+	Department addDepartment(Department department);
+	
+	Page<Department> getAllByIdAndPageable(Pageable paging);
 
-	String deleteDepartmentById(long id);
+	Department updateEnable(UUID id, boolean enable);
 
-	String deleteDepartmentByName(String name);
+	Department updateDepartment(UUID id, String departmentName);
 
-	boolean isDepartmentExistedById(long id);
+	List<Department> getDepartmentEnable();
 }

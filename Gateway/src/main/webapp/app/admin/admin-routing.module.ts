@@ -14,6 +14,20 @@ import { RouterModule } from '@angular/router';
         },
       },
       {
+        path: 'department-management',
+        loadChildren: () => import('./department/department.module').then(m => m.DepartmentModule),
+        data: {
+          pageTitle: 'Department',
+        },
+      },
+      {
+        path: 'course-management',
+        loadChildren: () => import('./course/course.module').then(m => m.CourseModule),
+        data: {
+          pageTitle: 'Course',
+        },
+      },
+      {
         path: 'role',
         loadChildren: () => import('./role/role.module').then(m => m.RoleModule),
         data: {

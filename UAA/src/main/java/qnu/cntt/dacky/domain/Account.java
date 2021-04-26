@@ -90,6 +90,10 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	@OneToMany(mappedBy = "account")
 	private List<AccountAuthority> accountAuthoritys;
 
+	@ManyToOne
+	@JoinColumn(name = "class_id")
+	private ClaSs class1;
+	
 	public String getPassword() {
 		return password;
 	}
@@ -200,6 +204,14 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 
 	public void setResetDate(Instant resetDate) {
 		this.resetDate = resetDate;
+	}
+
+	public ClaSs getClass1() {
+		return class1;
+	}
+
+	public void setClass1(ClaSs class1) {
+		this.class1 = class1;
 	}
 
 }

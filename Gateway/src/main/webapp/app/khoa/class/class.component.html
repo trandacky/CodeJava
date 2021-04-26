@@ -1,0 +1,52 @@
+{{classList|json}}
+<H3>Quản lý lớp:</H3>
+<div class="table-responsive text-center" *ngIf="classList">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+        <thead>
+            <tr>
+                <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                <th><span>Tên lớp</span>
+                    <fa-icon icon="sort"></fa-icon>
+                </th>
+                <th><span>Tình trạng</span>
+                    <fa-icon icon="sort"></fa-icon>
+                </th>
+                <th><span>Ngày tạo</span></th>
+                <th><span>Ngày Cập nhật</span></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody *ngIf="classList">
+            <tr *ngFor="let class of classList">
+                <!-- <td ><a [routerLink]="['/khoa/evaluation-criteria', class.uuid ,'edit']">{{ typeReport.typeName }}</a></td> -->
+                <td>{{class.name}}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" *ngIf="!class.enable" (click)="updateStatus(class.uuid,!class.enable)">Đã Dừng</button>
+                    <button class="btn btn-success btn-sm" *ngIf="class.enable"(click)="updateStatus(class.uuid,!class.enable)">Đang Hoạt Động</button>
+                    <!--(click)=""-->
+                </td>
+                <td>{{ class.createdDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td>{{ class.updateDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary btn-sm">
+                            <fa-icon icon="pencil-alt"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="classList">
+    <div class="row justify-content-center">
+        <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+            [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
+    </div>
+</div>

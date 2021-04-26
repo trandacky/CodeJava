@@ -1,10 +1,13 @@
 package qnu.cntt.dacky.web.rest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -79,21 +82,26 @@ public class AdminRestController {
 	public List<EvaluationCriteria> getReportExampleByTypeId(@PathVariable Long id) {
 
 		List<EvaluationCriteria> evaluationCriterias = evaluationCriteriaService.getByTypeReportId(id);
-		
-			for (int i = 0; i < evaluationCriterias.size(); i++) {
 
-				if (evaluationCriterias.get(i).getParentEvaluationCriteria() != null) {
-					evaluationCriterias.remove(i);
-					i--;
-				}
+		for (int i = 0; i < evaluationCriterias.size(); i++) {
 
+			if (evaluationCriterias.get(i).getParentEvaluationCriteria() != null) {
+				evaluationCriterias.remove(i);
+				i--;
 			}
-		return evaluationCriterias;
+
+		}
+		return evaluationCriterias.stream().sorted(Comparator.comparing(EvaluationCriteria::getCreateDate))
+				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/get-all-type-report-enable")
 	public List<TypeReport> getAllTypeReportEnable() {
 		return typeReportService.getEnableTypeReport();
+	}
+	@GetMapping("/get-type-report-by-id/{id}")
+	public Optional<TypeReport> getTypeReportById(@PathVariable Long id) {
+		return typeReportService.getTypeReportById(id);
 	}
 
 	@GetMapping("/get-all-type-report")
@@ -195,8 +203,7 @@ public class AdminRestController {
 	}
 
 	@PutMapping("update-evaluation-criteria")
-	public EvaluationCriteria updateEvaluationCriteria(
-			@RequestBody EvaluationCriteriaUpdateDTO evaluationCriteriaUpdateDTO) {
+	public EvaluationCriteria updateEvaluationCriteria(@RequestBody EvaluationCriteriaDTO evaluationCriteriaUpdateDTO) {
 		return evaluationCriteriaService.updateEvaluaCriteria(evaluationCriteriaUpdateDTO);
 	}
 

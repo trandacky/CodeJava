@@ -16,11 +16,10 @@ import qnu.cntt.dacky.service.MailService;
 import qnu.cntt.dacky.web.rest.errors.BadRequestAlertException;
 import qnu.cntt.dacky.web.rest.errors.EmailAlreadyUsedException;
 import qnu.cntt.dacky.web.rest.errors.LoginAlreadyUsedException;
-
+import qnu.cntt.dacky.web.rest.vm.ManagedUserVM;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import liquibase.util.ObjectUtil;
 import net.logstash.logback.encoder.org.apache.commons.lang3.ObjectUtils;
 
 import org.slf4j.Logger;
@@ -75,8 +74,8 @@ import java.util.*;
 
 @RequestMapping("/api")
 public class UserResource {
-	private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections
-			.unmodifiableList(Arrays.asList("UUID", "username", "firstName", "lastName", "email", "activated", "langKey"));
+	private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(
+			Arrays.asList("UUID", "username", "firstName", "lastName", "email", "activated", "langKey"));
 
 	private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
@@ -113,19 +112,21 @@ public class UserResource {
 	@PostMapping("/users")
 
 	@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-	public ResponseEntity<Account> createUser(@Valid @RequestBody AccountDTO userDTO) throws URISyntaxException {
+	public ResponseEntity<Account> createUser(@Valid @RequestBody ManagedUserVM userDTO) throws URISyntaxException {
 		log.debug("REST request to save User : {}", userDTO);
 
 		if (!ObjectUtils.isEmpty(userDTO.getUUID())) {
-			throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists"); 
-			// Lowercase the user login before comparing with database																														 
+			throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
+			// Lowercase the user login before comparing with database
 		} else if (userRepository.findOneByUsername(userDTO.getUsername().toLowerCase()).isPresent()) {
 			throw new LoginAlreadyUsedException();
 		} else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
 			throw new EmailAlreadyUsedException();
 		} else {
 			Account newUser = userService.createUser(userDTO);
-			mailService.sendCreationEmail(newUser);
+			if (ObjectUtils.isEmpty(userDTO.getPassword())) {
+				mailService.sendCreationEmail(newUser);
+			}
 			return ResponseEntity.created(new URI("/api/users/" + newUser.getUsername()))
 					.headers(HeaderUtil.createAlert(applicationName,
 							"A user is created with identifier " + newUser.getUsername(), newUser.getUsername()))
@@ -216,7 +217,8 @@ public class UserResource {
 	@GetMapping("/users/{username:" + Constants.LOGIN_REGEX + "}")
 	public ResponseEntity<AccountDTOToReturnDetailAccount> getUser(@PathVariable String username) {
 		log.debug("REST request to get User : {}", username);
-		return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByUserName(username).map(AccountDTOToReturnDetailAccount::new));
+		return ResponseUtil.wrapOrNotFound(
+				userService.getUserWithAuthoritiesByUserName(username).map(AccountDTOToReturnDetailAccount::new));
 	}
 
 	/**

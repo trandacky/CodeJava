@@ -26,6 +26,10 @@ export class UserManagementUpdateComponent implements OnInit {
       ],
     ],
     firstName: ['', [Validators.maxLength(50)]],
+    password: ['', [
+      Validators.maxLength(50),
+      Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
+    ]],
     lastName: ['', [Validators.maxLength(50)]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     activated: [],
@@ -33,7 +37,7 @@ export class UserManagementUpdateComponent implements OnInit {
     authorities: [],
   });
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(private userService: UserService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {
@@ -85,7 +89,7 @@ export class UserManagementUpdateComponent implements OnInit {
   }
 
   private updateUser(user: User): void {
-    user.uuid=this.editForm.get(['uuid'])!.value;
+    user.uuid = this.editForm.get(['uuid'])!.value;
     user.username = this.editForm.get(['username'])!.value;
     user.firstName = this.editForm.get(['firstName'])!.value;
     user.lastName = this.editForm.get(['lastName'])!.value;
@@ -93,6 +97,7 @@ export class UserManagementUpdateComponent implements OnInit {
     user.activated = this.editForm.get(['activated'])!.value;
     user.langKey = this.editForm.get(['langKey'])!.value;
     user.authorities = this.editForm.get(['authorities'])!.value;
+    user.password=this.editForm.get(['password'])!.value;
   }
 
   private onSaveSuccess(): void {

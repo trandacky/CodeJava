@@ -21,7 +21,7 @@ List<EvaluationCriteria> getAll();
 
 	EvaluationCriteria createEvaluaCriteria(EvaluationCriteriaDTO evaluationCriteriaDTO);
 
-	EvaluationCriteria updateEvaluaCriteria(EvaluationCriteriaUpdateDTO evaluationCriteriaUpdateDTO);
+	EvaluationCriteria updateEvaluaCriteria(EvaluationCriteriaDTO evaluationCriteriaUpdateDTO);
 
 	EvaluationCriteria updateContentById(Long id, String content);
 

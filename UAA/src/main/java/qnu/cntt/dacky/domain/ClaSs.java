@@ -19,7 +19,7 @@ public class ClaSs extends AbstractAuditingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(mappedBy = "class1")
-	private List<AccountDetails> accountDetails = new ArrayList<>();
+	private List<Account> accounts = new ArrayList<>();
 
 	@Column(name = "name")
 	private String name;
@@ -54,13 +54,15 @@ public class ClaSs extends AbstractAuditingEntity implements Serializable {
 	public void setEnable(Boolean enable) {
 		this.enable = enable;
 	}
- 
-	public List<AccountDetails> getAccountDetails() {
-		return accountDetails;
+
+	public List<Account> getAccounts() {
+		return accounts;
 	}
 
-	public void setAccountDetails(List<AccountDetails> accountDetails) {
-		this.accountDetails = accountDetails;
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
 	}
+ 
+	
 	
 }

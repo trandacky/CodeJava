@@ -32,7 +32,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
         ,{
           path: 'khoa',
           data: {
-            authorities: [Authority.SV],
+            authorities: [Authority.KHOA],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () => import('./khoa/khoa-routing.module').then(m => m.KhoaRoutingModule),

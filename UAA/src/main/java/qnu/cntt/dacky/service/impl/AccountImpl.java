@@ -30,6 +30,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -150,13 +151,14 @@ public class AccountImpl implements AccountService {
 
 	private void removeUser(Account existingUser) {
 		accountAuthorityRepository.deleteAll(existingUser.getAccountAuthoritys());
-		accountDetailRepository.delete(existingUser.getAccountDetail());
+//		accountDetailRepository.delete(existingUser.getAccountDetail());
 		accountRepository.delete(existingUser);
 		accountRepository.flush();
 		this.clearUserCaches(existingUser);
 	}
 
-	public Account createUser(AccountDTO userDTO) {
+	public Account createUser(ManagedUserVM userDTO) {
+		String encryptedPassword;
 		Account user = new Account();
 		user.setUsername(userDTO.getUsername().toLowerCase());
 		user.setFirstName(userDTO.getFirstName());
@@ -164,10 +166,14 @@ public class AccountImpl implements AccountService {
 		if (userDTO.getEmail() != null) {
 			user.setEmail(userDTO.getEmail().toLowerCase());
 		}
-
-		String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+		if (ObjectUtils.isEmpty(userDTO.getPassword())) {
+			encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+			user.setResetKey(RandomUtil.generateResetKey());
+		} else {
+			encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+		}
 		user.setPassword(encryptedPassword);
-		user.setResetKey(RandomUtil.generateResetKey());
+		
 		user.setResetDate(Instant.now());
 		user.setActivated(true);
 		user.setCreatedBy("user");
@@ -341,7 +347,7 @@ public class AccountImpl implements AccountService {
 	public void registerAdmin() {
 		Authority authority = new Authority();
 		authority.setAuthorities("ROLE_ADMIN");
-		authority.setCreatedBy("ADMIN");
+		authority.setCreatedBy("Anonymus");
 		if (authorityRepository.findByAuthorities(authority.getAuthorities()).isEmpty()) {
 			authorityRepository.save(authority);
 		}
