@@ -80,9 +80,10 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	@Size(min = 5, max = 254)
 	@Column(length = 254, unique = true)
 	private String email;
-
-	@OneToOne(mappedBy = "account")
-	private AccountDetails accountDetail;
+	
+	@Size(min = 8, max = 14)
+	@Column(name = "phone_number")
+	private String phoneNumber;
 
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 	private List<Avatar> avatars;
@@ -181,15 +182,6 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public AccountDetails getAccountDetail() {
-		return accountDetail;
-	}
-
-	public void setAccountDetail(AccountDetails accountDetail) {
-		this.accountDetail = accountDetail;
-	}
-
 	public List<AccountAuthority> getAccountAuthoritys() {
 		return accountAuthoritys;
 	}

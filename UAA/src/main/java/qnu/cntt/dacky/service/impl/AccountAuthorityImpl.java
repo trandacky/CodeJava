@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.AccountAuthority;
-import qnu.cntt.dacky.domain.AccountDetails;
 import qnu.cntt.dacky.domain.Authority;
 import qnu.cntt.dacky.repository.AccountAuthorityRepository;
 import qnu.cntt.dacky.repository.AccountRepository;

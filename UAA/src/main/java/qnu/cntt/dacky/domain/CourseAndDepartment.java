@@ -3,10 +3,10 @@ package qnu.cntt.dacky.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,16 +21,16 @@ public class CourseAndDepartment extends AbstractAuditingEntity implements Seria
 	@OneToMany(mappedBy = "courseAndDepartment")
 	private List<ClaSs> classes = new ArrayList<>();
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "course_id")
 	private Course course;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "department_id")
 	private Department department;
 
 	@Column(name = "enable")
-	private Boolean enable;
+	private Boolean enable=true;
 
 	
 

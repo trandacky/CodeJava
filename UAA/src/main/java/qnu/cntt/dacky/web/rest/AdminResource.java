@@ -2,24 +2,16 @@ package qnu.cntt.dacky.web.rest;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import qnu.cntt.dacky.domain.AccountDetails;
 import qnu.cntt.dacky.domain.Authority;
-import qnu.cntt.dacky.security.AuthoritiesConstants;
 import qnu.cntt.dacky.service.AccountAuthorityService;
-import qnu.cntt.dacky.service.AccountDetailService;
 import qnu.cntt.dacky.service.AuthorityService;
 import qnu.cntt.dacky.service.dto.AccountAuthorityDTO;
 import qnu.cntt.dacky.service.dto.AuthorityDTO;
@@ -30,8 +22,6 @@ public class AdminResource {
 	@Autowired
 	private AuthorityService authorityService;
 
-	@Autowired
-	private AccountDetailService accountDetailService;
 
 	@GetMapping("/get-all-authority")
 	public List<Authority> getAllAuthority() {
@@ -66,8 +56,4 @@ public class AdminResource {
 		authorityService.deleteAuthority(authorities);
 	}
 
-	@GetMapping("/get-all-account-detail")
-	public List<AccountDetails> getAllAccountDetails() {
-		return accountDetailService.getAllAccountDetail();
-	}
 }

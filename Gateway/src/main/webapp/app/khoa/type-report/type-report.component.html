@@ -51,8 +51,8 @@
                     <button class="btn btn-success btn-sm" *ngIf="typeReport.enable"(click)="updateStatus(typeReport.id,!typeReport.enable)">Đang Hoạt Động</button>
                     <!--(click)=""-->
                 </td>
-                <td>{{ typeReport.createDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-                <td>{{ typeReport.updateDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td>{{ typeReport.createDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ typeReport.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td class="text-center">
                     <div class="btn-group">
                         <button type="button" (click)="clickEdit(typeReport.id,typeReport.typeName,typeReport.enable)" class="btn btn-primary btn-sm">

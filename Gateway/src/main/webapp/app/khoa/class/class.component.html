@@ -25,8 +25,8 @@
                     <button class="btn btn-success btn-sm" *ngIf="class.enable"(click)="updateStatus(class.uuid,!class.enable)">Đang Hoạt Động</button>
                     <!--(click)=""-->
                 </td>
-                <td>{{ class.createdDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-                <td>{{ class.updateDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td>{{ class.createdDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ class.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td class="text-center">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary btn-sm">

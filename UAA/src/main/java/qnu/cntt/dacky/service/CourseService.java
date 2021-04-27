@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import qnu.cntt.dacky.domain.Course;
+import qnu.cntt.dacky.domain.CourseAndDepartment;
 
 
 public interface CourseService {
@@ -28,4 +29,6 @@ public interface CourseService {
 	Course updateEnable(UUID uuid, boolean enable);
 
 	Course updateCourse(UUID uuid, String course);
+
+	List<CourseAndDepartment> getDepartmentByCourse(UUID uuid);
 }

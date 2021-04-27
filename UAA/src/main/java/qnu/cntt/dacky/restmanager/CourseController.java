@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import qnu.cntt.dacky.domain.Course;
+import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.service.CourseService;
 import qnu.cntt.dacky.service.dto.CourseDTO;
 
@@ -36,11 +37,24 @@ public class CourseController {
 	private List<Course> getAllCourse() {
 		return courseService.getAllCourse();
 	}
+
 	@GetMapping("/get-course-enable")
 	private List<Course> getCourseEnable() {
 		return courseService.getCourseEnable();
 	}
-	
+
+	@GetMapping("/get-department-by-course")
+	private ResponseEntity<Map<String, Object>> getDepartmentByCourse(@RequestParam("uuid") UUID uuid) {
+		try {
+			Map<String, Object> response = new HashMap<>();
+			response.put("course", courseService.getCourseById(uuid));
+			response.put("departments", courseService.getDepartmentByCourse(uuid));
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/get-paging-course")
 	private ResponseEntity<Map<String, Object>> getPagingDepartment(@RequestParam(defaultValue = "0") int page) {
 		try {
@@ -75,14 +89,14 @@ public class CourseController {
 		course.setEnable(true);
 		return courseService.addCourse(course);
 	}
+
 	@PutMapping("/update-enable-course")
-	private Course updateEnable(@RequestParam("uuid") UUID uuid, @RequestParam("enable") boolean enable)
-	{
-		return courseService.updateEnable(uuid,enable);
+	private Course updateEnable(@RequestParam("uuid") UUID uuid, @RequestParam("enable") boolean enable) {
+		return courseService.updateEnable(uuid, enable);
 	}
+
 	@PutMapping("/update-course")
-	private Course updateCourse(@RequestParam("uuid") UUID uuid, @RequestParam("course") String course)
-	{
-		return courseService.updateCourse(uuid,course);
+	private Course updateCourse(@RequestParam("uuid") UUID uuid, @RequestParam("course") String course) {
+		return courseService.updateCourse(uuid, course);
 	}
 }

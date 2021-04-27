@@ -5,10 +5,8 @@ import qnu.cntt.dacky.config.Constants;
 import qnu.cntt.dacky.domain.Authority;
 import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.AccountAuthority;
-import qnu.cntt.dacky.domain.AccountDetails;
 import qnu.cntt.dacky.repository.AuthorityRepository;
 import qnu.cntt.dacky.repository.AccountAuthorityRepository;
-import qnu.cntt.dacky.repository.AccountDetailRepository;
 import qnu.cntt.dacky.repository.AccountRepository;
 import qnu.cntt.dacky.security.AuthoritiesConstants;
 import qnu.cntt.dacky.security.SecurityUtils;
@@ -58,8 +56,6 @@ public class AccountImpl implements AccountService {
 	@Autowired
 	private AccountAuthorityRepository accountAuthorityRepository;
 
-	@Autowired
-	private AccountDetailRepository accountDetailRepository;
 
 	public Optional<Account> activateRegistration(String key) {
 		log.debug("Activating user for activation key {}", key);
@@ -128,11 +124,6 @@ public class AccountImpl implements AccountService {
 		accountAuthority.setAccount(newUser);
 		accountAuthority.setAuthority(authorities.get());
 		accountAuthorityRepository.save(accountAuthority);
-
-		AccountDetails accountDetail = new AccountDetails();
-		accountDetail.setAccount(newUser);
-		accountDetailRepository.save(accountDetail);
-		// them detail cho user
 		this.clearUserCaches(newUser);
 		log.debug("Created Information for User: {}", newUser);
 		return newUser;
@@ -192,12 +183,6 @@ public class AccountImpl implements AccountService {
 			accountAuthorityRepository.save(accAuthor);
 		}
 		// luu user truoc khi luu quyen do tinh chat database
-
-		AccountDetails accountDetail = new AccountDetails();
-
-		accountDetail.setAccount(user);
-		accountDetailRepository.save(accountDetail);
-		// them detail cho user
 
 		this.clearUserCaches(user);
 		log.debug("Created Information for User: {}", user);
@@ -377,11 +362,6 @@ public class AccountImpl implements AccountService {
 		accountAuthority.setAccount(newUser);
 		accountAuthority.setAuthority(authorities.get());
 		accountAuthorityRepository.save(accountAuthority);
-
-		AccountDetails accountDetail = new AccountDetails();
-		accountDetail.setAccount(newUser);
-		accountDetailRepository.save(accountDetail);
-		// them detail cho user
 		this.clearUserCaches(newUser);
 		log.debug("Created Information for User: {}", newUser);
 	}

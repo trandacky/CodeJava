@@ -51,8 +51,8 @@
                         <button class="btn btn-success btn-sm" *ngIf="department.enable" (click)="updateEnable(department.uuid,!department.enable)">Đang Hoạt Động</button>
                         <!--(click)=""-->
                     </td>
-                    <td>{{ department.createdDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-                    <td>{{ department.updateDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td>{{ department.createdDate | date:'HH:mm:ss dd/MM/yyyy ' }}</td>
+                    <td>{{ department.updateDate | date:'HH:mm:ss dd/MM/yyyy ' }}</td>
                     <td class="text-center">
                         <div class="btn-group">
                             <button type="button" (click)="editClick(department.uuid,department.departmentName)" class="btn btn-primary btn-sm">

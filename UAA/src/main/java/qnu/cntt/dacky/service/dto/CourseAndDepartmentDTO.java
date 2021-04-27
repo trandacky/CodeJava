@@ -1,34 +1,31 @@
 package qnu.cntt.dacky.service.dto;
 
+import java.util.UUID;
+
 public class CourseAndDepartmentDTO {
 
-	private long courseId;
-	private long departmentId;
+	private UUID courseId;
+	private UUID departmentId;
 
 	public CourseAndDepartmentDTO() {
 		super();
 	}
 
-	public CourseAndDepartmentDTO(long courseId, long departmentId) {
-		super();
-		this.courseId = courseId;
-		this.departmentId = departmentId;
-	}
-
-	public long getCourseId() {
+	public UUID getCourseId() {
 		return courseId;
 	}
 
-	public void setCourseId(long courseId) {
+	public void setCourseId(UUID courseId) {
 		this.courseId = courseId;
 	}
 
-	public long getDepartmentId() {
+	public UUID getDepartmentId() {
 		return departmentId;
 	}
 
-	public void setDepartmentId(long departmentId) {
+	public void setDepartmentId(UUID departmentId) {
 		this.departmentId = departmentId;
 	}
 
+	
 }

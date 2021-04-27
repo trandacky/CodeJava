@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "course")
 public class Course extends AbstractAuditingEntity implements Serializable{
@@ -16,6 +18,7 @@ public class Course extends AbstractAuditingEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(mappedBy = "course")
+	@JsonIgnore
 	private List<CourseAndDepartment> courseAndDepartment=new ArrayList<>();
 
 	@Column(name = "course")

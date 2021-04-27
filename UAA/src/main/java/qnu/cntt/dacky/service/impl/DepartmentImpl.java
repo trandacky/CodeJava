@@ -1,6 +1,6 @@
 package qnu.cntt.dacky.service.impl;
 
-import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,7 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import qnu.cntt.dacky.domain.Course;
+import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.domain.Department;
+import qnu.cntt.dacky.repository.CourseAndDepartmentRepository;
 import qnu.cntt.dacky.repository.DepartmentRepository;
 import qnu.cntt.dacky.service.DepartmentService;
 
@@ -20,6 +23,9 @@ public class DepartmentImpl implements DepartmentService {
 	@Autowired
 	private DepartmentRepository departmentRepository;
 
+	@Autowired
+	private CourseAndDepartmentRepository courseAndDepartmentRepository;
+
 	@Override
 	public List<Department> getAllDepartment() {
 		return departmentRepository.findAll();
@@ -27,7 +33,12 @@ public class DepartmentImpl implements DepartmentService {
 
 	@Override
 	public Department getDepartmentById(UUID id) {
-		return departmentRepository.findById(id).get();
+		Optional<Department> optional=departmentRepository.findById(id);
+		if(optional.isPresent())
+		{
+			return optional.get();
+		}
+		return null;
 	}
 
 	@Override
@@ -37,7 +48,6 @@ public class DepartmentImpl implements DepartmentService {
 
 	@Override
 	public Department addDepartment(Department department) {
-		department.setCreatedDate(Instant.now());
 		department.setEnable(true);
 		return departmentRepository.save(department);
 	}
@@ -49,12 +59,10 @@ public class DepartmentImpl implements DepartmentService {
 
 	@Override
 	public Department updateEnable(UUID id, boolean enable) {
-		Optional<Department> optional=departmentRepository.findById(id);
-		if(optional.isPresent())
-		{
-			Department department=optional.get();
+		Optional<Department> optional = departmentRepository.findById(id);
+		if (optional.isPresent()) {
+			Department department = optional.get();
 			department.setEnable(enable);
-			department.setUpdateDate(Instant.now());
 			return departmentRepository.save(department);
 		}
 		return null;
@@ -62,12 +70,11 @@ public class DepartmentImpl implements DepartmentService {
 
 	@Override
 	public Department updateDepartment(UUID id, String departmentName) {
-		Optional<Department> optional=departmentRepository.findById(id);
-		if(optional.isPresent())
-		{
-			Department department=optional.get();
-			department.setDepartmentName(departmentName);;
-			department.setUpdateDate(Instant.now());
+		Optional<Department> optional = departmentRepository.findById(id);
+		if (optional.isPresent()) {
+			Department department = optional.get();
+			department.setDepartmentName(departmentName);
+			;
 			return departmentRepository.save(department);
 		}
 		return null;
@@ -76,6 +83,23 @@ public class DepartmentImpl implements DepartmentService {
 	@Override
 	public List<Department> getDepartmentEnable() {
 		return departmentRepository.findByEnableTrue();
+	}
+
+	@Override
+	public List<Course> getCourseByDepartment(UUID uuid) {
+		Optional<Department> optional= departmentRepository.findById(uuid);
+		if(optional.isPresent())
+		{
+			Department department= optional.get();
+			List<Course> courses= new ArrayList<Course>();
+			List<CourseAndDepartment> courseAndDepartments=courseAndDepartmentRepository.findByDepartment(department);
+			for(CourseAndDepartment courseAndDepartment: courseAndDepartments)
+			{
+				courses.add(courseAndDepartment.getCourse());
+			}
+			return courses;
+		}
+		return null;
 	}
 
 }

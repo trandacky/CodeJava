@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import qnu.cntt.dacky.domain.Course;
+import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.domain.Department;
 import qnu.cntt.dacky.service.DepartmentService;
 import qnu.cntt.dacky.service.dto.DepartmentDTO;
@@ -36,10 +38,24 @@ public class DepartmentController {
 	private List<Department> getAllDepartment() {
 		return departmentService.getAllDepartment();
 	}
+
+	@GetMapping("/get-course-by-department")
+	private ResponseEntity<Map<String, Object>> getCourseByDepartment(@RequestParam("uuid") UUID uuid) {
+		try {
+			Map<String, Object> response = new HashMap<>();
+			response.put("courses", departmentService.getCourseByDepartment(uuid));
+			response.put("department", departmentService.getDepartmentById(uuid));
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/get-department-enable")
 	private List<Department> getDepartmentEnable() {
 		return departmentService.getDepartmentEnable();
 	}
+
 	@GetMapping("/get-paging-department")
 	private ResponseEntity<Map<String, Object>> getPagingDepartment(@RequestParam(defaultValue = "0") int page) {
 		try {
@@ -61,14 +77,16 @@ public class DepartmentController {
 	private Department getDepartmentById(@RequestParam("id") UUID id) {
 		return departmentService.getDepartmentById(id);
 	}
-	
+
 	@PutMapping("/update-enable-department")
 	private Department updateEnable(@RequestParam("uuid") UUID id, @RequestParam("enable") boolean enable) {
-		return departmentService.updateEnable(id,enable);
+		return departmentService.updateEnable(id, enable);
 	}
+
 	@PutMapping("/update-department")
-	private Department updateDepartment(@RequestParam("uuid") UUID id, @RequestParam("departmentName") String departmentName) {
-		return departmentService.updateDepartment(id,departmentName);
+	private Department updateDepartment(@RequestParam("uuid") UUID id,
+			@RequestParam("departmentName") String departmentName) {
+		return departmentService.updateDepartment(id, departmentName);
 	}
 
 	@PostMapping("/get-department-by-name")

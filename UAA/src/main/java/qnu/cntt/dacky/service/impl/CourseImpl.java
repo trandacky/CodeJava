@@ -1,6 +1,6 @@
 package qnu.cntt.dacky.service.impl;
 
-import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import qnu.cntt.dacky.domain.Course;
+import qnu.cntt.dacky.domain.CourseAndDepartment;
+import qnu.cntt.dacky.repository.CourseAndDepartmentRepository;
 import qnu.cntt.dacky.repository.CourseRepository;
 import qnu.cntt.dacky.service.CourseService;
 
@@ -19,6 +21,8 @@ public class CourseImpl implements CourseService {
 
 	@Autowired
 	private CourseRepository courseRepository;
+	@Autowired
+	private CourseAndDepartmentRepository courseAndDepartmentRepository;
 
 	@Override
 	public List<Course> getAllCourse() {
@@ -27,7 +31,12 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public Course getCourseById(UUID id) {
-		return courseRepository.findById(id).get();
+		Optional<Course> optional=courseRepository.findById(id);
+		if(optional.isPresent())
+		{
+			return optional.get();
+		}
+		return null;
 	}
 
 	@Override
@@ -64,7 +73,6 @@ public class CourseImpl implements CourseService {
 		{
 			Course course=optional.get();
 			course.setEnable(enable);
-			course.setUpdateDate(Instant.now());
 			return courseRepository.save(course);
 		}
 		return null;
@@ -77,8 +85,18 @@ public class CourseImpl implements CourseService {
 		{
 			Course course=optional.get();
 			course.setCourse(string);
-			course.setUpdateDate(Instant.now());
 			return courseRepository.save(course);
+		}
+		return null;
+	}
+
+	@Override
+	public List<CourseAndDepartment> getDepartmentByCourse(UUID uuid) {
+		Optional<Course> optional=courseRepository.findById(uuid);
+		if(optional.isPresent())
+		{
+			Course course = optional.get();
+			return courseAndDepartmentRepository.findByCourse(course);
 		}
 		return null;
 	}
