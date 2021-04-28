@@ -18,7 +18,7 @@ export class KhoaService {
   createTypeReport(typeName: string): Observable<any> {
     const typeReportParam = new FormData();
     typeReportParam.append('typename',typeName);
-    return this.http.post(this.urlService+'/create-type-report?typeName=', typeReportParam);
+    return this.http.post(this.urlService+'/create-type-report', typeReportParam);
   }
   updateTypeReportEnable(id: Number, enable:Boolean): Observable<Object> {
     const typeReportForm = new FormData();

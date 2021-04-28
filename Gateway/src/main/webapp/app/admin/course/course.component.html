@@ -46,7 +46,7 @@
             </thead>
             <tbody *ngIf="courses">
                 <tr *ngFor="let course of courses">
-                    <td ><a>{{ course.course }}</a></td>
+                    <td ><a [routerLink]="['/admin/department-management', course.uuid]">{{ course.course }}</a></td>
                     <td>
                         <button class="btn btn-danger btn-sm" *ngIf="!course.enable"(click)="updateEnable(course.uuid,!course.enable)">Đã Dừng</button>
                         <button class="btn btn-success btn-sm" *ngIf="course.enable" (click)="updateEnable(course.uuid,!course.enable)">Đang Hoạt Động</button>

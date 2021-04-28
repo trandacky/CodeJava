@@ -1,5 +1,6 @@
 package qnu.cntt.dacky.restmanager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +41,22 @@ public class DepartmentController {
 	}
 
 	@GetMapping("/get-course-by-department")
-	private ResponseEntity<Map<String, Object>> getCourseByDepartment(@RequestParam("uuid") UUID uuid) {
+	private ResponseEntity<Map<String, Object>> getCourseByDepartment(@RequestParam(defaultValue = "0") int page,
+			@RequestParam("uuid") UUID uuid) {
 		try {
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createdDate").descending());
+			Page<CourseAndDepartment> pageable = departmentService.getCourseByDepartment(uuid, paging);
+			List<CourseAndDepartment> courseAndDepartments = pageable.getContent();
+			List<Course> courses = new ArrayList<Course>();
+			for (CourseAndDepartment courseAndDepartment : courseAndDepartments) {
+				courses.add(courseAndDepartment.getCourse());
+			}
 			Map<String, Object> response = new HashMap<>();
-			response.put("courses", departmentService.getCourseByDepartment(uuid));
+			response.put("courses", courses);
 			response.put("department", departmentService.getDepartmentById(uuid));
+			response.put("currentPage", pageable.getNumber());
+			response.put("totalItems", pageable.getTotalElements());
+			response.put("totalPages", pageable.getTotalPages());
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

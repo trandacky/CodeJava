@@ -4,8 +4,7 @@
             <h3>Update: </h3>
             <h3> ID: {{formUpdateTypeReport?.value?.id}}</h3>
             <div class="col-md-6">
-                <input class="form-control" formControlName="typeName"
-                    value="{{formUpdateTypeReport?.value?.typeName}}"
+                <input class="form-control" formControlName="typeName" value="{{formUpdateTypeReport?.value?.typeName}}"
                     placeholder="Enter type name update for: {{formUpdateTypeReport?.value?.content}}">
             </div>
             <div class="col-md-1">
@@ -20,8 +19,21 @@
                         onclick="return confirm('Do you want update it?');" class="btn btn-success">Update</button>
                 </div>
                 <div class="col">
-                    <input type="button" (click)="clickCancelEdit()" class="btn btn-danger"
-                        value="Cancel update">
+                    <input type="button" (click)="clickCancelEdit()" class="btn btn-danger" value="Cancel update">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div *ngIf="!edit">
+    <form (ngSubmit)="submitFormCreateTypeReport()" [formGroup]="formCreateTypeReport">
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control" formControlName="typeName">
+            </div>
+            <div class="col-md-3 row">
+                <div class="col">
+                    <button type="submit" [disabled]="!formCreateTypeReport.valid" class="btn btn-success">Thêm</button>
                 </div>
             </div>
         </div>
@@ -45,17 +57,21 @@
         </thead>
         <tbody *ngIf="typeReports">
             <tr *ngFor="let typeReport of typeReports">
-                <td ><a [routerLink]="['/khoa/evaluation-criteria', typeReport.id ,'edit']">{{ typeReport.typeName }}</a></td>
+                <td><a [routerLink]="['/khoa/evaluation-criteria', typeReport.id ,'edit']">{{ typeReport.typeName }}</a>
+                </td>
                 <td>
-                    <button class="btn btn-danger btn-sm" *ngIf="!typeReport.enable" (click)="updateStatus(typeReport.id,!typeReport.enable)">Đã Dừng</button>
-                    <button class="btn btn-success btn-sm" *ngIf="typeReport.enable"(click)="updateStatus(typeReport.id,!typeReport.enable)">Đang Hoạt Động</button>
+                    <button class="btn btn-danger btn-sm" *ngIf="!typeReport.enable"
+                        (click)="updateStatus(typeReport.id,!typeReport.enable)">Đã Dừng</button>
+                    <button class="btn btn-success btn-sm" *ngIf="typeReport.enable"
+                        (click)="updateStatus(typeReport.id,!typeReport.enable)">Đang Hoạt Động</button>
                     <!--(click)=""-->
                 </td>
                 <td>{{ typeReport.createDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td>{{ typeReport.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td class="text-center">
                     <div class="btn-group">
-                        <button type="button" (click)="clickEdit(typeReport.id,typeReport.typeName,typeReport.enable)" class="btn btn-primary btn-sm">
+                        <button type="button" (click)="clickEdit(typeReport.id,typeReport.typeName,typeReport.enable)"
+                            class="btn btn-primary btn-sm">
                             <fa-icon icon="pencil-alt"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>

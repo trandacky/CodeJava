@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import qnu.cntt.dacky.domain.Course;
 import qnu.cntt.dacky.domain.CourseAndDepartment;
+import qnu.cntt.dacky.domain.Department;
 import qnu.cntt.dacky.repository.CourseAndDepartmentRepository;
 import qnu.cntt.dacky.repository.CourseRepository;
 import qnu.cntt.dacky.service.CourseService;
@@ -92,11 +93,17 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public List<CourseAndDepartment> getDepartmentByCourse(UUID uuid) {
+		
+		return null;
+	}
+
+	@Override
+	public Page<CourseAndDepartment> getDepartmentByCourse(UUID uuid, Pageable paging) {
 		Optional<Course> optional=courseRepository.findById(uuid);
 		if(optional.isPresent())
 		{
 			Course course = optional.get();
-			return courseAndDepartmentRepository.findByCourse(course);
+			return courseAndDepartmentRepository.findByCourse(course,paging);
 		}
 		return null;
 	}

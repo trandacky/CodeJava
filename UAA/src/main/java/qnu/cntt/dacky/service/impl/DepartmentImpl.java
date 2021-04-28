@@ -86,18 +86,12 @@ public class DepartmentImpl implements DepartmentService {
 	}
 
 	@Override
-	public List<Course> getCourseByDepartment(UUID uuid) {
+	public Page<CourseAndDepartment> getCourseByDepartment(UUID uuid, Pageable paging) {
 		Optional<Department> optional= departmentRepository.findById(uuid);
 		if(optional.isPresent())
 		{
 			Department department= optional.get();
-			List<Course> courses= new ArrayList<Course>();
-			List<CourseAndDepartment> courseAndDepartments=courseAndDepartmentRepository.findByDepartment(department);
-			for(CourseAndDepartment courseAndDepartment: courseAndDepartments)
-			{
-				courses.add(courseAndDepartment.getCourse());
-			}
-			return courses;
+			return courseAndDepartmentRepository.findByDepartment(department,paging);
 		}
 		return null;
 	}

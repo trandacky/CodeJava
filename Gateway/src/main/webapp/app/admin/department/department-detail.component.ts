@@ -5,27 +5,27 @@ import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { AdminService } from '../service-admin.service';
 
 @Component({
-    selector: 'jhi-course-detail-management',
-    templateUrl: './course-detail.component.html',
+    selector: 'jhi-department-detail-management',
+    templateUrl: './department-detail.component.html',
 })
-export class CourseDetailComponent implements OnInit {
-    departmentUUID: any| null = null;
+export class DepartmentDetailComponent implements OnInit {
+    courseUUID: any| null = null;
     totalItems = 0;
     page = 1;
     edit = false;
     itemsPerPage = ITEMS_PER_PAGE;
-    courses!: any;
-    department: any;
+    course!: any;
+    departments: any;
     constructor(private route: ActivatedRoute, private adminService: AdminService) { }
 
     ngOnInit(): void {
-        this.route.data.subscribe(({ departmentUUID }) => (this.departmentUUID = departmentUUID));
+        this.route.data.subscribe(({ courseUUID }) => (this.courseUUID = courseUUID));
         this.loadAll(this.page);
     }
     private loadAll(page: number): void {
-        this.adminService.getCourseByDepartmentId(--page,this.departmentUUID).subscribe(data => {
-            this.department=data.department;
-            this.courses = data.courses; this.totalItems = data.totalItems;
+        this.adminService.getDepartmentByCourseId(--page,this.courseUUID).subscribe(data => {
+            this.course=data.course;
+            this.departments = data.departments; this.totalItems = data.totalItems;
 
         });
     }

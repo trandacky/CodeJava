@@ -34,7 +34,6 @@ public class AccountDTOToReturnDetailAccount {
 			authority.add(accAuthor.getAuthority().getAuthorities());
 		}
 		this.authorities = authority;
-		this.accountDetailDTO = new AccountDetailDTO(account.getAccountDetail());
 	}
 
 	public AccountDTOToReturnDetailAccount() {
@@ -70,19 +69,7 @@ public class AccountDTOToReturnDetailAccount {
 
 	private List<String> authorities;
 
-	private AccountDetailDTO accountDetailDTO;
-
 	
-	
-	@Override
-	public String toString() {
-		return "AccountDTOToReturnDetailAccount [UUID=" + UUID + ", username=" + username + ", createdBy=" + createdBy
-				+ ", createdDate=" + createdDate + ", updateBy=" + updateBy + ", updateDate=" + updateDate
-				+ ", activated=" + activated + ", firstName=" + firstName + ", lastName=" + lastName + ", enabled="
-				+ enabled + ", locked=" + locked + ", email=" + email + ", authorities=" + authorities
-				+ ", accountDetailDTO=" + accountDetailDTO + "]";
-	}
-
 	public java.util.UUID getUUID() {
 		return UUID;
 	}
@@ -185,14 +172,6 @@ public class AccountDTOToReturnDetailAccount {
 
 	public void setAuthorities(List<String> authorities) {
 		this.authorities = authorities;
-	}
-
-	public AccountDetailDTO getAccountDetailDTO() {
-		return accountDetailDTO;
-	}
-
-	public void setAccountDetailDTO(AccountDetailDTO accountDetailDTO) {
-		this.accountDetailDTO = accountDetailDTO;
 	}
 
 }

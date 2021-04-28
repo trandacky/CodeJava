@@ -30,5 +30,5 @@ public interface DepartmentService {
 
 	List<Department> getDepartmentEnable();
 
-	List<Course> getCourseByDepartment(UUID uuid);
+	Page<CourseAndDepartment> getCourseByDepartment(UUID uuid, Pageable paging);
 }
