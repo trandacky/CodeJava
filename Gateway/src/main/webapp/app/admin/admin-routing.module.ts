@@ -28,6 +28,13 @@ import { RouterModule } from '@angular/router';
         },
       },
       {
+        path: 'course-department-management',
+        loadChildren: () => import('./course-and-department/course-and-department.module').then(m => m.CourseAndDepartmentModule),
+        data: {
+          pageTitle: 'Course',
+        },
+      },
+      {
         path: 'role',
         loadChildren: () => import('./role/role.module').then(m => m.RoleModule),
         data: {

@@ -15,6 +15,7 @@ import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.domain.Department;
 import qnu.cntt.dacky.repository.CourseAndDepartmentRepository;
 import qnu.cntt.dacky.repository.CourseRepository;
+import qnu.cntt.dacky.repository.DepartmentRepository;
 import qnu.cntt.dacky.service.CourseService;
 
 @Service
@@ -22,6 +23,8 @@ public class CourseImpl implements CourseService {
 
 	@Autowired
 	private CourseRepository courseRepository;
+	@Autowired
+	private DepartmentRepository departmentRepository;
 	@Autowired
 	private CourseAndDepartmentRepository courseAndDepartmentRepository;
 
@@ -32,9 +35,8 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public Course getCourseById(UUID id) {
-		Optional<Course> optional=courseRepository.findById(id);
-		if(optional.isPresent())
-		{
+		Optional<Course> optional = courseRepository.findById(id);
+		if (optional.isPresent()) {
 			return optional.get();
 		}
 		return null;
@@ -47,9 +49,20 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public Course addCourse(Course course) {
-		return courseRepository.save(course);
+		List<Department> departments = departmentRepository.findByEnableTrue();
+		course = courseRepository.save(course);
+		CourseAndDepartment courseAndDepartment;
+		List<CourseAndDepartment> courseAndDepartments = new ArrayList<>();
+		for (Department department : departments) {
+			courseAndDepartment = new CourseAndDepartment();
+			courseAndDepartment.setDepartment(department);
+			courseAndDepartment.setCourse(course);
+			courseAndDepartment.setEnable(false);
+			courseAndDepartments.add(courseAndDepartment);
+		}
+		courseAndDepartmentRepository.saveAll(courseAndDepartments);
+		return course;
 	}
-
 
 	@Override
 	public boolean isCourseExistById(UUID id) {
@@ -58,7 +71,7 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public Page<Course> getPageable(Pageable paging) {
-		
+
 		return courseRepository.findAll(paging);
 	}
 
@@ -69,10 +82,16 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public Course updateEnable(UUID uuid, boolean enable) {
-		Optional<Course> optional=courseRepository.findById(uuid);
-		if(optional.isPresent()) 
-		{
-			Course course=optional.get();
+		Optional<Course> optional = courseRepository.findById(uuid);
+		if (optional.isPresent()) {
+			Course course = optional.get();
+			if (!enable) {
+				List<CourseAndDepartment> list = courseAndDepartmentRepository.findByCourse(course);
+				for (CourseAndDepartment courseAndDepartment : list) {
+						courseAndDepartment.setEnable(false);
+						courseAndDepartmentRepository.save(courseAndDepartment);
+				}
+			}
 			course.setEnable(enable);
 			return courseRepository.save(course);
 		}
@@ -81,10 +100,9 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public Course updateCourse(UUID uuid, String string) {
-		Optional<Course> optional=courseRepository.findById(uuid);
-		if(optional.isPresent()) 
-		{
-			Course course=optional.get();
+		Optional<Course> optional = courseRepository.findById(uuid);
+		if (optional.isPresent()) {
+			Course course = optional.get();
 			course.setCourse(string);
 			return courseRepository.save(course);
 		}
@@ -93,17 +111,16 @@ public class CourseImpl implements CourseService {
 
 	@Override
 	public List<CourseAndDepartment> getDepartmentByCourse(UUID uuid) {
-		
+
 		return null;
 	}
 
 	@Override
 	public Page<CourseAndDepartment> getDepartmentByCourse(UUID uuid, Pageable paging) {
-		Optional<Course> optional=courseRepository.findById(uuid);
-		if(optional.isPresent())
-		{
+		Optional<Course> optional = courseRepository.findById(uuid);
+		if (optional.isPresent()) {
 			Course course = optional.get();
-			return courseAndDepartmentRepository.findByCourse(course,paging);
+			return courseAndDepartmentRepository.findByCourse(course, paging);
 		}
 		return null;
 	}

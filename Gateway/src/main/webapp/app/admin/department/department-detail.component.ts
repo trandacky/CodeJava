@@ -33,9 +33,15 @@ export class DepartmentDetailComponent implements OnInit {
         this.loadAll(this.page);
     }
     updateEnable(uuid: any, enable: boolean): void {
-        this.adminService.updateDepartmentEnable(uuid, enable).subscribe(
+        this.adminService.updateCourseAndDepartmentEnable(uuid, enable).subscribe(
             () => { this.loadAll(this.page); },
             () => { alert("error"); }
+        );
+    }
+    delete(uuid:String): void{
+        this.adminService.deleteCourseAndDepartment(uuid).subscribe(
+            () => { alert("deleted success");this.loadAll(this.page); },
+            () => { alert("server error or department haved class"); }
         );
     }
 }

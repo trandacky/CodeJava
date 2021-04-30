@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import qnu.cntt.dacky.domain.ClaSs;
 import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.service.dto.CourseAndDepartmentDTO;
 
@@ -25,4 +26,8 @@ public interface CourseAndDepartmentService {
 	CourseAndDepartment getCourseAndDepartmentByUsername(String username);
 
 	Page<CourseAndDepartment> getPageableEnable(Pageable paging);
+
+	CourseAndDepartment deletedById(UUID uuid);
+
+	List<ClaSs> getClassByCADId(UUID uuid);
 }

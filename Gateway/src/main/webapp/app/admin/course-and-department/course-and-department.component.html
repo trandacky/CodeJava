@@ -1,11 +1,12 @@
-<h2>Quản lý khóa: Khoa: {{department.departmentName}} </h2>
-<div class="table-responsive text-center" *ngIf="courses">
-    <h6>Click vào tên khóa để xem các khoa của khóa</h6>
+<h2>Quản lý khoa và khóa</h2>
+<div class="table-responsive text-center" *ngIf="courseAndDepartments">
+    <h6>Click vào tên khóa để xem danh sách lớp</h6>
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
             <tr>
                 <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
-                <th><span>Tên khóa</span>
+                <th><span>Tên khóa</span></th>
+                <th><span>Tên khoa</span>
                 </th>
                 <th><span>Tình trạng</span>
                 </th>
@@ -13,21 +14,22 @@
                 <th><span>Ngày Cập nhật</span></th>
             </tr>
         </thead>
-        <tbody *ngIf="courses">
-            <tr *ngFor="let course of courses">
-                <td><a>{{ course.course }}</a></td>
+        <tbody *ngIf="courseAndDepartments">
+            <tr *ngFor="let courseAndDepartment of courseAndDepartments">
+                <td>{{ courseAndDepartment.course }}</td>
+                <td><a [routerLink]="['./', courseAndDepartment.uuid]">{{ courseAndDepartment.departmentName }}</a></td>
                 <td>
-                    <button class="btn btn-danger btn-sm" *ngIf="!course.enable"
-                        (click)="updateEnable(course.uuid,!course.enable)">Đã Dừng</button>
-                    <button class="btn btn-success btn-sm" *ngIf="course.enable"
-                        (click)="updateEnable(course.uuid,!course.enable)">Đang Hoạt Động</button>
+                    <button class="btn btn-danger btn-sm" *ngIf="!courseAndDepartment.enable"
+                        (click)="updateEnable(courseAndDepartment.uuid,!courseAndDepartment.enable)">Đã Dừng</button>
+                    <button class="btn btn-success btn-sm" *ngIf="courseAndDepartment.enable"
+                        (click)="updateEnable(courseAndDepartment.uuid,!courseAndDepartment.enable)">Đang Hoạt Động</button>
                     <!--(click)=""-->
                 </td>
-                <td>{{ course.createdDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
-                <td>{{ course.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ courseAndDepartment.createdDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ courseAndDepartment.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td>
                     <div class="text-right">
-                        <button type="button" (click)="delete(course.uuid)"
+                        <button type="button" (click)="delete(courseAndDepartment.uuid)"
                         class="btn btn-danger btn-sm">
                     <fa-icon icon="times"></fa-icon>
                     <span class="d-none d-md-inline">Delete</span>
@@ -39,7 +41,7 @@
     </table>
 </div>
 
-<div *ngIf="courses">
+<div *ngIf="courseAndDepartments">
     <div class="row justify-content-center">
         <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
     </div>

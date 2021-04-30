@@ -79,7 +79,7 @@ public class ClassController {
 //	}
 
 	@DeleteMapping("/delete-class-by-id/{id}")
-	private String deleteClassById(@PathVariable UUID id) {
+	private ClaSs deleteClassById(@PathVariable UUID id) {
 		return classService.deleteClassById(id);
 	}
 

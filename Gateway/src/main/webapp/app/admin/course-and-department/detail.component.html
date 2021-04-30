@@ -1,0 +1,40 @@
+<h2>Danh sách lớp Khóa:{{courseAndDepartment.course}} - Khoa: {{courseAndDepartment.departmentName}}</h2>
+<div class="table-responsive text-center" *ngIf="classList">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+        <thead>
+            <tr>
+                <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                <th><span>Tên lớp</span></th>
+                <th><span>Số lượng</span>
+                </th>
+                <th><span>Tình trạng</span>
+                </th>
+                <th><span>Ngày tạo</span></th>
+                <th><span>Ngày Cập nhật</span></th>
+            </tr>
+        </thead>
+        <tbody *ngIf="classList">
+            <tr *ngFor="let class of classList">
+                <td>{{ class.name }}</td>
+                <td>{{ class.count }}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" *ngIf="!class.enable"
+                        (click)="updateEnable(class.uuid,!class.enable)">Đã Dừng</button>
+                    <button class="btn btn-success btn-sm" *ngIf="class.enable"
+                        (click)="updateEnable(class.uuid,!class.enable)">Đang Hoạt Động</button>
+                    <!--(click)=""-->
+                </td>
+                <td>{{ class.createdDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ class.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>
+                    <div class="text-right">
+                        <button type="button" (click)="delete(class.uuid)" class="btn btn-danger btn-sm">
+                            <!-- <fa-icon icon="times"></fa-icon> -->
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

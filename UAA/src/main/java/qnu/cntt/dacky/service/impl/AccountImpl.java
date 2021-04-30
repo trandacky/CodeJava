@@ -3,6 +3,7 @@ package qnu.cntt.dacky.service.impl;
 
 import qnu.cntt.dacky.config.Constants;
 import qnu.cntt.dacky.domain.Authority;
+import qnu.cntt.dacky.domain.ClaSs;
 import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.AccountAuthority;
 import qnu.cntt.dacky.repository.AuthorityRepository;
@@ -365,7 +366,7 @@ public class AccountImpl implements AccountService {
 		this.clearUserCaches(newUser);
 		log.debug("Created Information for User: {}", newUser);
 	}
-
+ 
 	private void clearUserCaches(Account user) {
 		Objects.requireNonNull(cacheManager.getCache(AccountRepository.USERS_BY_USERNAME_CACHE))
 				.evict(user.getUsername());
@@ -373,5 +374,10 @@ public class AccountImpl implements AccountService {
 			Objects.requireNonNull(cacheManager.getCache(AccountRepository.USERS_BY_EMAIL_CACHE))
 					.evict(user.getEmail());
 		}
+	}
+
+	@Override
+	public int getCount(ClaSs ss) {
+		return accountRepository.findByClass1(ss).size();
 	}
 }

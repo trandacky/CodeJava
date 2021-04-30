@@ -1,6 +1,7 @@
 package qnu.cntt.dacky.repository;
 
 import qnu.cntt.dacky.domain.Account;
+import qnu.cntt.dacky.domain.ClaSs;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -63,4 +64,6 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 //	Optional<Account> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
 	Page<Account> findAllByUsernameNot(Pageable pageable, String login);
+
+	List<Account> findByClass1(ClaSs ss);
 }

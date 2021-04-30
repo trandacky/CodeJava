@@ -98,4 +98,29 @@ public class CourseAndDepartmentImpl implements CourseAndDepartmentService {
 	public Page<CourseAndDepartment> getPageableEnable(Pageable paging) {
 		return courseAndDepartmentRepository.findByEnableTrue(paging);
 	}
+
+	@Override
+	public CourseAndDepartment deletedById(UUID uuid) {
+		Optional<CourseAndDepartment> optional = courseAndDepartmentRepository.findById(uuid);
+		if (optional.isPresent()) {
+			CourseAndDepartment courseAndDepartment=optional.get();
+			List<ClaSs> classes=classRepository.findByCourseAndDepartment(courseAndDepartment);
+			if(classes.isEmpty())
+			{
+				courseAndDepartmentRepository.delete(courseAndDepartment);
+				return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<ClaSs> getClassByCADId(UUID uuid) {
+		Optional<CourseAndDepartment> optional=courseAndDepartmentRepository.findById(uuid);
+		if(optional.isPresent())
+		{
+			return classRepository.findByCourseAndDepartment(optional.get());
+		}
+		return null;
+	}
 }

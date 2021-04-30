@@ -1,6 +1,7 @@
 package qnu.cntt.dacky.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import qnu.cntt.dacky.domain.ClaSs;
+import qnu.cntt.dacky.repository.AccountRepository;
 import qnu.cntt.dacky.repository.ClassRepository;
 import qnu.cntt.dacky.service.ClassService;
 
@@ -18,6 +20,8 @@ public class ClassImpl implements ClassService {
 
 	@Autowired
 	private ClassRepository classRepository;
+	@Autowired
+	private AccountRepository accountRepository;
 	
 //	@Autowired
 //	private CourseAndDepartmentRepository andDepartmentRepository;
@@ -47,11 +51,17 @@ public class ClassImpl implements ClassService {
 	}
 
 	@Override
-	public String deleteClassById(UUID id) {
-		if (!isClassExistById(id))
-			return "Delete failed!";
-		classRepository.deleteById(id);
-		return "Deleted successfully!";
+	public ClaSs deleteClassById(UUID id) {
+		Optional<ClaSs> optional=classRepository.findById(id);
+		if(optional.isPresent())
+		{
+			if(accountRepository.findByClass1(optional.get()).isEmpty())
+			{
+				classRepository.deleteById(id);
+				return new ClaSs();
+			}
+		}
+		return null;
 	}
 
 	@Override

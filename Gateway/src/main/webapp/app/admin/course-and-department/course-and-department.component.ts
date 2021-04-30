@@ -1,31 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { AdminService } from '../service-admin.service';
 
 @Component({
-    selector: 'jhi-course-detail-management',
-    templateUrl: './course-detail.component.html',
+    selector: 'jhi-course-and-department-management',
+    templateUrl: './course-and-department.component.html',
 })
-export class CourseDetailComponent implements OnInit {
-    departmentUUID: any| null = null;
+export class CourseAndDepartmentComponent implements OnInit {
     totalItems = 0;
     page = 1;
-    edit = false;
     itemsPerPage = ITEMS_PER_PAGE;
-    courses!: any;
-    department: any;
-    constructor(private route: ActivatedRoute, private adminService: AdminService) { }
+    courseAndDepartments: any;
+    addForm: FormGroup = this.fb.group({
+        courseuuid: ['', Validators.required],
+        departmentuuid: ['', Validators.required],
+    });
+    constructor(private fb: FormBuilder, private adminService: AdminService) { }
 
     ngOnInit(): void {
-        this.route.data.subscribe(({ departmentUUID }) => (this.departmentUUID = departmentUUID));
+        this.addForm;
         this.loadAll(this.page);
     }
     private loadAll(page: number): void {
-        this.adminService.getCourseByDepartmentId(--page,this.departmentUUID).subscribe(data => {
-            this.department=data.department;
-            this.courses = data.courses; this.totalItems = data.totalItems;
+        this.adminService.getCourseAndDepartment(--page).subscribe(data => {
+            this.courseAndDepartments = data.courseAndDepartment; this.totalItems = data.totalItems;
 
         });
     }

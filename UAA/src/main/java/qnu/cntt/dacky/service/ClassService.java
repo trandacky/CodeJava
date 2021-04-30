@@ -23,7 +23,7 @@ public interface ClassService {
 
 	boolean isClassExistById(UUID id);
 
-	String deleteClassById(UUID id);
+	ClaSs deleteClassById(UUID id);
 
 
 	Page<ClaSs> getAllByIdAndPageable(Pageable paging);

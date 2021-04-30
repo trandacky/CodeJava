@@ -62,6 +62,13 @@ public class DepartmentImpl implements DepartmentService {
 		Optional<Department> optional = departmentRepository.findById(id);
 		if (optional.isPresent()) {
 			Department department = optional.get();
+			if (!enable) {
+				List<CourseAndDepartment> list = courseAndDepartmentRepository.findByDepartment(department);
+				for (CourseAndDepartment courseAndDepartment : list) {
+						courseAndDepartment.setEnable(false);
+						courseAndDepartmentRepository.save(courseAndDepartment);
+				}
+			}
 			department.setEnable(enable);
 			return departmentRepository.save(department);
 		}

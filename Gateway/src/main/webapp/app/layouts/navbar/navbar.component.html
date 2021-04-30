@@ -174,7 +174,14 @@
                             <span>Quản lý khoa</span>
                         </a>
                     </li>
-                   
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/course-department-management" routerLinkActive="active"
+                            (click)="collapseNavbar()">
+                            <fa-icon icon="user" [fixedWidth]="true"></fa-icon>
+                            <span>Khoa và khóa</span>
+                        </a>
+                    </li>
+                    
                     <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
                 </ul>
             </li>

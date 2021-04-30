@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
 import qnu.cntt.dacky.domain.Account;
+import qnu.cntt.dacky.domain.ClaSs;
 import qnu.cntt.dacky.service.dto.AccountDTO;
 import qnu.cntt.dacky.service.dto.AccountDTOToReturnDetailAccount;
 import qnu.cntt.dacky.web.rest.vm.ManagedUserVM;
@@ -39,4 +40,5 @@ public interface AccountService {
 	public List<String> getAuthorities();
 	@Transactional
 	public void registerAdmin();
+	public int getCount(ClaSs ss);
 }

@@ -26,6 +26,7 @@ import qnu.cntt.dacky.domain.Course;
 import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.domain.Department;
 import qnu.cntt.dacky.service.CourseService;
+import qnu.cntt.dacky.service.dto.CourseAndDepartmentReturnDTO;
 import qnu.cntt.dacky.service.dto.CourseDTO;
 
 @RestController
@@ -52,15 +53,15 @@ public class CourseController {
 			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createdDate").descending());
 			Page<CourseAndDepartment> pageable = courseService.getDepartmentByCourse(uuid,paging);
 			List<CourseAndDepartment> courseAndDepartments=pageable.getContent();
-			List<Department> departments = new ArrayList<>();
-			for(CourseAndDepartment courseAndDepartment:courseAndDepartments)
+			List<CourseAndDepartmentReturnDTO> returnDTOs= new ArrayList<>();
+			for(CourseAndDepartment courseAndDepartment: courseAndDepartments)
 			{
-				departments.add(courseAndDepartment.getDepartment());
+				returnDTOs.add(new CourseAndDepartmentReturnDTO(courseAndDepartment));
 			}
 			
 			Map<String, Object> response = new HashMap<>();
 			response.put("course", courseService.getCourseById(uuid));
-			response.put("departments", departments);
+			response.put("departments", returnDTOs);
 			response.put("currentPage", pageable.getNumber());
 			response.put("totalItems", pageable.getTotalElements());
 			response.put("totalPages", pageable.getTotalPages());

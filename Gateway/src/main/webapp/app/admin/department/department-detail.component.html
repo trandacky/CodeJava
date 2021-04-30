@@ -24,6 +24,15 @@
                 </td>
                 <td>{{ department.createdDate | date:'HH:mm:ss dd/MM/yyyy ' }}</td>
                 <td>{{ department.updateDate | date:'HH:mm:ss dd/MM/yyyy ' }}</td>
+                <td>
+                    <div class="text-right">
+                        <button type="button" (click)="delete(department.uuid)"
+                        class="btn btn-danger btn-sm">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                </button>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
