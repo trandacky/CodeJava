@@ -1,18 +1,14 @@
 package qnu.cntt.dacky.service.dto;
 
+import java.util.UUID;
+
 public class ClassDTO {
 
 	private String className;
-	private long courseAndDepartmentId;
+	private UUID courseAndDepartmentId;
 
 	public ClassDTO() {
 		super();
-	}
-
-	public ClassDTO(String className, long courseAndDepartmentId) {
-		super();
-		this.className = className;
-		this.courseAndDepartmentId = courseAndDepartmentId;
 	}
 
 	public String getClassName() {
@@ -23,12 +19,14 @@ public class ClassDTO {
 		this.className = className;
 	}
 
-	public long getCourseAndDepartmentId() {
+	public UUID getCourseAndDepartmentId() {
 		return courseAndDepartmentId;
 	}
 
-	public void setCourseAndDepartmentId(long courseAndDepartmentId) {
+	public void setCourseAndDepartmentId(UUID courseAndDepartmentId) {
 		this.courseAndDepartmentId = courseAndDepartmentId;
 	}
+
+	
 
 }

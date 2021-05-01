@@ -239,10 +239,7 @@ public class AccountImpl implements AccountService {
 
 	public void deleteUser(String login) {
 		accountRepository.findOneByUsername(login).ifPresent(user -> {
-			for (AccountAuthority accAu : user.getAccountAuthoritys()) {
-				accountAuthorityRepository.deleteById(accAu.getUUID());
-			}
-
+			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
 			// accountRepository.delete(user);
 			user.setActivated(false);
 			this.clearUserCaches(user);
@@ -260,7 +257,7 @@ public class AccountImpl implements AccountService {
 	 * @param langKey   language key.
 	 * @param imageUrl  image URL of user.
 	 */
-
+	@Transactional
 	public void updateUser(String firstName, String lastName, String email) {
 		SecurityUtils.getCurrentUserLogin().flatMap(accountRepository::findOneByUsername).ifPresent(user -> {
 			user.setFirstName(firstName);
@@ -375,9 +372,29 @@ public class AccountImpl implements AccountService {
 					.evict(user.getEmail());
 		}
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public int getCount(ClaSs ss) {
+		return accountRepository.findCountByClass1(ss);
+	}
 
 	@Override
-	public int getCount(ClaSs ss) {
-		return accountRepository.findByClass1(ss).size();
+	@Transactional
+	public void updateActivated(String username, boolean activated) {
+		accountRepository.findOneByUsername(username).ifPresent(user -> {
+			// accountRepository.delete(user);
+			
+			if(activated&&user.getAccountAuthoritys().isEmpty())
+			{	
+				AccountAuthority accountAuthority= new AccountAuthority();
+				accountAuthority.setAccount(user);
+				accountAuthority.setAuthority(authorityRepository.findByAuthorities(AuthoritiesConstants.SV).get());
+				accountAuthorityRepository.save(accountAuthority);
+			}
+			user.setActivated(activated);
+			this.clearUserCaches(user);
+			log.debug("Deleted User: {}", user);
+		});
 	}
 }

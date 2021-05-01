@@ -48,27 +48,11 @@
             </dl>
             <dl class="col-md jh-entity-details">
                 <dt><span>About</span></dt>
-                <dd>
-                    <span>{{ user?.accountDetailDTO?.about }}</span>
-                </dd>
-
-                <dt><span>Phone Number</span></dt>
-                <dd>{{user?.accountDetailDTO?.phoneNumber }}</dd>
-
-                <dt><span>Name</span></dt>
-                <dd>{{ user?.accountDetailDTO?.name }}</dd>
+                <dd>{{ user?.uuid}}</dd>
 
                 <dt><span>Class</span></dt>
                 <dd>{{ user|json }}</dd>
 
-                <dt><span>Profiles</span></dt>
-                <dd>
-                    <ul class="list-unstyled">
-                        <li *ngFor="let authority of user.authorities">
-                            <span class="badge badge-info">{{ authority }}</span>
-                        </li>
-                    </ul>
-                </dd>
             </dl>
 </div>
             <button type="submit" routerLink="../../" class="btn btn-info">

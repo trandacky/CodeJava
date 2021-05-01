@@ -79,8 +79,8 @@ export class EvaluationCriteriaComponent implements OnInit {
   }
   editButton(id: any,content: any,maxScore: any): void
   {
-    this.formEvaluationCriteria.value.id = id;
-    this.formEvaluationCriteria.value.content=content;
-    this.formEvaluationCriteria.value.maxScore=maxScore;
+    this.formEvaluationCriteria.get('id')?.setValue(id);
+    this.formEvaluationCriteria.get('content')?.setValue(content);
+    this.formEvaluationCriteria.get('maxScore')?.setValue(maxScore);
   }
 }

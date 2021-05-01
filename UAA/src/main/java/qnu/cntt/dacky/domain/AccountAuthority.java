@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -22,12 +23,12 @@ public class AccountAuthority extends AbstractAuditingEntity implements Serializ
 	private static final long serialVersionUID = 1L;
 	
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "account_uuid", referencedColumnName = "uuid")
 	private Account account;
 	
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "authority_uuid", referencedColumnName = "uuid")
 	private Authority authority;
 

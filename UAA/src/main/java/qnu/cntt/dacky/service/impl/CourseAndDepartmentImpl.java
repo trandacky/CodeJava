@@ -26,6 +26,7 @@ import qnu.cntt.dacky.security.SecurityUtils;
 import qnu.cntt.dacky.service.CourseAndDepartmentService;
 import qnu.cntt.dacky.service.dto.CourseAndDepartmentDTO;
 import qnu.cntt.dacky.web.rest.AccountResource;
+import qnu.cntt.dacky.web.rest.errors.BadRequestAlertException;
 
 @Service
 public class CourseAndDepartmentImpl implements CourseAndDepartmentService {
@@ -59,6 +60,7 @@ public class CourseAndDepartmentImpl implements CourseAndDepartmentService {
 		if (department.isPresent() && course.isPresent()) {
 			courseAndDepartment.setCourse(course.get());
 			courseAndDepartment.setDepartment(department.get());
+			courseAndDepartment.setEnable(false);
 			return courseAndDepartmentRepository.save(courseAndDepartment);
 		}
 		return null;
@@ -108,10 +110,10 @@ public class CourseAndDepartmentImpl implements CourseAndDepartmentService {
 			if(classes.isEmpty())
 			{
 				courseAndDepartmentRepository.delete(courseAndDepartment);
-				return null;
+				return new CourseAndDepartment();
 			}
 		}
-		return null;
+		throw new BadRequestAlertException("class have account", "classManagement", "idexists");
 	}
 
 	@Override

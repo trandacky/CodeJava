@@ -41,4 +41,5 @@ public interface AccountService {
 	@Transactional
 	public void registerAdmin();
 	public int getCount(ClaSs ss);
+	public void updateActivated(String username, boolean activated);
 }

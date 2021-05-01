@@ -34,4 +34,6 @@ public interface CourseService {
 	List<CourseAndDepartment> getDepartmentByCourse(UUID uuid);
 
 	Page<CourseAndDepartment> getDepartmentByCourse(UUID uuid, Pageable paging);
+
+	List<Department> getDepartmentNotHaveByCourse(UUID uuid);
 }

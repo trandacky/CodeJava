@@ -1,4 +1,38 @@
-<h2>Danh sách lớp Khóa:{{courseAndDepartment.course}} - Khoa: {{courseAndDepartment.departmentName}}</h2>
+<h2>Danh sách lớp Khóa:{{courseAndDepartment.course}} - {{courseAndDepartment.departmentName}}</h2>
+<button type="submit" routerLink="../" class="btn btn-info">
+    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+</button>
+<div *ngIf="edit">
+    <form (ngSubmit)="submitEdit()" [formGroup]="editForm">
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control" placeholder="Nhập tên lớp" formControlName="className">
+            </div>
+            <div class="col-md-3 row">
+                <div class="col">
+                    <button type="submit" [disabled]="!editForm.valid" class="btn btn-success">Cập nhật</button>
+                </div>
+                <div class="col">
+                    <button (click)="cancel()" class="btn btn-success">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div *ngIf="!edit">
+    <form (ngSubmit)="submitCreate()" [formGroup]="addForm">
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control" placeholder="Nhập tên lớp" formControlName="className">
+            </div>
+            <div class="col-md-3 row">
+                <div class="col">
+                    <button type="submit" [disabled]="!addForm.valid" class="btn btn-success">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 <div class="table-responsive text-center" *ngIf="classList">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
@@ -15,7 +49,7 @@
         </thead>
         <tbody *ngIf="classList">
             <tr *ngFor="let class of classList">
-                <td>{{ class.name }}</td>
+                <td><a [routerLink]="['../class/', class.uuid]">{{ class.name }}</a></td>
                 <td>{{ class.count }}</td>
                 <td>
                     <button class="btn btn-danger btn-sm" *ngIf="!class.enable"
@@ -28,6 +62,11 @@
                 <td>{{ class.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td>
                     <div class="text-right">
+                        <button type="submit" (click)="editClick(class.uuid, class.name)"
+                            class="btn btn-primary btn-sm">
+                            <fa-icon icon="pencil-alt"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
                         <button type="button" (click)="delete(class.uuid)" class="btn btn-danger btn-sm">
                             <!-- <fa-icon icon="times"></fa-icon> -->
                             <span class="d-none d-md-inline">Delete</span>

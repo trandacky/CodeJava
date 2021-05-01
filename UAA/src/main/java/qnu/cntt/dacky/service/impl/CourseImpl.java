@@ -124,4 +124,28 @@ public class CourseImpl implements CourseService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<Department> getDepartmentNotHaveByCourse(UUID uuid) {
+		List<Department> departments= departmentRepository.findAll();
+		List<CourseAndDepartment> courseAndDepartments;
+		Optional<Course> optional = courseRepository.findById(uuid);
+		if (optional.isPresent()) {
+			Course course = optional.get();
+			
+			courseAndDepartments = courseAndDepartmentRepository.findByCourse(course);
+			for(CourseAndDepartment courseAndDepartment:courseAndDepartments)
+			{
+				for(int i=0;i<departments.size();i++)
+				{
+					if(courseAndDepartment.getDepartment().getUUID().equals(departments.get(i).getUUID()))
+					{
+						departments.remove(i);
+						i--;
+					}
+				}
+			} 
+		}
+		return departments;
+	}
 }

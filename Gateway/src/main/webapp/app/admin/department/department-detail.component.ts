@@ -12,7 +12,9 @@ export class DepartmentDetailComponent implements OnInit {
     courseUUID: any| null = null;
     totalItems = 0;
     page = 1;
+    dropdown!:any;
     edit = false;
+    departmentUUID:any;
     itemsPerPage = ITEMS_PER_PAGE;
     course!: any;
     departments: any;
@@ -26,6 +28,7 @@ export class DepartmentDetailComponent implements OnInit {
         this.adminService.getDepartmentByCourseId(--page,this.courseUUID).subscribe(data => {
             this.course=data.course;
             this.departments = data.departments; this.totalItems = data.totalItems;
+            this.dropdown=data.dropdown;
 
         });
     }
@@ -42,6 +45,12 @@ export class DepartmentDetailComponent implements OnInit {
         this.adminService.deleteCourseAndDepartment(uuid).subscribe(
             () => { alert("deleted success");this.loadAll(this.page); },
             () => { alert("server error or department haved class"); }
+        );
+    }
+    addDepartment():void{
+        this.adminService.createCourseAndDepartment(this.courseUUID,this.departmentUUID).subscribe(
+            () => {this.loadAll(this.page); },
+            () => { alert("server error"); }
         );
     }
 }

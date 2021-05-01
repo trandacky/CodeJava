@@ -22,12 +22,6 @@ import java.util.stream.Collectors;
  * A DTO representing a user, with his authorities.
  */
 public class AccountDTO {
-
-	@Autowired
-	private AuthorityRepository authorityRepository;
-
-	
-
 	public AccountDTO(Account account) {
 		super();
 		this.UUID = account.getUUID();
@@ -39,9 +33,8 @@ public class AccountDTO {
 		this.activated = account.getActivated();
 		this.firstName = account.getFirstName();
 		this.lastName = account.getLastName();
-		this.enabled = account.isEnabled();
-		this.locked = account.isLocked();
 		this.email = account.getEmail();
+		this.phoneNumber=account.getPhoneNumber();
 		List<String> authority = new ArrayList<>();
 		for(AccountAuthority accAuthor: account.getAccountAuthoritys())
 		{
@@ -76,6 +69,8 @@ public class AccountDTO {
 	private boolean locked = false;
 
 	private String email;
+	
+	private String phoneNumber;
 
 	private List<String> authorities;
 
@@ -93,31 +88,31 @@ public class AccountDTO {
 	}
 
 
-	public Account toEntity(AccountDTO accountDTO) {
-		Account account = new Account();
-		account.setActivated(accountDTO.isActivated());
-		account.setUUID(accountDTO.getUUID());
-		account.setCreatedBy(accountDTO.getCreatedBy());
-		account.setCreatedDate(accountDTO.getCreatedDate());
-		account.setUpdateBy(accountDTO.getUpdateBy());
-		account.setUpdateDate(accountDTO.getUpdateDate());
-		account.setFirstName(accountDTO.getFirstName());
-		account.setLastName(accountDTO.getLastName());
-		account.setUsername(accountDTO.getUsername());
-		if (accountDTO.getEmail() != null) {
-			account.setEmail(accountDTO.getEmail().toLowerCase());
-		}
-		List<AccountAuthority> accountAuthoritys = new ArrayList<>();
-		for (String acc : accountDTO.getAuthorities()) {
-			Authority authority = authorityRepository.findByAuthorities(acc).get();
-
-			AccountAuthority accountAuthority = new AccountAuthority();
-			accountAuthority.setAuthority(authority);
-			accountAuthoritys.add(accountAuthority);
-		}
-		account.setAccountAuthoritys(accountAuthoritys);
-		return account;
-	}
+//	public Account toEntity(AccountDTO accountDTO) {
+//		Account account = new Account();
+//		account.setActivated(accountDTO.isActivated());
+//		account.setUUID(accountDTO.getUUID());
+//		account.setCreatedBy(accountDTO.getCreatedBy());
+//		account.setCreatedDate(accountDTO.getCreatedDate());
+//		account.setUpdateBy(accountDTO.getUpdateBy());
+//		account.setUpdateDate(accountDTO.getUpdateDate());
+//		account.setFirstName(accountDTO.getFirstName());
+//		account.setLastName(accountDTO.getLastName());
+//		account.setUsername(accountDTO.getUsername());
+//		if (accountDTO.getEmail() != null) {
+//			account.setEmail(accountDTO.getEmail().toLowerCase());
+//		}
+//		List<AccountAuthority> accountAuthoritys = new ArrayList<>();
+//		for (String acc : accountDTO.getAuthorities()) {
+//			Authority authority = authorityRepository.findByAuthorities(acc).get();
+//
+//			AccountAuthority accountAuthority = new AccountAuthority();
+//			accountAuthority.setAuthority(authority);
+//			accountAuthoritys.add(accountAuthority);
+//		}
+//		account.setAccountAuthoritys(accountAuthoritys);
+//		return account;
+//	}
 
 	public java.util.UUID getUUID() {
 		return UUID;
@@ -166,8 +161,18 @@ public class AccountDTO {
 	public void setActivated(boolean activated) {
 		this.activated = activated;
 	}
-
 	
+	
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 
 	public String getFirstName() {
 		return firstName;

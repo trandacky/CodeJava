@@ -6,7 +6,11 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.ClaSs;
+import qnu.cntt.dacky.service.dto.AccountDTO;
+import qnu.cntt.dacky.service.dto.ClassDTO;
+import qnu.cntt.dacky.service.dto.ClassDTOUpdate;
 
 public interface ClassService {
 
@@ -16,7 +20,7 @@ public interface ClassService {
 
 	ClaSs getClassByName(String className);
 
-	String addClass(ClaSs claSs);
+	ClaSs addClass(ClassDTO classDTO);
 
 
 	String deleteClassByName(String className);
@@ -27,4 +31,10 @@ public interface ClassService {
 
 
 	Page<ClaSs> getAllByIdAndPageable(Pageable paging);
+
+	ClaSs updateEnable(UUID uuid, boolean enable);
+
+	Page<Account> getAccountByClass(Pageable paging, UUID uuid);
+
+	ClaSs updateName(ClassDTOUpdate dtoUpdate);
 }

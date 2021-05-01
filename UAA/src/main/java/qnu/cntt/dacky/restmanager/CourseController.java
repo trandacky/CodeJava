@@ -1,6 +1,7 @@
 package qnu.cntt.dacky.restmanager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,14 +55,16 @@ public class CourseController {
 			Page<CourseAndDepartment> pageable = courseService.getDepartmentByCourse(uuid,paging);
 			List<CourseAndDepartment> courseAndDepartments=pageable.getContent();
 			List<CourseAndDepartmentReturnDTO> returnDTOs= new ArrayList<>();
+			List<Department> dropdown= courseService.getDepartmentNotHaveByCourse(uuid);
 			for(CourseAndDepartment courseAndDepartment: courseAndDepartments)
 			{
 				returnDTOs.add(new CourseAndDepartmentReturnDTO(courseAndDepartment));
 			}
-			
+			returnDTOs.sort(Comparator.comparing(CourseAndDepartmentReturnDTO::getCreatedDate));
 			Map<String, Object> response = new HashMap<>();
 			response.put("course", courseService.getCourseById(uuid));
 			response.put("departments", returnDTOs);
+			response.put("dropdown", dropdown);
 			response.put("currentPage", pageable.getNumber());
 			response.put("totalItems", pageable.getTotalElements());
 			response.put("totalPages", pageable.getTotalPages());

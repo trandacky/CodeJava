@@ -237,4 +237,20 @@ public class UserResource {
 				.headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login))
 				.build();
 	}
+	@PutMapping("/admin/account")
+	public ResponseEntity<Void> updateEnable(@RequestParam("username") String username,@RequestParam("activated") boolean activated ) {
+		log.debug("REST request to delete User: {}", username);
+		userService.updateActivated(username,activated);
+		return ResponseEntity.noContent()
+				.headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + username, username))
+				.build();
+	}
+	@DeleteMapping("/admin/account")
+	public ResponseEntity<Void> deletedRole(@RequestParam("username") String username) {
+		log.debug("REST request to delete User: {}", username);
+		userService.deleteUser(username);
+		return ResponseEntity.noContent()
+				.headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + username, username))
+				.build();
+	}
 }

@@ -65,5 +65,9 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 
 	Page<Account> findAllByUsernameNot(Pageable pageable, String login);
 
-	List<Account> findByClass1(ClaSs ss);
+	@Query(value="SELECT COUNT(a.UUID) from Account a where a.class1 = :ss")
+	int findCountByClass1(@Param(value="ss")ClaSs ss);
+
+	Page<Account> findAllByClass1(ClaSs ss,Pageable paging);
+	
 }

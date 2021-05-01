@@ -81,17 +81,17 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	@Column(length = 254, unique = true)
 	private String email;
 	
-	@Size(min = 8, max = 14)
-	@Column(name = "phone_number")
+	@Size(max = 14)
+	@Column(name = "phone_number",length = 14)
 	private String phoneNumber;
 
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 	private List<Avatar> avatars;
 
-	@OneToMany(mappedBy = "account")
+	@OneToMany(mappedBy = "account",fetch = FetchType.EAGER)
 	private List<AccountAuthority> accountAuthoritys;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "class_id")
 	private ClaSs class1;
 	
@@ -105,6 +105,15 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 
 	public boolean getActivated() {
 		return activated;
+	}
+	
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public void setActivated(boolean activated) {

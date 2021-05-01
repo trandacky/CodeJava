@@ -114,8 +114,11 @@ public class CourseAndDepartmentController {
 	}
 
 	@PostMapping("/create-course-and-department")
-	private CourseAndDepartment addCourseAndDepartment(@RequestBody CourseAndDepartmentDTO courseAndDepartmentDTO) {
-		return courseAndDepartmentService.addCourseAndDepartment(courseAndDepartmentDTO);
+	private CourseAndDepartment addCourseAndDepartment(@RequestParam UUID courseId,@RequestParam UUID departmentId ) {
+		CourseAndDepartmentDTO dto= new CourseAndDepartmentDTO();
+		dto.setCourseId(courseId);
+		dto.setDepartmentId(departmentId);
+		return courseAndDepartmentService.addCourseAndDepartment(dto);
 	}
 
 	@PutMapping("/update-course-and-department-enable")

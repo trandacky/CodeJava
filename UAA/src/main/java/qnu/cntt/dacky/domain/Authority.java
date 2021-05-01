@@ -2,6 +2,9 @@ package qnu.cntt.dacky.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -32,6 +35,7 @@ public class Authority extends AbstractAuditingEntity implements Serializable {
     private String authorities;
     
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<AccountAuthority> accountAuthorities;
 
 

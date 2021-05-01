@@ -1,4 +1,17 @@
 <h2>Quản lý khoa: Khóa: {{course.course}} </h2>
+
+<div>
+    <button type="submit" routerLink="/admin/course-management" class="btn btn-info">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+    </button>
+<div class="col-md-6">
+    Thêm khoa:
+    <select class="form-control" [(ngModel)]="departmentUUID" (change)="addDepartment()">
+        <option value="null" disabled>Select a Value</option>
+        <option  *ngFor="let department of dropdown" [ngValue]="department.uuid" selected="false">{{department.departmentName}}</option>
+    </select>
+</div>
+</div>
 <div class="table-responsive text-center" *ngIf="departments">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
@@ -26,11 +39,10 @@
                 <td>{{ department.updateDate | date:'HH:mm:ss dd/MM/yyyy ' }}</td>
                 <td>
                     <div class="text-right">
-                        <button type="button" (click)="delete(department.uuid)"
-                        class="btn btn-danger btn-sm">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline">Delete</span>
-                </button>
+                        <button type="button" (click)="delete(department.uuid)" class="btn btn-danger btn-sm">
+                            <fa-icon icon="times"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
                     </div>
                 </td>
             </tr>
