@@ -26,4 +26,6 @@ public interface CourseAndDepartmentRepository extends JpaRepositoryImplementati
 
 	List<CourseAndDepartment> findByDepartment(Department department);
 
+	Page<CourseAndDepartment> findByDepartmentIn(List<Department> departments, Pageable paging);
+
 }

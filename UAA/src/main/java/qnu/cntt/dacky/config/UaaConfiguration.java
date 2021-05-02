@@ -88,6 +88,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
                 .antMatchers("/api/create/account/account-admin").permitAll()
 //api public
                 .antMatchers("/api/admin/*").hasAuthority(AuthoritiesConstants.ADMIN)
+                .antMatchers("/api/khoa/*").hasAuthority(AuthoritiesConstants.KHOA)
                 
                 .antMatchers("/api/activate").permitAll()
                 .antMatchers("/api/authenticate").permitAll()

@@ -2,6 +2,7 @@ package qnu.cntt.dacky.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.ClaSs;
 import qnu.cntt.dacky.service.dto.AccountDTO;
 import qnu.cntt.dacky.service.dto.AccountDTOToReturnDetailAccount;
+import qnu.cntt.dacky.service.dto.AccountSVDTO;
 import qnu.cntt.dacky.web.rest.vm.ManagedUserVM;
 
 public interface AccountService {
@@ -42,4 +44,9 @@ public interface AccountService {
 	public void registerAdmin();
 	public int getCount(ClaSs ss);
 	public void updateActivated(String username, boolean activated);
+	public Account getAccountByUsername(String string);
+	public List<Account> getAllAccountKHOA(UUID uuid);
+	public List<Account> accountRoleKhoaNot();
+	public Account createAccountOfClass(AccountSVDTO accountSVDTO);
+	void deleteUserKhoa(String login);
 }

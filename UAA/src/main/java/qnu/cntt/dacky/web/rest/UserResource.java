@@ -238,6 +238,7 @@ public class UserResource {
 				.build();
 	}
 	@PutMapping("/admin/account")
+	@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 	public ResponseEntity<Void> updateEnable(@RequestParam("username") String username,@RequestParam("activated") boolean activated ) {
 		log.debug("REST request to delete User: {}", username);
 		userService.updateActivated(username,activated);
@@ -246,6 +247,7 @@ public class UserResource {
 				.build();
 	}
 	@DeleteMapping("/admin/account")
+	@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 	public ResponseEntity<Void> deletedRole(@RequestParam("username") String username) {
 		log.debug("REST request to delete User: {}", username);
 		userService.deleteUser(username);

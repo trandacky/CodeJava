@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,7 +28,10 @@ public class Department extends AbstractAuditingEntity implements Serializable {
 
 	@Column(name = "enable")
 	private Boolean enable;
-
+	
+	@OneToMany(mappedBy = "department",fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<AccountDepartment> accountDepartments;
 	
 
 	public List<CourseAndDepartment> getCourseAndDepartments() {
@@ -53,4 +57,13 @@ public class Department extends AbstractAuditingEntity implements Serializable {
 	public void setEnable(Boolean enable) {
 		this.enable = enable;
 	}
+
+	public List<AccountDepartment> getAccountDepartments() {
+		return accountDepartments;
+	}
+
+	public void setAccountDepartments(List<AccountDepartment> accountDepartments) {
+		this.accountDepartments = accountDepartments;
+	}
+	
 }

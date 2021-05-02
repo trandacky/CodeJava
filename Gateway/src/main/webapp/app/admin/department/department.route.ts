@@ -2,6 +2,7 @@ import { ActivatedRouteSnapshot, Resolve, Routes } from '@angular/router';
 
 import { DepartmentComponent } from './department.component';
 import { DepartmentDetailComponent } from './department-detail.component';
+import { AccountDepartmentComponent } from './account-department.component';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
@@ -26,6 +27,16 @@ export const departmentRoute: Routes = [
     },
     data: {
       pageTitle: 'Course detail',
+    },
+  },
+  {
+    path: 'manager/:uuid',
+    component: AccountDepartmentComponent,
+    resolve: {
+      departmentUUID: CourseResolve,
+    },
+    data: {
+      pageTitle: 'Department account manager',
     },
   },
 ];

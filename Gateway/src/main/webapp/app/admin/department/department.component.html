@@ -56,6 +56,10 @@
                     <td>{{ department.updateDate | date:'HH:mm:ss dd/MM/yyyy ' }}</td>
                     <td class="text-center">
                         <div class="btn-group">
+                            <button type="button" [routerLink]="['./manager', department.uuid]" class="btn btn-warning  btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Quản trị khoa</span>
+                            </button>
                             <button type="button" (click)="editClick(department.uuid,department.departmentName)" class="btn btn-primary btn-sm">
                                 <fa-icon icon="pencil-alt"></fa-icon>
                                 <span class="d-none d-md-inline">Edit</span>

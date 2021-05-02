@@ -95,6 +95,9 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	@JoinColumn(name = "class_id")
 	private ClaSs class1;
 	
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<AccountDepartment>  accountDepartments;
+	
 	public String getPassword() {
 		return password;
 	}
@@ -214,5 +217,15 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 	public void setClass1(ClaSs class1) {
 		this.class1 = class1;
 	}
+
+	public List<AccountDepartment> getAccountDepartments() {
+		return accountDepartments;
+	}
+
+	public void setAccountDepartments(List<AccountDepartment> accountDepartments) {
+		this.accountDepartments = accountDepartments;
+	}
+	
+	
 
 }

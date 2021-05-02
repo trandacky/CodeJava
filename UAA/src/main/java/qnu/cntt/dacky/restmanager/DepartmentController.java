@@ -87,7 +87,7 @@ public class DepartmentController {
 		}
 	}
 
-	@PostMapping("/get-department-by-id")
+	@GetMapping("/get-department-by-id")
 	private Department getDepartmentById(@RequestParam("id") UUID id) {
 		return departmentService.getDepartmentById(id);
 	}

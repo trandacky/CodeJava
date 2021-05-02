@@ -1,6 +1,7 @@
 package qnu.cntt.dacky.web.rest;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -8,10 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.Authority;
 import qnu.cntt.dacky.service.AccountAuthorityService;
+import qnu.cntt.dacky.service.AccountService;
 import qnu.cntt.dacky.service.AuthorityService;
 import qnu.cntt.dacky.service.dto.AccountAuthorityDTO;
 import qnu.cntt.dacky.service.dto.AuthorityDTO;
@@ -21,7 +25,8 @@ import qnu.cntt.dacky.service.dto.AuthorityDTO;
 public class AdminResource {
 	@Autowired
 	private AuthorityService authorityService;
-
+	
+	
 
 	@GetMapping("/get-all-authority")
 	public List<Authority> getAllAuthority() {

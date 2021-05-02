@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
             loadChildren: () => import('./evaluation-criteria/evaluation-criteria.module').then(m => m.EvaluationCriteriaModule),
           },
           {
-            path: 'class',
+            path: 'course-department',
             loadChildren: () => import('./class/class.module').then(m => m.ClassModule),
           },
         /* jhipster-needle-add-admin-route - JHipster will add admin routes here */

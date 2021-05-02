@@ -30,7 +30,7 @@ import qnu.cntt.dacky.service.dto.UpdateReportScore23DTO;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api/class/president")
+@RequestMapping("/api/cbl")
 public class ClassPresidentRestController {
 	private final int sizePage = 20;
 

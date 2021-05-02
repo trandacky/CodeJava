@@ -30,6 +30,12 @@ export class AdminService {
   createClass(classData: FormData): Observable<{}> {
     return this.http.post(this.urlUAA + '/add-class', classData);
   }
+  createAccountDepartment(username: String, departmentuuid: String): Observable<{}> {
+    const formData = new FormData();
+    formData.append('username', username.toString());
+    formData.append('departmentuuid', departmentuuid.toString())
+    return this.http.post(this.urlUAA + '/create-account-khoa', formData);
+  }
   createCourseAndDepartment(courseUUID: String, departmentId: String): Observable<any> {
     const formData = new FormData();
     formData.append('courseId', courseUUID.toString());
@@ -51,12 +57,21 @@ export class AdminService {
   getCourseAndDepartment(page: Number): Observable<any> {
     return this.http.get(this.urlUAA + '/get-paging-course-and-department?page=' + page);
   }
-  getAccountByClassId(page: Number, classUUID:String): Observable<any> {
-    return this.http.get(this.urlUAA + '/get-account-by-class?page=' 
-    + page+'&uuid='+classUUID);
+  getAccountByClassId(page: Number, classUUID: String): Observable<any> {
+    return this.http.get(this.urlUAA + '/get-account-by-class?page='
+      + page + '&uuid=' + classUUID);
   }
   getClassByCADId(uuid: String): Observable<any> {
     return this.http.get(this.urlUAA + '/get-class-by-cad-id?uuid=' + uuid);
+  }
+  getDepartmentById(uuid: String): Observable<any> {
+    return this.http.get(this.urlUAA + '/get-department-by-id?id=' + uuid);
+  }
+  getAllAccountKhoa(uuid: String): Observable<any> {
+    return this.http.get(this.urlUAA + '/get-all-account-khoa?uuid=' + uuid);
+  }
+  getAccountKhoaNot(): Observable<any> {
+    return this.http.get(this.urlUAA + '/account-khoa-not');
   }
   updateCourseEnable(uuid: String, enable: boolean): Observable<any> {
     const formData = new FormData();
@@ -76,7 +91,7 @@ export class AdminService {
     formData.append('course', course.toString())
     return this.http.put(this.urlUAA + '/update-course', formData);
   }
-  updateClassName(formData:FormData): Observable<any> {
+  updateClassName(formData: FormData): Observable<any> {
     return this.http.put(this.urlUAA + '/update-class-name', formData);
   }
   updateDepartmentEnable(uuid: String, enable: boolean): Observable<any> {
@@ -103,13 +118,17 @@ export class AdminService {
     formData.append('departmentName', departmentName.toString())
     return this.http.put(this.urlUAA + '/update-department', formData);
   }
-  deleteCourseAndDepartment(uuid:String):Observable<any> {
-    return this.http.delete(this.urlUAA + '/delete-course-and-department/'+uuid);
+  deleteCourseAndDepartment(uuid: String): Observable<any> {
+    return this.http.delete(this.urlUAA + '/delete-course-and-department/' + uuid);
   }
-  deleteClass(uuid:String):Observable<any> {
-    return this.http.delete(this.urlUAA + '/delete-class-by-id/'+uuid);
+  deleteClass(uuid: String): Observable<any> {
+    return this.http.delete(this.urlUAA + '/delete-class-by-id/' + uuid);
   }
-  deleteAccountRole(username:String):Observable<any> {
-    return this.http.delete(this.urlUAA + '/account?username='+username);
+  deleteAccountRole(username: String): Observable<any> {
+    return this.http.delete(this.urlUAA + '/account?username=' + username);
+  }
+  deleteAccountDepartment(username: String, departmentuuid: String): Observable<{}> {
+    return this.http.delete(this.urlUAA + '/delete-account-khoa?username='
+      + username + '&departmentuuid=' + departmentuuid);
   }
 }

@@ -1,52 +1,77 @@
-{{classList|json}}
-<H3>Quản lý lớp:</H3>
+<h2>Danh sách lớp Khóa:{{courseAndDepartment.course}} - {{courseAndDepartment.departmentName}}</h2>
+<button type="submit" routerLink="../" class="btn btn-info">
+    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+</button>
+<div *ngIf="edit">
+    <form (ngSubmit)="submitEdit()" [formGroup]="editForm">
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control" placeholder="Nhập tên lớp" formControlName="className">
+            </div>
+            <div class="col-md-3 row">
+                <div class="col">
+                    <button type="submit" [disabled]="!editForm.valid" class="btn btn-success">Cập nhật</button>
+                </div>
+                <div class="col">
+                    <button (click)="cancel()" class="btn btn-success">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div *ngIf="!edit">
+    <form (ngSubmit)="submitCreate()" [formGroup]="addForm">
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control" placeholder="Nhập tên lớp" formControlName="className">
+            </div>
+            <div class="col-md-3 row">
+                <div class="col">
+                    <button type="submit" [disabled]="!addForm.valid" class="btn btn-success">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 <div class="table-responsive text-center" *ngIf="classList">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
             <tr>
-                <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
-                <th><span>Tên lớp</span>
-                    <fa-icon icon="sort"></fa-icon>
+                <th><span>Tên lớp</span></th>
+                <th><span>Số lượng</span>
                 </th>
                 <th><span>Tình trạng</span>
-                    <fa-icon icon="sort"></fa-icon>
                 </th>
                 <th><span>Ngày tạo</span></th>
                 <th><span>Ngày Cập nhật</span></th>
-                <th scope="col"></th>
             </tr>
         </thead>
         <tbody *ngIf="classList">
             <tr *ngFor="let class of classList">
-                <!-- <td ><a [routerLink]="['/khoa/evaluation-criteria', class.uuid ,'edit']">{{ typeReport.typeName }}</a></td> -->
-                <td>{{class.name}}</td>
+                <td><a [routerLink]="['../class/', class.uuid]">{{ class.name }}</a></td>
+                <td>{{ class.count }}</td>
                 <td>
-                    <button class="btn btn-danger btn-sm" *ngIf="!class.enable" (click)="updateStatus(class.uuid,!class.enable)">Đã Dừng</button>
-                    <button class="btn btn-success btn-sm" *ngIf="class.enable"(click)="updateStatus(class.uuid,!class.enable)">Đang Hoạt Động</button>
-                    <!--(click)=""-->
+                    <button class="btn btn-danger btn-sm" *ngIf="!class.enable"
+                        (click)="updateEnable(class.uuid,!class.enable)">Đã Dừng</button>
+                    <button class="btn btn-success btn-sm" *ngIf="class.enable"
+                        (click)="updateEnable(class.uuid,!class.enable)">Đang Hoạt Động</button>
+
                 </td>
                 <td>{{ class.createdDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td>{{ class.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
-                <td class="text-center">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary btn-sm">
+                <td>
+                    <div class="text-right">
+                        <button type="submit" (click)="editClick(class.uuid, class.name)"
+                            class="btn btn-primary btn-sm">
                             <fa-icon icon="pencil-alt"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="button" (click)="delete(class.uuid)" class="btn btn-danger btn-sm">
+                            <span class="d-none d-md-inline">Delete</span>
                         </button>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</div>
-
-<div *ngIf="classList">
-    <div class="row justify-content-center">
-        <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-    </div>
-
-    <div class="row justify-content-center">
-        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
-            [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
-    </div>
 </div>

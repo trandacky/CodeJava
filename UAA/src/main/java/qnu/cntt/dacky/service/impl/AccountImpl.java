@@ -4,15 +4,22 @@ package qnu.cntt.dacky.service.impl;
 import qnu.cntt.dacky.config.Constants;
 import qnu.cntt.dacky.domain.Authority;
 import qnu.cntt.dacky.domain.ClaSs;
+import qnu.cntt.dacky.domain.CourseAndDepartment;
+import qnu.cntt.dacky.domain.Department;
 import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.AccountAuthority;
+import qnu.cntt.dacky.domain.AccountDepartment;
 import qnu.cntt.dacky.repository.AuthorityRepository;
+import qnu.cntt.dacky.repository.ClassRepository;
+import qnu.cntt.dacky.repository.DepartmentRepository;
 import qnu.cntt.dacky.repository.AccountAuthorityRepository;
+import qnu.cntt.dacky.repository.AccountDepartmentRepository;
 import qnu.cntt.dacky.repository.AccountRepository;
 import qnu.cntt.dacky.security.AuthoritiesConstants;
 import qnu.cntt.dacky.security.SecurityUtils;
 import qnu.cntt.dacky.service.AccountService;
 import qnu.cntt.dacky.service.dto.AccountDTO;
+import qnu.cntt.dacky.service.dto.AccountSVDTO;
 import qnu.cntt.dacky.service.exception.EmailAlreadyUsedException;
 import qnu.cntt.dacky.service.exception.InvalidPasswordException;
 import qnu.cntt.dacky.service.exception.UsernameAlreadyUsedException;
@@ -56,7 +63,12 @@ public class AccountImpl implements AccountService {
 	private CacheManager cacheManager;
 	@Autowired
 	private AccountAuthorityRepository accountAuthorityRepository;
-
+	@Autowired
+	private DepartmentRepository departmentRepository;
+	@Autowired
+	private ClassRepository classRepository;
+	@Autowired
+	private AccountDepartmentRepository accountDepartmentRepository;
 
 	public Optional<Account> activateRegistration(String key) {
 		log.debug("Activating user for activation key {}", key);
@@ -92,6 +104,16 @@ public class AccountImpl implements AccountService {
 	}
 
 	public Account registerUser(AccountDTO userDTO, String password) {
+		boolean testUsername=true;
+		try {
+			Long.parseLong(userDTO.getUsername());
+		} catch (Exception e) {
+			testUsername=false;
+		}
+		if(testUsername)
+		{
+			throw new UsernameAlreadyUsedException();
+		}
 		accountRepository.findOneByUsername(userDTO.getUsername().toLowerCase()).ifPresent(existingUser -> {
 			boolean removed = removeNonActivatedUser(existingUser);
 			if (!removed) {
@@ -165,7 +187,7 @@ public class AccountImpl implements AccountService {
 			encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
 		}
 		user.setPassword(encryptedPassword);
-		
+
 		user.setResetDate(Instant.now());
 		user.setActivated(true);
 		user.setCreatedBy("user");
@@ -240,13 +262,36 @@ public class AccountImpl implements AccountService {
 	public void deleteUser(String login) {
 		accountRepository.findOneByUsername(login).ifPresent(user -> {
 			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
-			// accountRepository.delete(user);
+//			if(!user.getActivated()&&user.isLocked())
+//			{
+//				accountRepository.delete(user);
+//			}
+			if(!user.getActivated())
+			{
+				user.setLocked(true);
+			}
 			user.setActivated(false);
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});
 	}
 
+	@Transactional
+	@Override
+	public void deleteUserKhoa(String login) {
+		accountRepository.findOneByUsername(login).ifPresent(user -> {
+			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
+			if(!user.getActivated())
+			{
+				user.setLocked(true);
+			}
+			user.setActivated(false);
+			
+			
+			this.clearUserCaches(user);
+			log.debug("Deleted User: {}", user);
+		});
+	}
 	/**
 	 * Update basic information (first name, last name, email, language) for the
 	 * current user.
@@ -363,7 +408,7 @@ public class AccountImpl implements AccountService {
 		this.clearUserCaches(newUser);
 		log.debug("Created Information for User: {}", newUser);
 	}
- 
+
 	private void clearUserCaches(Account user) {
 		Objects.requireNonNull(cacheManager.getCache(AccountRepository.USERS_BY_USERNAME_CACHE))
 				.evict(user.getUsername());
@@ -372,7 +417,7 @@ public class AccountImpl implements AccountService {
 					.evict(user.getEmail());
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public int getCount(ClaSs ss) {
@@ -384,10 +429,9 @@ public class AccountImpl implements AccountService {
 	public void updateActivated(String username, boolean activated) {
 		accountRepository.findOneByUsername(username).ifPresent(user -> {
 			// accountRepository.delete(user);
-			
-			if(activated&&user.getAccountAuthoritys().isEmpty())
-			{	
-				AccountAuthority accountAuthority= new AccountAuthority();
+
+			if (activated && user.getAccountAuthoritys().isEmpty()) {
+				AccountAuthority accountAuthority = new AccountAuthority();
 				accountAuthority.setAccount(user);
 				accountAuthority.setAuthority(authorityRepository.findByAuthorities(AuthoritiesConstants.SV).get());
 				accountAuthorityRepository.save(accountAuthority);
@@ -396,5 +440,81 @@ public class AccountImpl implements AccountService {
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});
+	}
+
+	@Override
+	public Account getAccountByUsername(String string) {
+		Optional<Account> optional = accountRepository.findByUsername(string);
+		if (optional.isPresent())
+			return optional.get();
+		return null;
+	}
+
+	@Override
+	public List<Account> getAllAccountKHOA(UUID uuid) {
+		Optional<Department> optional = departmentRepository.findById(uuid);
+		if (optional.isPresent()) {
+			Department department = optional.get();
+			List<AccountDepartment> accountDepartments = accountDepartmentRepository.findByDepartment(department);
+			List<Account> accounts = new ArrayList<>();
+			for (AccountDepartment accountDepartment : accountDepartments) {
+				accounts.add(accountDepartment.getAccount());
+			}
+			return accounts;
+		}
+		return null;
+	}
+
+	@Override
+	public List<Account> accountRoleKhoaNot() {
+		List<AccountDepartment> accountDepartments = accountDepartmentRepository.findAll();
+		List<Account> accounts = new ArrayList<Account>();
+		for (AccountDepartment accountDepartment : accountDepartments) {
+			accounts.add(accountDepartment.getAccount());
+		}
+		List<Account> accountKhoa = accountRepository.findByAuthorities(AuthoritiesConstants.KHOA);
+		for (Account account : accounts) {
+			for (int i = 0; i < accountKhoa.size(); i++) {
+				if (account.getUUID().equals(accountKhoa.get(i).getUUID())) {
+					accountKhoa.remove(i);
+					i--;
+				}
+			}
+		}
+		return accountKhoa;
+	}
+
+	@Override
+	@Transactional
+	public Account createAccountOfClass(AccountSVDTO accountSVDTO) {
+		Optional<ClaSs> optional = classRepository.findById(accountSVDTO.getClassuuid());
+		if (optional.isPresent()) {
+			Optional<Account> accOptional=accountRepository.findByUsername(accountSVDTO.getUsername());
+			Account account = new Account();
+			if(accOptional.isPresent()&&accOptional.get().isLocked())
+			{
+				accountRepository.delete(accOptional.get());
+			}
+			account.setActivated(true);
+			account.setLocked(false);
+			account.setUsername(accountSVDTO.getUsername().toLowerCase());
+			account.setClass1(optional.get());
+			account.setFirstName(accountSVDTO.getFirstName());
+			account.setLastName(accountSVDTO.getLastName());
+			account.setEmail(accountSVDTO.getEmail().toLowerCase());
+			account.setPhoneNumber(accountSVDTO.getPhoneNumber());
+			
+			String encryptedPassword = passwordEncoder.encode(accountSVDTO.getPassword());
+			account.setPassword(encryptedPassword);
+			
+			account=accountRepository.save(account);
+			Authority authority=authorityRepository.findByAuthorities(AuthoritiesConstants.USER).get();
+			AccountAuthority accountAuthority= new AccountAuthority();
+			accountAuthority.setAccount(account);
+			accountAuthority.setAuthority(authority);
+			accountAuthorityRepository.save(accountAuthority);
+			return account;
+		}
+		return null;
 	}
 }

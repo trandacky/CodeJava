@@ -21,7 +21,7 @@ import qnu.cntt.dacky.service.dto.UpdateReportScore1DTO;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api/class/student")
+@RequestMapping("/api/sv")
 public class StudentRestControler {
 	@Autowired
 	private ReportService reportService;

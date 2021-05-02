@@ -67,7 +67,13 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 
 	@Query(value="SELECT COUNT(a.UUID) from Account a where a.class1 = :ss")
 	int findCountByClass1(@Param(value="ss")ClaSs ss);
-
+	
+	@Query(value="SELECT a from Account a INNER JOIN AccountAuthority aa ON a.UUID = aa.account.UUID INNER JOIN Authority at "
+			+ "ON at.UUID=aa.authority.UUID where at.authorities = :khoa")
+	List<Account> findByAuthorities(@Param(value="khoa") String khoa);
+	
 	Page<Account> findAllByClass1(ClaSs ss,Pageable paging);
+
+	
 	
 }

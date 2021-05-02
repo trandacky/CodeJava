@@ -45,7 +45,7 @@ import qnu.cntt.dacky.service.dto.UpdateReportScore23DTO;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api/admin")
+@RequestMapping("/api/khoa")
 public class AdminRestController {
 	private final int sizePage = 10;
 	@Autowired

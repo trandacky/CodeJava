@@ -1,0 +1,53 @@
+<H3>Quản lý lớp:</H3>
+<div class="table-responsive text-center" *ngIf="courseAndDepartments">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+        <thead>
+            <tr>
+                <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                <th><span>Khóa</span>
+                </th>
+                <th><span>Khoa</span>
+                </th>
+                <th><span>Tình trạng</span>
+                </th>
+                <th><span>Ngày tạo</span></th>
+                <th><span>Ngày Cập nhật</span></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody *ngIf="courseAndDepartments">
+            <tr *ngFor="let courseAndDepartment of courseAndDepartments">
+                <!-- <td ><a [routerLink]="['/khoa/evaluation-criteria', class.uuid ,'edit']">{{ typeReport.typeName }}</a></td> -->
+                <td>{{courseAndDepartment.course}}</td>
+                <td><a [routerLink]="['./', courseAndDepartment.uuid]">{{courseAndDepartment.departmentName}}</a></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" *ngIf="!courseAndDepartment.enable" (click)="updateStatus(courseAndDepartment.uuid,!courseAndDepartment.enable)">Đã Dừng</button>
+                    <button class="btn btn-success btn-sm" *ngIf="courseAndDepartment.enable"(click)="updateStatus(courseAndDepartment.uuid,!courseAndDepartment.enable)">Đang Hoạt Động</button>
+                    <!--(click)=""-->
+                </td>
+                <td>{{ courseAndDepartment.createdDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ courseAndDepartment.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>
+                    <div class="text-right">
+                        <button type="button" (click)="delete(courseAndDepartment.uuid)"
+                        class="btn btn-danger btn-sm">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="courseAndDepartments">
+    <div class="row justify-content-center">
+        <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+            [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
+    </div>
+</div>

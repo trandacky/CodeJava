@@ -1,6 +1,7 @@
 package qnu.cntt.dacky.restmanager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.ClaSs;
 import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.security.SecurityUtils;
@@ -40,7 +42,7 @@ public class CourseAndDepartmentController {
 	private CourseAndDepartmentService courseAndDepartmentService;
 	@Autowired
 	private AccountService accountService;
-
+	
 	@GetMapping("/get-all-course-and-department")
 	private List<CourseAndDepartment> getAllCourseAndDepartment() {
 		return courseAndDepartmentService.getAllCourseAndDepartment();
@@ -103,6 +105,7 @@ public class CourseAndDepartmentController {
 				classReturnDTO.setCount(accountService.getCount(ss));
 				classReturnDTOs.add(classReturnDTO);
 			} 
+			classReturnDTOs.sort(Comparator.comparing(ClassReturnDTO::getCreatedDate));
 			Map<String, Object> response = new HashMap<>();
 			response.put("classList", classReturnDTOs); 
 			response.put("courseAndDepartment",
