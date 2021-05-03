@@ -3,6 +3,7 @@ package qnu.cntt.dacky.web.rest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ import qnu.cntt.dacky.service.ReportService;
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/gvhd")
-public class TeacherRestController {
+public class GVHDRestController {
 	private final int sizePage = 20;
 
 	@Autowired
@@ -34,7 +35,7 @@ public class TeacherRestController {
 	private ReportService reportService;
 
 	@GetMapping("/get-all-report-by-class-id")
-	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam Long classid,
+	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam UUID classid,
 			@RequestParam(defaultValue = "0") int page) {
 		try {
 			Pageable paging = PageRequest.of(page, sizePage);

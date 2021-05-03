@@ -1,0 +1,65 @@
+<h2>Phát phiếu:</h2>
+<form (ngSubmit)="createAll()" [formGroup]="formCreateReport">
+    <button type="submit" [disabled]="!formCreateReport.valid" class="btn btn-success">Phát tất cả các
+        lớp</button>
+    <div class="row">
+        <div class="col-md-8">
+            <label>Loại phiếu</label>
+            <select formControlName="typeReportId" class="form-control">
+                <option *ngFor="let typeReport of typeReports" value="{{typeReport.id}}">{{typeReport.typeName}}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label>Học Kỳ</label>
+            <select formControlName="semester" class="form-control">
+                <option *ngFor="let semester of [1,2,3,4]" value="{{semester}}">{{semester}}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label>Năm học</label>
+            <select formControlName="year" class="form-control">
+                <option *ngFor="let semester of transform()" value="{{semester}}">{{semester}}
+                </option>
+            </select>
+        </div>
+    </div>
+</form>
+<div class="table-responsive text-center" *ngIf="classList">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+        <thead>
+            <tr>
+                <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                <th><span>Khoa</span></th>
+                <th><span>Khóa</span></th>
+                <th><span>Tên lớp</span></th>
+                <th><span>Số lượng tài khoản</span></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody *ngIf="classList">
+            <tr *ngFor="let class of classList">
+                <td>{{ class.departmentName }}</td>
+                <td>{{ class.course }}</td>
+                <td>{{ class.name }}</td>
+                <td>{{ class.count }}</td>
+                <td><button type="button" [disabled]="!formCreateReport.valid"
+                    (click)="createByClassUUId(class.uuid)" class="btn btn-warning btn-sm">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Phát phiếu</span>
+                </button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="classList">
+    <div class="row justify-content-center">
+        <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+            [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
+    </div>
+</div>

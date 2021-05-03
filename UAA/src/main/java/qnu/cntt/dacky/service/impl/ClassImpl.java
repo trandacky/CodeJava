@@ -128,4 +128,13 @@ public class ClassImpl implements ClassService {
 		}
 		throw new BadRequestAlertException("uuid does not exist", "classManagement", "idexists");
 	}
+
+	@Override
+	public List<Account> getAllAccountByClass(UUID uuid) {
+		Optional<ClaSs> ss = classRepository.findById(uuid);
+		if (ss.isPresent()) {
+			return accountRepository.findAllByClass1(ss.get());
+		}
+		return null;
+	}
 }

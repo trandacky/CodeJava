@@ -1,12 +1,11 @@
 package qnu.cntt.dacky.web.rest;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import qnu.cntt.dacky.service.dto.EvaluationCriteriaUpdateDTO;
 
 import qnu.cntt.dacky.domain.DetailReport;
 import qnu.cntt.dacky.domain.EvaluationCriteria;
@@ -42,11 +38,14 @@ import qnu.cntt.dacky.service.dto.NewDetailReportDTO;
 import qnu.cntt.dacky.service.dto.TypeReportDTO;
 import qnu.cntt.dacky.service.dto.UpdateDetailReportScore23DTO;
 import qnu.cntt.dacky.service.dto.UpdateReportScore23DTO;
+import qnu.cntt.dacky.web.rest.dto.CommunicateAccountClassDTO;
+import qnu.cntt.dacky.web.rest.dto.CreateReportDTO;
+import qnu.cntt.dacky.web.rest.errors.BadRequestAlertException;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/khoa")
-public class AdminRestController {
+public class KhoaRestController {
 	private final int sizePage = 10;
 	@Autowired
 	private TypeReportService typeReportService;
@@ -55,16 +54,19 @@ public class AdminRestController {
 	private EvaluationCriteriaService evaluationCriteriaService;
 
 	@Autowired
+	private CallUAA callUAA;
+
+	@Autowired
 	private DetailReportService detailReportService;
 
 	@Autowired
 	private ReportService reportService;
 
 	@GetMapping("/get-all-report-by-class-id")
-	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam Long classid,
+	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam UUID classid,
 			@RequestParam(defaultValue = "0") int page) {
 		try {
-			Pageable paging = PageRequest.of(page, sizePage, Sort.by("id").ascending());
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").ascending());
 			Page<Report> pageable = reportService.getAllByClassIdAndPageable(classid, paging);
 			List<Report> reports = pageable.getContent();
 			Map<String, Object> response = new HashMap<>();
@@ -99,6 +101,7 @@ public class AdminRestController {
 	public List<TypeReport> getAllTypeReportEnable() {
 		return typeReportService.getEnableTypeReport();
 	}
+
 	@GetMapping("/get-type-report-by-id/{id}")
 	public Optional<TypeReport> getTypeReportById(@PathVariable Long id) {
 		return typeReportService.getTypeReportById(id);
@@ -107,7 +110,7 @@ public class AdminRestController {
 	@GetMapping("/get-all-type-report")
 	public ResponseEntity<Map<String, Object>> getAllTypeReport(@RequestParam(defaultValue = "0") int page) {
 		try {
-			Pageable paging = PageRequest.of(page, sizePage, Sort.by("id").ascending());
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").ascending());
 			Page<TypeReport> pageable = typeReportService.getAllTypeReportPageable(paging);
 			List<TypeReport> typeReports = pageable.getContent();
 			Map<String, Object> response = new HashMap<>();
@@ -150,14 +153,23 @@ public class AdminRestController {
 	}
 
 	/* create detail report */
-	@PostMapping("/create-report-and-detail-report-by-type-report-by-username")
-	public void createReportAndDetailReportByUsername(@RequestParam String username, @RequestParam Long typereportid) {
-		Long reportId = (long) 0;
-		Optional<TypeReport> typeReportOptional = typeReportService.getTypeReportById(typereportid);
-		if (typeReportOptional.isPresent()) {
-			reportId = reportService.createReport(username, typereportid).getId();
-			createDetailReport(reportId, typeReportOptional.get());
+	@PostMapping("/create-report-and-detail-report-by-type-report-and-username")
+	public boolean createReportAndDetail(@RequestParam String username, @RequestParam Long typereportid) {
+		return createReportAndDetailReportByUsername(username, typereportid);
+	}
+
+	@PostMapping("/create-report-and-detail-report-by-type-report-and-classuuid")
+	public boolean createReportAndDetailByClass(@RequestBody CreateReportDTO createReportDTO) {
+		try {
+
+			List<CommunicateAccountClassDTO> accountClassDTOs = callUAA.getAccountClass(createReportDTO.getClassuuid());
+			for (CommunicateAccountClassDTO classDTO : accountClassDTOs) {
+				createReportAndDetailReportByCreateReportDTO(createReportDTO, classDTO.getUsername());
+			}
+		} catch (Exception e) {
+			throw new BadRequestAlertException("error", "Create or connect", "exception");
 		}
+		return true;
 	}
 
 	/* end create detail */
@@ -166,7 +178,7 @@ public class AdminRestController {
 	public ResponseEntity<Map<String, Object>> getReportAccepted3FalseInClass(@RequestParam Long classid,
 			@RequestParam(defaultValue = "0") int page) {
 		try {
-			Pageable paging = PageRequest.of(page, sizePage, Sort.by("id").descending());
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").descending());
 			Page<Report> pageable = reportService.getAllByAccepted3FalseByClassIdByPagable(classid, paging);
 			List<Report> reports = pageable.getContent();
 			Map<String, Object> response = new HashMap<>();
@@ -183,7 +195,7 @@ public class AdminRestController {
 	@GetMapping("/get-all-report")
 	public ResponseEntity<Map<String, Object>> getAllReport(@RequestParam(defaultValue = "0") int page) {
 		try {
-			Pageable paging = PageRequest.of(page, sizePage, Sort.by("id").descending());
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").descending());
 			Page<Report> pageable = reportService.getAllByPageable(paging);
 			List<Report> reports = pageable.getContent();
 			Map<String, Object> response = new HashMap<>();
@@ -263,25 +275,63 @@ public class AdminRestController {
 		return total;
 	}
 
-	private void createDetailReport(Long reportId, TypeReport typeReport) {
-
-		NewDetailReportDTO newDetailReportDTO = new NewDetailReportDTO();
-
-		newDetailReportDTO.setReportId(reportId);
-
-		List<EvaluationCriteria> evaluationCriterias = typeReport.getEvaluationCriterias();
-
-		for (EvaluationCriteria evaluationCriteria : evaluationCriterias) {
-			if (evaluationCriteria.getParentEvaluationCriteria() == null) {
-
-				newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria.getId());
-
-				DetailReport detailReport = createDetailToDatabase(newDetailReportDTO);
-
-				newDetailReportDTO.setParentId(detailReport.getId());
-
-				createDetailTree(newDetailReportDTO, evaluationCriteria, detailReport, true);
+	private boolean createReportAndDetailReportByCreateReportDTO(CreateReportDTO createReportDTO, String username) {
+		try {
+			if (!reportService.checkReport(createReportDTO, username)) {
+				Long reportId = (long) 0;
+				Optional<TypeReport> typeReportOptional = typeReportService
+						.getTypeReportById(createReportDTO.getTypeReportId());
+				if (typeReportOptional.isPresent()) {
+					reportId = reportService.createReportByDTO(createReportDTO, username).getId();
+					createDetailReport(reportId, typeReportOptional.get());
+				}
 			}
+		} catch (Exception e) {
+			throw new BadRequestAlertException("error", "Create", "exception");
+		}
+		return true;
+	}
+
+	private boolean createReportAndDetailReportByUsername(String username, Long typereportid) {
+		try {
+
+			Long reportId = (long) 0;
+			Optional<TypeReport> typeReportOptional = typeReportService.getTypeReportById(typereportid);
+			if (typeReportOptional.isPresent()) {
+				reportId = reportService.createReport(username, typereportid).getId();
+				createDetailReport(reportId, typeReportOptional.get());
+			}
+		} catch (Exception e) {
+			throw new BadRequestAlertException("error", "Create", "exception");
+		}
+		return true;
+	}
+
+	private void createDetailReport(Long reportId, TypeReport typeReport) {
+		try {
+			NewDetailReportDTO newDetailReportDTO = new NewDetailReportDTO();
+
+			newDetailReportDTO.setReportId(reportId);
+
+			List<EvaluationCriteria> evaluationCriterias = evaluationCriteriaService
+					.getByTypeReportId(typeReport.getId());
+
+			for (EvaluationCriteria evaluationCriteria : evaluationCriterias) {
+				if (evaluationCriteria.getParentEvaluationCriteria() == null) {
+
+					newDetailReportDTO.setParentId(null);
+
+					newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria.getId());
+
+					DetailReport detailReport = createDetailToDatabase(newDetailReportDTO);
+
+					newDetailReportDTO.setParentId(detailReport.getId());
+
+					createDetailTree(newDetailReportDTO, evaluationCriteria, detailReport, true);
+				}
+			}
+		} catch (Exception e) {
+			throw new BadRequestAlertException("error", "Create", "exception");
 		}
 	}
 
@@ -291,24 +341,36 @@ public class AdminRestController {
 
 	private void createDetailTree(NewDetailReportDTO newDetailReportDTO, EvaluationCriteria evaluationCriteria,
 			DetailReport detailReport, boolean isParent) {
-		if (!evaluationCriteria.getChildEvaluationCriterias().isEmpty()) {
-			newDetailReportDTO.setParentId(detailReport.getId());
-
-			for (EvaluationCriteria evaluationCriteria2 : evaluationCriteria.getChildEvaluationCriterias()) {
-				newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria.getId());
-				if (isParent) {
-					createDetailTree(newDetailReportDTO, evaluationCriteria2, detailReport, false);
-				} else
-					createDetailTree(newDetailReportDTO, evaluationCriteria2,
-							createDetailToDatabase(newDetailReportDTO), false);
-			}
-		} else {
-
-			newDetailReportDTO.setParentId(detailReport.getId());
-
-			newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria.getId());
-
-			createDetailToDatabase(newDetailReportDTO);
+		try {
+			if (!evaluationCriteria.getChildEvaluationCriterias().isEmpty()) {
+				
+				
+				for (EvaluationCriteria evaluationCriteria2 : evaluationCriteria.getChildEvaluationCriterias()) {
+					newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria.getId());
+					
+					if (evaluationCriteria2.getChildEvaluationCriterias().isEmpty()) {
+						newDetailReportDTO.setParentId(detailReport.getId());
+						newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria2.getId());
+						createDetailToDatabase(newDetailReportDTO);
+					} else
+					{
+						newDetailReportDTO.setParentId(detailReport.getId()); 
+						newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria2.getId());
+						createDetailTree(newDetailReportDTO, evaluationCriteria2,
+								createDetailToDatabase(newDetailReportDTO), false);
+					}
+				}
+			} /*
+				 * else {
+				 * 
+				 * newDetailReportDTO.setParentId(detailReport.getId());
+				 * 
+				 * newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria.getId());
+				 * 
+				 * createDetailToDatabase(newDetailReportDTO); }
+				 */
+		} catch (Exception e) {
+			throw new BadRequestAlertException("error", "Create", "exception");
 		}
 	}
 }

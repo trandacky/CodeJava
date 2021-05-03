@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ import qnu.cntt.dacky.service.dto.UpdateReportScore23DTO;
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/cbl")
-public class ClassPresidentRestController {
+public class CBLRestController {
 	private final int sizePage = 20;
 
 	@Autowired
@@ -41,7 +42,7 @@ public class ClassPresidentRestController {
 	private ReportService reportService;
 
 	@GetMapping("/get-all-report-by-classid")
-	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam Long classid,
+	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam UUID classid,
 			@RequestParam(defaultValue = "0") int page) {
 
 		try {
@@ -70,7 +71,7 @@ public class ClassPresidentRestController {
 	}
 
 	@GetMapping("/get-all-report-by-classid-accepted2-false")
-	public ResponseEntity<Map<String, Object>> getReportFalseInClass(@RequestParam Long classid,
+	public ResponseEntity<Map<String, Object>> getReportFalseInClass(@RequestParam UUID classid,
 			@RequestParam(defaultValue = "0") int page) {
 		try {
 			Pageable paging = PageRequest.of(page, sizePage);

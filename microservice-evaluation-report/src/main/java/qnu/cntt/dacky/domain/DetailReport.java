@@ -29,12 +29,12 @@ public class DetailReport extends AbtractEntity {
 	private String note;
 
 	@ManyToOne
-	@JoinColumn(name = "id_report", nullable = false)
+	@JoinColumn(name = "report_id", nullable = false)
 	private Report report;
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_evaluation_criteria", nullable = false)
+	@JoinColumn(name = "evaluation_criteria_id", nullable = false)
 	private EvaluationCriteria evaluationCriteria;
 	
 	@JsonIgnore

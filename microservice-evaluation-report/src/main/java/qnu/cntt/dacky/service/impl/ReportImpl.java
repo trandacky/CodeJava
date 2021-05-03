@@ -3,18 +3,21 @@ package qnu.cntt.dacky.service.impl;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import qnu.cntt.dacky.domain.AbtractEntity;
 import qnu.cntt.dacky.domain.Report;
 import qnu.cntt.dacky.domain.TypeReport;
 import qnu.cntt.dacky.repository.ReportRepository;
 import qnu.cntt.dacky.repository.TypeReportRepository;
 import qnu.cntt.dacky.service.ReportService;
 import qnu.cntt.dacky.service.dto.ReportDTO;
+import qnu.cntt.dacky.web.rest.dto.CreateReportDTO;
 
 @Service
 public class ReportImpl implements ReportService {
@@ -207,7 +210,7 @@ public class ReportImpl implements ReportService {
 	}
 
 	@Override
-	public Page<Report> getAllByClassIdAndPageable(Long classId, Pageable pageable) {
+	public Page<Report> getAllByClassIdAndPageable(UUID classId, Pageable pageable) {
 
 		return reportRepository.findAllByClassIdPageable(classId, pageable);
 	}
@@ -225,14 +228,44 @@ public class ReportImpl implements ReportService {
 
 	@Override
 	public List<Report> updateAllReportAccepted3TrueByClassId(Long classId) {
-		
-		return reportRepository.updateAccepted3TrueByClassIdLike(classId,Instant.now());
+
+		return reportRepository.updateAccepted3TrueByClassIdLike(classId, Instant.now());
 	}
 
 	@Override
 	public List<Report> updateAllReportAccepted3FalseByClassId(Long classId) {
-		
-		return reportRepository.updateAccepted3FalseByClassIdLike(classId,Instant.now());
+
+		return reportRepository.updateAccepted3FalseByClassIdLike(classId, Instant.now());
 	}
 
+	@Override
+	public Report createReportByDTO(CreateReportDTO createReportDTO, String username) {
+		Report report = new Report();
+
+		Optional<TypeReport> typeReport = typeReportRepository.findById(createReportDTO.getTypeReportId());
+		if (typeReport.isPresent()) {
+			report.setUsername(username);
+			report.setTypeReport(typeReport.get());
+			report.setClassId(createReportDTO.getClassuuid());
+			report.setSemester(createReportDTO.getSemester());
+			report.setYear(createReportDTO.getYear());
+			return reportRepository.save(report);
+		}
+		return null;
+
+	}
+	@Override
+	public boolean checkReport(CreateReportDTO createReportDTO, String username) {
+		Optional<TypeReport> typeReport = typeReportRepository.findById(createReportDTO.getTypeReportId());
+		if (typeReport.isPresent()) {
+			Optional<Report> optional = reportRepository.findByTypeReportAndClassIdAndYearAndSemesterAndUsername(
+					typeReport.get(), createReportDTO.getClassuuid(), createReportDTO.getYear(),
+					createReportDTO.getSemester(), username);
+			if (optional.isPresent()) {
+				return true;
+			}
+		}
+		return false;
+
+	}
 }

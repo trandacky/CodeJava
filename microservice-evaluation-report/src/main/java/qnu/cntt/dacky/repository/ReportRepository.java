@@ -3,6 +3,7 @@ package qnu.cntt.dacky.repository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import qnu.cntt.dacky.domain.Report;
+import qnu.cntt.dacky.domain.TypeReport;
 
 
 @Repository
@@ -53,7 +55,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 	Page<Report> findAllByClassIdAccepted2FalsePageable(Long classId, Pageable pageable);
 
 	@Query("select e from Report e where e.classId= :classId")
-	Page<Report> findAllByClassIdPageable(Long classId, Pageable pageable);
+	Page<Report> findAllByClassIdPageable(UUID classId, Pageable pageable);
 
 	@Query("select e from Report e where e.classId= :classId and e.accepted3=False")
 	Page<Report> findByAccepted3FalseAndClassIdLike(Long classId, Pageable pageable);
@@ -63,5 +65,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 	
 	@Query("update Report e set  e.accepted3=False, e.updateDate = :now where e.classId= :classId ")
 	List<Report> updateAccepted3FalseByClassIdLike(Long classId, Instant now);
+
+	Optional<Report> findByTypeReportAndClassIdAndYearAndSemesterAndUsername(TypeReport typeReport, UUID classuuid,
+			int year, int semester, String username);
 
 }

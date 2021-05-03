@@ -1,3 +1,6 @@
+<button type="submit" routerLink="/khoa/type-report" class="btn btn-info">
+    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+</button>
 <div class="text-center">
       <div>
           <div *ngIf="formNewEvaluationCriteria">
@@ -10,11 +13,11 @@
                             </div>
                               <div class="col-md-8">
                                   <input class="form-control" formControlName="content"
-                                      placeholder="Enter type name to save">
+                                      placeholder="Enter evaluation">
                               </div>
                               <div class="col-md-1">
                                   <input class="form-control" formControlName="maxScore"
-                                      placeholder="Enter type name to save">
+                                      placeholder="Enter max score">
                               </div>
                               <div class="col">
                                   <button type="submit" [disabled]="!formNewEvaluationCriteria.valid" class="btn btn-primary">Save</button>

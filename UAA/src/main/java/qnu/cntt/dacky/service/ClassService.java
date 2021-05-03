@@ -35,6 +35,8 @@ public interface ClassService {
 	ClaSs updateEnable(UUID uuid, boolean enable);
 
 	Page<Account> getAccountByClass(Pageable paging, UUID uuid);
+	
+	List<Account> getAllAccountByClass(UUID uuid);
 
 	ClaSs updateName(ClassDTOUpdate dtoUpdate);
 }

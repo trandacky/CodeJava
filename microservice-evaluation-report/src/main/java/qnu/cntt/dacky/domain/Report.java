@@ -1,8 +1,8 @@
 package qnu.cntt.dacky.domain;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,12 +17,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "report")
 public class Report extends AbtractEntity {
+	
 	@Column(name = "year")
-	private Integer year;
+	private Integer year=getYearNow();
 
 	/* Hoc Ky */
 	@Column(name = "semester")
-	private Integer semester;
+	private Integer semester=0;
 
 	@Column(name = "total_score1")
 	private Integer totalScore1 = 0;
@@ -43,7 +44,7 @@ public class Report extends AbtractEntity {
 	private String username;
 	
 	@Column(name="class_id")
-	private Long classId;
+	private UUID classId;
 	
 	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
 	private List<DetailReport> detailReports;
@@ -154,17 +155,17 @@ public class Report extends AbtractEntity {
 	}
 
 
-	public Long getClassId() {
+	public UUID getClassId() {
 		return classId;
 	}
 
 
-	public void setClassId(Long classId) {
+	public void setClassId(UUID classId) {
 		this.classId = classId;
 	}
 
-
-    
-    
-  
+	private int getYearNow()
+	{
+		return Integer.parseInt(Instant.now().toString().substring(0,4));
+	}  
 }

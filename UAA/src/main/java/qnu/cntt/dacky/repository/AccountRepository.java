@@ -74,6 +74,8 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 	
 	Page<Account> findAllByClass1(ClaSs ss,Pageable paging);
 
+	List<Account> findAllByClass1(ClaSs claSs);
+
 	
 	
 }

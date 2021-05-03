@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import qnu.cntt.dacky.domain.Account;
 import qnu.cntt.dacky.domain.AccountDepartment;
+import qnu.cntt.dacky.domain.ClaSs;
 import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.domain.Department;
 import qnu.cntt.dacky.repository.AccountDepartmentRepository;
 import qnu.cntt.dacky.repository.AccountRepository;
+import qnu.cntt.dacky.repository.ClassRepository;
 import qnu.cntt.dacky.repository.CourseAndDepartmentRepository;
 import qnu.cntt.dacky.repository.DepartmentRepository;
 import qnu.cntt.dacky.service.AccountDepartmentService;
@@ -31,6 +33,8 @@ public class AccountDepartmentImpl implements AccountDepartmentService {
 	private AccountDepartmentRepository accountDepartmentRepository;
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private ClassRepository classRepository;
 
 	@Autowired
 	private CourseAndDepartmentRepository courseAndDepartmentRepository;
@@ -74,6 +78,47 @@ public class AccountDepartmentImpl implements AccountDepartmentService {
 
 			return courseAndDepartmentRepository.findByDepartmentIn(departments, paging);
 
+		}
+		return null;
+	}
+
+	@Override
+	public List<ClaSs> getCADByUsernameKhoa(String username) {
+		Optional<Account> account = accountRepository.findByUsername(username);
+		if (account.isPresent()) {
+			List<AccountDepartment> accountDepartments = accountDepartmentRepository.findByAccount(account.get());
+
+			List<Department> departments = new ArrayList<>();
+
+			for (AccountDepartment accountDepartment : accountDepartments) {
+				departments.add(accountDepartment.getDepartment());
+			}
+
+			List<CourseAndDepartment> courseAndDepartments = courseAndDepartmentRepository
+					.findByDepartmentIn(departments);
+			List<ClaSs> claSs=classRepository.findByCourseAndDepartmentIn(courseAndDepartments);
+			return claSs;
+		}
+		return null;
+	}
+
+	@Override
+	public Page<ClaSs> getCADByUsernameKhoaAndPaging(String username, Pageable paging) {
+		
+		Optional<Account> account = accountRepository.findByUsername(username);
+		if (account.isPresent()) {
+			List<AccountDepartment> accountDepartments = accountDepartmentRepository.findByAccount(account.get());
+
+			List<Department> departments = new ArrayList<>();
+
+			for (AccountDepartment accountDepartment : accountDepartments) {
+				departments.add(accountDepartment.getDepartment());
+			}
+
+			List<CourseAndDepartment> courseAndDepartments = courseAndDepartmentRepository
+					.findByDepartmentIn(departments);
+			Page<ClaSs> claSs=classRepository.findByCourseAndDepartmentIn(courseAndDepartments,paging);
+			return claSs;
 		}
 		return null;
 	}

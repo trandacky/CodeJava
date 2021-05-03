@@ -1,6 +1,5 @@
 package qnu.cntt.dacky.service.impl;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +62,6 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 		if (optional.isPresent()) {
 			evaluationCriteria.setTypeReport(optional.get());
 			TypeReport typeReport=optional.get();
-			typeReport.setUpdateDate(Instant.now());
 			typeReportRepository.save(typeReport);
 		}
 		return evaluationCriteriaRepository.save(evaluationCriteria);
@@ -78,12 +76,10 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 
 		{
 			EvaluationCriteria evaluationCriteria = evaluationCriteriaOptional.get();
-			TypeReport typeReport=evaluationCriteria.getTypeReport();
-			typeReport.setUpdateDate(Instant.now());
-			typeReportRepository.save(typeReport);
+//			TypeReport typeReport=evaluationCriteria.getTypeReport();
+//			typeReportRepository.save(typeReport);
 			evaluationCriteria.setContent(evaluationCriteriaDTO.getContent());
 			evaluationCriteria.setMaxScore(evaluationCriteriaDTO.getMaxScore());
-			evaluationCriteria.setUpdateDate(Instant.now());
 			return evaluationCriteriaRepository.save(evaluationCriteria);
 		}
 
@@ -98,10 +94,8 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 		{
 			EvaluationCriteria evaluationCriteria = evaluationCriteriaOptional.get();
 			TypeReport typeReport=evaluationCriteria.getTypeReport();
-			typeReport.setUpdateDate(Instant.now());
 			typeReportRepository.save(typeReport);
 			evaluationCriteria.setContent(content);
-			evaluationCriteria.setUpdateDate(Instant.now());
 			return evaluationCriteriaRepository.save(evaluationCriteria);
 		}
 
@@ -115,10 +109,8 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 		{
 			EvaluationCriteria evaluationCriteria = evaluationCriteriaOptional.get();
 			TypeReport typeReport=evaluationCriteria.getTypeReport();
-			typeReport.setUpdateDate(Instant.now());
 			typeReportRepository.save(typeReport);
 			evaluationCriteria.setMaxScore(score);
-			evaluationCriteria.setUpdateDate(Instant.now());
 			return evaluationCriteriaRepository.save(evaluationCriteria);
 		}
 
@@ -133,10 +125,8 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 			EvaluationCriteria evaluationCriteria = evaluationCriteriaOptional.get();
 			if (evaluationCriteriaParentOptional.isPresent()) {
 				TypeReport typeReport=evaluationCriteria.getTypeReport();
-				typeReport.setUpdateDate(Instant.now());
 				typeReportRepository.save(typeReport);
 				evaluationCriteria.setParentEvaluationCriteria(evaluationCriteriaParentOptional.get());
-				evaluationCriteria.setUpdateDate(Instant.now());
 				return evaluationCriteriaRepository.save(evaluationCriteria);
 			}
 		}
@@ -154,7 +144,6 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 			if (typeReportOptional.isPresent()) {
 				TypeReport typeReport = typeReportOptional.get();
 				EvaluationCriteria evaluationCriteria = evaluationCriteriaOptional.get();
-				evaluationCriteria.setUpdateDate(Instant.now());
 				evaluationCriteria.setTypeReport(typeReport);
 				return evaluationCriteriaRepository.save(evaluationCriteria);
 			}
@@ -175,7 +164,6 @@ public class EvaluationCriteriaImpl implements EvaluationCriteriaService {
 		if (criteria.isPresent()) {
 			evaluationCriteria=criteria.get();
 			TypeReport typeReport=evaluationCriteria.getTypeReport();
-			typeReport.setUpdateDate(Instant.now());
 			typeReportRepository.save(typeReport);
 			evaluationCriteria.setTypeReport(null);
 			evaluationCriteria.setParentEvaluationCriteria(null);;

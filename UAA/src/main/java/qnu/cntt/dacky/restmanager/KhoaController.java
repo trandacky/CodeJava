@@ -70,7 +70,7 @@ public class KhoaController {
 	private DepartmentService departmentService;
 
 	@GetMapping("/get-paging-class")
-	public ResponseEntity<Map<String, Object>> getPagingClass(@RequestParam("uuid") UUID uuid) {
+	public ResponseEntity<Map<String, Object>> getPagingClassByCADId(@RequestParam("uuid") UUID uuid) {
 		try {
 			List<ClaSs> sses = courseAndDepartmentService.getClassByCADId(uuid);
 			List<ClassReturnDTO> classReturnDTOs = new ArrayList<>();
@@ -160,6 +160,30 @@ public class KhoaController {
 			response.put("currentPage", pageable.getNumber());
 			response.put("totalItems", pageable.getTotalElements());
 			response.put("totalPages", pageable.getTotalPages());
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@GetMapping("/get-class-paging-by-username")
+	private ResponseEntity<Map<String, Object>> getClassPagingByUserName(@RequestParam(defaultValue = "0") int page) {
+		try {
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createdDate").descending());
+			
+			Optional<String> username = SecurityUtils.getCurrentUserLogin();
+			Page<ClaSs> pageable=accountDepartmentService.getCADByUsernameKhoaAndPaging(username.get(),paging);
+			List<ClassReturnDTO> classReturnDTOs = new ArrayList<>();
+			ClassReturnDTO classReturnDTO;
+			for (ClaSs ss : pageable.getContent()) {
+				classReturnDTO = new ClassReturnDTO(ss);
+				classReturnDTO.setCount(accountService.getCount(ss));
+				classReturnDTOs.add(classReturnDTO);
+			}
+			Map<String, Object> response = new HashMap<>();
+			response.put("classList", classReturnDTOs);
+			response.put("currentPage", pageable.getNumber());
+			response.put("totalItems", pageable.getTotalElements());
+			response.put("totalPages", pageable.getTotalPages()); 
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

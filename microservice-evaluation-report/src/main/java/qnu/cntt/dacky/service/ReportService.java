@@ -2,12 +2,15 @@ package qnu.cntt.dacky.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import qnu.cntt.dacky.domain.AbtractEntity;
 import qnu.cntt.dacky.domain.Report;
 import qnu.cntt.dacky.service.dto.ReportDTO;
+import qnu.cntt.dacky.web.rest.dto.CreateReportDTO;
 
 public interface ReportService {
 	/* get */
@@ -29,7 +32,7 @@ public interface ReportService {
 
 	List<Report> getAllByClassId(Long classId);
 	
-	Page<Report> getAllByClassIdAndPageable(Long classId,Pageable pageable);
+	Page<Report> getAllByClassIdAndPageable(UUID classid,Pageable pageable);
 	
 	Page<Report> getAllByClassIdAccepted2FalseAndPageable(Long classId,Pageable pageable);
 	
@@ -73,5 +76,9 @@ public interface ReportService {
 	List<Report> updateAllReportAccepted3TrueByClassId(Long classId);
 	
 	List<Report> updateAllReportAccepted3FalseByClassId(Long classId);
+
+	Report createReportByDTO(CreateReportDTO createReportDTO, String username);
+
+	boolean checkReport(CreateReportDTO createReportDTO, String username);
 
 }

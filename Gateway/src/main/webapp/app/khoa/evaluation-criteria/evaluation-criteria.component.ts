@@ -11,28 +11,28 @@ import { NestedTreeControl } from '@angular/cdk/tree';
   templateUrl: './evaluation-criteria.component.html',
 })
 export class EvaluationCriteriaComponent implements OnInit {
-  idTypeReport: Number| null = null;
+  idTypeReport: Number | null = null;
+  edit = false;
   evaluationArray!: Evaluation[];
-  formEvaluationCriteria!: FormGroup;
+  // formEvaluationCriteria!: FormGroup;
   formNewEvaluationCriteria!: FormGroup;
   formTypeReport!: FormGroup;
   treeControl = new NestedTreeControl<Evaluation>(node => node.childEvaluationCriterias);
   dataSource = new MatTreeNestedDataSource<Evaluation>();
 
-  constructor(private route: ActivatedRoute,private formBuilder: FormBuilder, private evaluationService: KhoaService) { }
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private evaluationService: KhoaService) { }
   hasChild = (_: number, node: Evaluation) => !!node.childEvaluationCriterias && node.childEvaluationCriterias.length > 0;
   ngOnInit(): void {
-    
+
     this.route.data.subscribe(({ idTypeReport }) => (this.idTypeReport = idTypeReport));
     this.getEvaluation(this.idTypeReport);
-    this.formEvaluationCriteria = this.structureFormEvaluationCriteria();
+    // this.formEvaluationCriteria = this.structureFormEvaluationCriteria();
     this.formNewEvaluationCriteria = this.structureFormNewEvaluation();
   }
-  toggleChildren(employee:any):void {
+  toggleChildren(employee: any): void {
     employee.visible = !employee.visible;
   }
   structureFormNewEvaluation(): FormGroup {
-
     return this.formBuilder.group
       (
         {
@@ -47,40 +47,46 @@ export class EvaluationCriteriaComponent implements OnInit {
   structureFormEvaluationCriteria(): FormGroup {
     return this.formBuilder.group(Evaluation);
   }
-  getEvaluation(id: any) :void{
-  
+  getEvaluation(id: any): void {
     this.evaluationService.getEvaluationByTypeId(id).subscribe(
-      data => { this.formEvaluationCriteria = data; this.evaluationArray = data; this.dataSource=data;},
+      data => { this.evaluationArray = data; this.dataSource = data; },
       () => alert("server fail")
     );
- 
-  }
-  deleteEvaluation(id: any):void {
 
+  }
+  deleteEvaluation(id: any): void {
     if (confirm("Do you want delete it?")) {
       this.evaluationService.deleteEvaluation(id).subscribe(
         () => { alert("delete success"); this.getEvaluation(this.idTypeReport); },
         () => alert("delete failed"));
     }
   }
-  updateEvaluationCriteria() :void{
+  updateEvaluationCriteria(): void {
     if (confirm("Do you want update all evaluation criteria?")) {
       alert();
     }
   }
-  createEvaluation() :void{
-    this.evaluationService.createNewEvaluation(this.formNewEvaluationCriteria.value).subscribe(
-      
-      () => { alert("save success"); this.getEvaluation(this.idTypeReport);},
-      () => { alert("save failed");});
+  createEvaluation(): void {
+    if (this.edit) {
+      this.evaluationService.updateEvaluation(this.formNewEvaluationCriteria.value).subscribe(
+        () => { alert("save success"); this.getEvaluation(this.idTypeReport); },
+        () => { alert("save failed"); });
+    }
+    else {
+      this.evaluationService.createNewEvaluation(this.formNewEvaluationCriteria.value).subscribe(
+        () => { alert("save success"); this.getEvaluation(this.idTypeReport); },
+        () => { alert("save failed"); });
+    }
   }
-  addButton(parentId: Number) :void{
+  addButton(parentId: Number): void {
+    this.edit = false;
     this.formNewEvaluationCriteria.get('parentId')?.setValue(parentId);
   }
-  editButton(id: any,content: any,maxScore: any): void
-  {
-    this.formEvaluationCriteria.get('id')?.setValue(id);
-    this.formEvaluationCriteria.get('content')?.setValue(content);
-    this.formEvaluationCriteria.get('maxScore')?.setValue(maxScore);
+  editButton(id: any, content: any, maxScore: any): void {
+    this.edit = true;
+    this.formNewEvaluationCriteria.get('id')?.setValue(id);
+    this.formNewEvaluationCriteria.get('content')?.setValue(content);
+    this.formNewEvaluationCriteria.get('maxScore')?.setValue(maxScore);
+    this.formNewEvaluationCriteria.get('parentId')?.setValue(id);
   }
 }
