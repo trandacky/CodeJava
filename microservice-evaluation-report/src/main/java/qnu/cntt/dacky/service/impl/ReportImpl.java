@@ -268,4 +268,9 @@ public class ReportImpl implements ReportService {
 		return false;
 
 	}
+
+	@Override
+	public Page<Report> getAllReportByUsername(String username, Pageable paging) {
+		return reportRepository.findByAccepted2FalseAndAccepted3FalseAndUsernameLike(username,paging);
+	}
 }

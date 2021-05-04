@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import qnu.cntt.dacky.domain.AbtractEntity;
 import qnu.cntt.dacky.domain.Report;
+import qnu.cntt.dacky.domain.TypeReport;
 import qnu.cntt.dacky.service.dto.ReportDTO;
 import qnu.cntt.dacky.web.rest.dto.CreateReportDTO;
 
@@ -80,5 +81,7 @@ public interface ReportService {
 	Report createReportByDTO(CreateReportDTO createReportDTO, String username);
 
 	boolean checkReport(CreateReportDTO createReportDTO, String username);
+
+	Page<Report> getAllReportByUsername(String username, Pageable paging);
 
 }

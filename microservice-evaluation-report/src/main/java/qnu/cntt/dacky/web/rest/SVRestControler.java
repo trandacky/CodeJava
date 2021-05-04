@@ -1,9 +1,17 @@
 package qnu.cntt.dacky.web.rest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,15 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import qnu.cntt.dacky.domain.DetailReport;
 import qnu.cntt.dacky.domain.Report;
+import qnu.cntt.dacky.domain.TypeReport;
+import qnu.cntt.dacky.security.SecurityUtils;
 import qnu.cntt.dacky.service.DetailReportService;
 import qnu.cntt.dacky.service.ReportService;
+import qnu.cntt.dacky.service.TypeReportService;
 import qnu.cntt.dacky.service.dto.UpdateDetailReportScore1AndNoteDTO;
 import qnu.cntt.dacky.service.dto.UpdateReportScore1DTO;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api/sv")
+@RequestMapping("/api/sinhvien")
 public class SVRestControler {
+	
+	private final int sizePage = 10;
+	@Autowired
+	private TypeReportService typeReportService;
 	@Autowired
 	private ReportService reportService;
 
@@ -30,8 +45,23 @@ public class SVRestControler {
 	private DetailReportService detailReportService;
 
 	@GetMapping("/get-all-report-by-username")
-	public List<Report> getAllReportByUsername(@RequestParam String username) {
-		return reportService.getAllByUsername(username);
+	public ResponseEntity<Map<String, Object>> getAllReportByUsername(@RequestParam(defaultValue = "0") int page) {
+		
+		try {
+			String username=SecurityUtils.getCurrentUserLogin().get();
+			
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").ascending());
+			Page<Report> pageable = reportService.getAllReportByUsername(username,paging);
+			List<Report> typeReports = pageable.getContent();
+			Map<String, Object> response = new HashMap<>();
+			response.put("reports", typeReports);
+			response.put("currentPage", pageable.getNumber());
+			response.put("totalItems", pageable.getTotalElements());
+			response.put("totalPages", pageable.getTotalPages());
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@GetMapping("/get-detail-report-by-reportid")

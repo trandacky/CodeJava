@@ -49,8 +49,7 @@ public class Report extends AbtractEntity {
 	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
 	private List<DetailReport> detailReports;
 
-	@JsonIgnore
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "type_report_id", nullable = false)
     private TypeReport typeReport;
 

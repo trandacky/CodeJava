@@ -69,4 +69,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 	Optional<Report> findByTypeReportAndClassIdAndYearAndSemesterAndUsername(TypeReport typeReport, UUID classuuid,
 			int year, int semester, String username);
 
+	Page<Report> findByAccepted2FalseAndUsernameLike(String username, Pageable paging);
+
+	Page<Report> findByAccepted2FalseAndAccepted3FalseAndUsernameLike(String username, Pageable paging);
+
 }

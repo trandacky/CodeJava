@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "type_report")
 public class TypeReport extends AbtractEntity {
@@ -17,6 +19,7 @@ public class TypeReport extends AbtractEntity {
 	@Column(name = "enable")
 	private Boolean enable=true;
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL,mappedBy = "typeReport")
 	private List<Report> reports;
 	

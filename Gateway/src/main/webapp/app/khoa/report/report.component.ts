@@ -44,7 +44,8 @@ export class ReportComponent implements OnInit {
     }
     transform() : any {
         const res = [];
-        for (let i = 2021; i < 2200; i++) {
+        const year: number = new Date().getFullYear();
+        for (let i = year-5; i < year+5; i++) {
             res.push(i);
           }
           return res;

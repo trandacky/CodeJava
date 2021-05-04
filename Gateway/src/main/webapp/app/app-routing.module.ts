@@ -27,7 +27,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
             authorities: [Authority.SV],
           },
           canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
+          loadChildren: () => import('./sinhvien/sinhvien.module').then(m => m.SinhVienRoutingModule),
         }
         ,{
           path: 'khoa',

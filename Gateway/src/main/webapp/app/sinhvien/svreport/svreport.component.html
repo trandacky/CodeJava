@@ -1,0 +1,44 @@
+<div class="table-responsive text-center" *ngIf="reports">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+        <thead>
+            <tr>
+                <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                <th><span>Tên Loại</span></th>
+                <th>Năm học</th>
+                <th>Học kỳ</th>
+
+                <th><span>Tình trạng</span>
+                </th>
+                <th><span>Ngày tạo</span></th>
+                <th><span>Ngày Cập nhật</span></th>
+
+            </tr>
+        </thead>
+        <tbody *ngIf="reports">
+            <tr *ngFor="let report of reports">
+                <td><a [routerLink]="['', report.id]">{{ report.typeReport.typeName }}</a></td>
+                <td>{{report.year}}</td>
+                <td>{{report.semester}}</td>
+                <td>
+                    <button class="btn btn-success btn-sm" [disabled]="true" *ngIf="!report.accepted2">Chưa
+                        duyệt(2)</button>
+                    <button class="btn btn-danger btn-sm" [disabled]="true" *ngIf="report.accepted2">Đã
+                        duyệt(2)</button>
+                    <!--(click)=""-->
+                </td>
+                <td>{{ report.createDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ report.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="reports">
+    <div class="row justify-content-center">
+        <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+            [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
+    </div>
+</div>
