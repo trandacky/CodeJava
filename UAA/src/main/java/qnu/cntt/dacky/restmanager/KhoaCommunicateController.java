@@ -28,7 +28,7 @@ import qnu.cntt.dacky.service.dto.CommunicateAccountClassDTO;
 //@FeignClient(name = "uaa")
 @RequestMapping("/api/khoa")
 
-public class CommunicateController {
+public class KhoaCommunicateController {
 
 	@Autowired
 	private AccountService accountService;

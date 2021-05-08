@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SinhVienService } from '../sinhvien.service';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 @Component({
@@ -13,7 +12,7 @@ export class SVReportComponent implements OnInit {
     edit = false;
     itemsPerPage = ITEMS_PER_PAGE;
     reports: any;
-    constructor(private formBuilder: FormBuilder, private sinhVienService: SinhVienService) { }
+    constructor(private sinhVienService: SinhVienService) { }
     ngOnInit(): void {
         this.loadAll(this.page);
     }

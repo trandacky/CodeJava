@@ -93,10 +93,23 @@ public class KhoaRestController {
 			}
 
 		}
+		for (EvaluationCriteria criteria : evaluationCriterias) {
+			if (!criteria.getChildEvaluationCriterias().isEmpty()) {
+				sort(criteria.getChildEvaluationCriterias());
+			}
+		}
 		return evaluationCriterias.stream().sorted(Comparator.comparing(EvaluationCriteria::getCreateDate))
 				.collect(Collectors.toList());
 	}
-
+	private void sort(List<EvaluationCriteria> evaluationCriterias)
+	{
+		for (EvaluationCriteria criteria : evaluationCriterias) {
+			if (!criteria.getChildEvaluationCriterias().isEmpty()) {
+				sort(criteria.getChildEvaluationCriterias());
+				criteria.getChildEvaluationCriterias().sort(Comparator.comparing(EvaluationCriteria::getCreateDate));
+			}
+		}
+	}
 	@GetMapping("/get-all-type-report-enable")
 	public List<TypeReport> getAllTypeReportEnable() {
 		return typeReportService.getEnableTypeReport();
@@ -172,10 +185,25 @@ public class KhoaRestController {
 		return true;
 	}
 
+	@PostMapping("/create-report-and-detail-report-by-type-report-all-account")
+	public boolean createReportAndDetailAll(@RequestBody CreateReportDTO createReportDTO) {
+		try {
+
+			List<CommunicateAccountClassDTO> accountClassDTOs = callUAA.getAllAccountKhoa();
+			for (CommunicateAccountClassDTO classDTO : accountClassDTOs) {
+				createReportDTO.setClassuuid(classDTO.getClassuuid());
+				createReportAndDetailReportByCreateReportDTO(createReportDTO, classDTO.getUsername());
+			}
+		} catch (Exception e) {
+			throw new BadRequestAlertException("error", "Create or connect", "exception");
+		}
+		return true;
+	}
+
 	/* end create detail */
 
 	@GetMapping("/get-all-report-accepted3-false-by-class-id")
-	public ResponseEntity<Map<String, Object>> getReportAccepted3FalseInClass(@RequestParam Long classid,
+	public ResponseEntity<Map<String, Object>> getReportAccepted3FalseInClass(@RequestParam UUID classid,
 			@RequestParam(defaultValue = "0") int page) {
 		try {
 			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").descending());
@@ -241,38 +269,10 @@ public class KhoaRestController {
 	public Report updateAccepted3(@RequestParam Long id, boolean accepted3) {
 		return reportService.updateAccepted3(id, accepted3);
 	}
-	/* begin do submit report */
-
-	@PutMapping("/submit-report-score3")
-	public void updateReportScore3(@RequestBody UpdateReportScore23DTO reportScore23DTO) {
-		if (!reportScore23DTO.getDetailReportScore23DTOs().isEmpty()) {
-			int totalScore3 = functionUpdateReportScore3AndCountTotalScore3(
-					reportScore23DTO.getDetailReportScore23DTOs());
-			reportService.updateTotalScore1(reportScore23DTO.getId(), totalScore3);
-		}
-
-	}
 
 	@DeleteMapping("/delete-evaluation-report/{id}")
 	public void deleteEvaluationReport(@PathVariable Long id) {
 		evaluationCriteriaService.deleteEvaluationReport(id);
-	}
-
-	private int functionUpdateReportScore3AndCountTotalScore3(
-			List<UpdateDetailReportScore23DTO> listDetailReportScore23DTOs) {
-		int total = 0;
-		for (UpdateDetailReportScore23DTO detailReport : listDetailReportScore23DTOs) {
-			if (detailReport.getDetailReportScore23DTOs().isEmpty()) {
-				detailReportService.updateScore2(detailReport.getId(), detailReport.getScore());
-				return detailReport.getScore();
-			} else {
-				int totalPiece = (0
-						+ functionUpdateReportScore3AndCountTotalScore3(detailReport.getDetailReportScore23DTOs()));
-				total += totalPiece;
-				detailReportService.updateScore3(detailReport.getId(), totalPiece);
-			}
-		}
-		return total;
 	}
 
 	private boolean createReportAndDetailReportByCreateReportDTO(CreateReportDTO createReportDTO, String username) {
@@ -343,18 +343,16 @@ public class KhoaRestController {
 			DetailReport detailReport, boolean isParent) {
 		try {
 			if (!evaluationCriteria.getChildEvaluationCriterias().isEmpty()) {
-				
-				
+
 				for (EvaluationCriteria evaluationCriteria2 : evaluationCriteria.getChildEvaluationCriterias()) {
 					newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria.getId());
-					
+
 					if (evaluationCriteria2.getChildEvaluationCriterias().isEmpty()) {
 						newDetailReportDTO.setParentId(detailReport.getId());
 						newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria2.getId());
 						createDetailToDatabase(newDetailReportDTO);
-					} else
-					{
-						newDetailReportDTO.setParentId(detailReport.getId()); 
+					} else {
+						newDetailReportDTO.setParentId(detailReport.getId());
 						newDetailReportDTO.setEvaluationCriteriaId(evaluationCriteria2.getId());
 						createDetailTree(newDetailReportDTO, evaluationCriteria2,
 								createDetailToDatabase(newDetailReportDTO), false);

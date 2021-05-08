@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,15 +26,15 @@ public class DetailReport extends AbtractEntity {
 	@Column(name = "score3")
 	private Integer score3 = 0;
 
-	@Column(name = "note")
+	@Column(name = "note", length=10485760)
 	private String note;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
 	@JoinColumn(name = "report_id", nullable = false)
 	private Report report;
 
-	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "evaluation_criteria_id", nullable = false)
 	private EvaluationCriteria evaluationCriteria;
 	
@@ -42,7 +43,7 @@ public class DetailReport extends AbtractEntity {
 	@JoinColumn(name = "parent_id", nullable = true)
 	private DetailReport parentDetailReport;
 
-	@OneToMany(mappedBy = "parentDetailReport", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "parentDetailReport", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<DetailReport> childDetailReport;
 
 	public Integer getScore1() {

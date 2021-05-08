@@ -44,32 +44,30 @@ public class DetailReportImpl implements DetailReportService {
 	public List<DetailReport> getDetailReportByReportId(Long id) {
 		Optional<Report> reportOptional = reportRepository.findById(id);
 		if (reportOptional.isPresent()) {
-			return reportOptional.get().getDetailReports();
+			return detailReportRepository.findByReport(reportOptional.get());
 		}
 		return null;
 	}
 
 	@Override
-	public DetailReport updateScore1AndNote(Long idDetailReport, int score1, String note) {
+	public Instant updateScore1AndNote(Long idDetailReport, int score1, String note) {
 		Optional<DetailReport> detailReportOptional = detailReportRepository.findById(idDetailReport);
 		if (detailReportOptional.isPresent()) {
 			DetailReport detailReport = detailReportOptional.get();
 			detailReport.setNote(note);
 			detailReport.setScore1(score1);
-			detailReport.setUpdateDate(Instant.now());
-			return detailReportRepository.save(detailReport);
+			return detailReportRepository.save(detailReport).getUpdateDate();
 		}
 		return null;
 	}
 
 	@Override
-	public DetailReport updateScore2(Long idDetailReport, int score2) {
+	public Instant updateScore2(Long idDetailReport, int score2) {
 		Optional<DetailReport> detailReportOptional = detailReportRepository.findById(idDetailReport);
 		if (detailReportOptional.isPresent()) {
 			DetailReport detailReport = detailReportOptional.get();
 			detailReport.setScore2(score2);
-			detailReport.setUpdateDate(Instant.now());
-			return detailReportRepository.save(detailReport);
+			return detailReportRepository.save(detailReport).getUpdateDate();
 		}
 		return null;
 	}

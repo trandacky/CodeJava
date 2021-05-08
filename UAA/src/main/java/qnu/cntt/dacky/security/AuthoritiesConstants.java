@@ -15,7 +15,7 @@ public final class AuthoritiesConstants {
     
     public static final String CBL = "ROLE_CBL";
     
-    public static final String GV = "ROLE_GV";
+    public static final String GV = "ROLE_GVHD";
 
     public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 

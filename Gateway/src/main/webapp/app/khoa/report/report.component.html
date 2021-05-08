@@ -1,5 +1,5 @@
 <h2>Phát phiếu:</h2>
-<form (ngSubmit)="createAll()" [formGroup]="formCreateReport">
+<form (ngSubmit)="createAll(0)" [formGroup]="formCreateReport">
     <button type="submit" [disabled]="!formCreateReport.valid" class="btn btn-success">Phát tất cả các
         lớp</button>
     <div class="row">
@@ -45,7 +45,7 @@
                 <td>{{ class.name }}</td>
                 <td>{{ class.count }}</td>
                 <td><button type="button" [disabled]="!formCreateReport.valid"
-                    (click)="createByClassUUId(class.uuid)" class="btn btn-warning btn-sm">
+                    (click)="createByClassUUId(class.uuid,0)" class="btn btn-warning btn-sm">
                     <fa-icon icon="pencil-alt"></fa-icon>
                     <span class="d-none d-md-inline">Phát phiếu</span>
                 </button></td>

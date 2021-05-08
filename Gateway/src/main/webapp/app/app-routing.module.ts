@@ -38,6 +38,22 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./khoa/khoa-routing.module').then(m => m.KhoaRoutingModule),
         },
         {
+          path: 'canbolop',
+          data: {
+            authorities: [Authority.CBL],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () => import('./canbolop/canbolop.module').then(m => m.CanBoLopRoutingModule),
+        },
+        {
+          path: 'giangvien',
+          data: {
+            authorities: [Authority.GVHD],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () => import('./giangvien/giangvien.module').then(m => m.GiangVienRoutingModule),
+        },
+        {
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },

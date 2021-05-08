@@ -1,3 +1,9 @@
+<div class="text-center">
+    <img src="./logo.png" width="30%" height="30%">
+    <h1>
+        <p>Phiếu đánh giá điểm rèn luyện</p>
+    </h1>
+</div>
 <div class="table-responsive text-center" *ngIf="reports">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
@@ -6,8 +12,12 @@
                 <th><span>Tên Loại</span></th>
                 <th>Năm học</th>
                 <th>Học kỳ</th>
-
-                <th><span>Tình trạng</span>
+                <th>Tổng điểm lần 1</th>
+                <th>Tổng điểm lần 2</th>
+                <th>Tổng điểm lần 3</th>
+                <th><span>Duyệt lần 2</span>
+                </th>
+                <th><span>Duyệt lần 3</span>
                 </th>
                 <th><span>Ngày tạo</span></th>
                 <th><span>Ngày Cập nhật</span></th>
@@ -16,15 +26,24 @@
         </thead>
         <tbody *ngIf="reports">
             <tr *ngFor="let report of reports">
-                <td><a [routerLink]="['', report.id]">{{ report.typeReport.typeName }}</a></td>
+                <td><a [routerLink]="['./', report.id]">{{ report.typeReport.typeName }}</a></td>
                 <td>{{report.year}}</td>
                 <td>{{report.semester}}</td>
+                <td>{{report.totalScore1}}</td>
+                <td>{{report.totalScore2}}</td>
+                <td>{{report.totalScore3}}</td>
                 <td>
                     <button class="btn btn-success btn-sm" [disabled]="true" *ngIf="!report.accepted2">Chưa
-                        duyệt(2)</button>
+                        duyệt</button>
                     <button class="btn btn-danger btn-sm" [disabled]="true" *ngIf="report.accepted2">Đã
-                        duyệt(2)</button>
+                        duyệt</button>
                     <!--(click)=""-->
+                </td>
+                <td>
+                    <button class="btn btn-success btn-sm" [disabled]="true" *ngIf="!report.accepted3">Chưa
+                        duyệt</button>
+                    <button class="btn btn-danger btn-sm" [disabled]="true" *ngIf="report.accepted3">Đã
+                        duyệt</button>
                 </td>
                 <td>{{ report.createDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td>{{ report.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>

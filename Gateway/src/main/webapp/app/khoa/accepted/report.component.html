@@ -1,0 +1,122 @@
+<button type="submit" routerLink="../" class="btn btn-info">
+    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+</button>
+<notifier-container></notifier-container>
+<div style="width: 100%;" class="card">
+    <div class="text-center">
+        <img src="./logo.png" width="30%" height="30%">
+        <h1>
+            <p>Phiếu đánh giá điểm rèn luyện</p>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h4> Khóa: {{infoAccount.course}}</h4>
+        </div>
+        <div class="col-md-6">
+            <h4> Khoa: {{infoAccount.department}}</h4>
+        </div>
+
+        <div class="col-md-6">
+            <h4> Lớp: {{infoAccount.className}}</h4>
+        </div>
+        <div class="col-md-6">
+            <h4> Họ và tên: {{infoAccount.firstName}} {{infoAccount.lastName}}</h4>
+        </div>
+        <div class="col-md-6">
+            <h4> Email: {{infoAccount.email}}</h4>
+        </div>
+        <div class="col-md-6">
+            <h4> Số điện thoại: {{infoAccount.phoneNumber}}</h4>
+        </div>
+        <div class="col-md-6">
+            <h4> Năm học: {{report.year}}</h4>
+        </div>
+        <div class="col-md-6">
+            <h4> Học kỳ: {{report.semester}}</h4>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped" aria-describedby="user-management-page-heading">
+            <thead>
+            <tr>
+                <th>Tiêu chí đánh giá</th>
+                <th>Điểm lần 1</th>
+                <th>Điểm lần 2</th>
+                <th>Điểm lần 3</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+            <tbody *ngFor="let detail of detailReports">
+                <tr *ngIf="detail.isChild===false">
+                    <td style="font-weight: bold;">{{detail.content}} ({{detail.maxScore}}đ)<label
+                            *ngIf="detail.isChild===false">:</label></td>
+                    <td>Tổng điểm của mục: {{detail.score1}}</td>
+                    <td>Tổng điểm của mục: {{detail.score2}}</td>
+                    <td>Tổng điểm của mục: {{detail.score3}}</td>
+                    <td>{{detail.note}}</td>
+                </tr>
+                <tr *ngIf="detail.isChild===true">
+                    <td style="font-weight: bold;">{{detail.content}} ({{detail.maxScore}}đ)<label>:</label></td>
+                    <td>Tổng điểm của mục: {{detail.score1}}</td>
+                    <td>Tổng điểm của mục: {{detail.score2}}</td>
+                    <td>Tổng điểm của mục: {{detail.score3}}</td>
+                    <td></td>
+                </tr>
+                <tr *ngIf="detail.isChild===true">
+                    <td>
+                        <ul style="margin-left: 35px">
+                            <li>{{detail.content}} ({{detail.maxScore}}đ)</li>
+                        </ul>
+                    </td>
+                    <td>{{detail.score1}}</td>
+                    <td>{{detail.score2}}</td>
+                    <td>{{detail.score3}}</td>
+                    <td><textarea readonly cols="30" value="{{detail.note}}" rows="2"></textarea>
+                    </td>
+                </tr>
+                <tr *ngFor="let detailChild of detail.detailReportDTOs;when detail.detailReportDTOs">
+                    <td>
+                        <ul [style.margin-left]=" detailChild.isChild ? '35px' : 'normal' ">
+                            <li [style.fontWeight]=" !detailChild.isChild ? 'bold' : 'normal' ">{{detailChild.content}}
+                                ({{detailChild.maxScore}}đ)<label *ngIf="detailChild.isChild===false">:</label></li>
+                        </ul>
+                    </td>
+                    <td>{{detailChild.score1}}</td>
+                    <td>{{detailChild.score2}}</td>
+                    <td>{{detailChild.score3}}</td>
+                    <td><textarea cols="30" readonly value="{{detailChild.note}}" rows="2"></textarea></td>
+            </tbody>
+            <tr>
+                <td></td>
+                <td>
+                    <h4> Tổng điểm lần 1: {{report.totalScore1}}</h4>
+                </td>
+                <td>
+                    <h4> Tổng điểm lần 2: {{report.totalScore2}}</h4>
+                </td>
+                <td> <h4> Tổng điểm lần 3: {{report.totalScore3}}</h4></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <button type="submit" routerLink="../" class="btn btn-info">
+                        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+                    </button>
+                    <button class="btn btn-success" style="float: right;" (click)="updateAccepted2(report.id,true,0)"
+                        *ngIf="!report.accepted2">Duyệt</button>
+                    <button class="btn btn-danger" style="float: right;" (click)="updateAccepted2(report.id,false,0)"
+                        *ngIf="report.accepted2">Bỏ duyệt</button>
+
+                </td>
+                <td></td>
+            </tr>
+
+        </table>
+
+    </div>
+</div>

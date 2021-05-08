@@ -15,6 +15,7 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {DemoMaterialModule} from './shared/material';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     BrowserModule,
@@ -23,6 +24,7 @@ import {DemoMaterialModule} from './shared/material';
     GatewayHomeModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
+    FormsModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     GatewayEntityModule,
     GatewayAppRoutingModule,

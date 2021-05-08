@@ -9,8 +9,11 @@ export class KhoaService {
  
   private urlService = SERVER_API_URL+'services/microserviceevaluationreport/api/khoa';
   private urlUAA = SERVER_API_URL+'services/uaa/api/khoa';
-
+  private urlUAAResource= SERVER_API_URL+'services/uaa/api/resource';
   constructor(private http: HttpClient) { }
+  getInfoAccount(): Observable<any> {
+    return this.http.get(this.urlUAAResource + `/info`);
+  }
   getAllTypeReport(page: Number): Observable<any> {
     return this.http.get(this.urlService + `/get-all-type-report?page=${page}`);
     // return this.http.get(`${this.url}` + `/get-all-type-report${paging? paging: ''}`);
@@ -40,7 +43,10 @@ export class KhoaService {
     return this.http.post(this.urlService+
       '/create-report-and-detail-report-by-type-report-and-classuuid', data);
   }
-  
+  createReportAndDetailAllClass(data: FormData): Observable<any> {
+    return this.http.post(this.urlService+
+      '/create-report-and-detail-report-by-type-report-all-account', data);
+  }
   createTypeReport(typeName: string): Observable<any> {
     const typeReportParam = new FormData();
     typeReportParam.append('typename',typeName);
@@ -56,6 +62,23 @@ export class KhoaService {
   createAccount(account: FormData): Observable<{}> {
     return this.http.post(this.urlUAA + '/create-account', account);
   }
+  ///////////////
+  getAllReport(page: Number): Observable<any> {
+    return this.http.get(this.urlService + `/get-all-report-by-class-id?page=${page}`);
+  }
+  getDetailReport(id: Number): Observable<any> {
+    return this.http.get(this.urlService + `/get-detail-report-by-report-id?id=${id}`);
+  }
+  updateAllAccepted3(): Observable<any> {
+    return this.http.put(this.urlService + '/update-all-report-accepted2',null);
+  }
+  updateAccepted3(id: Number, accepted2:Boolean): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('accepted2', accepted2.toString());
+    return this.http.put(this.urlService + '/update-accepted2', formData);
+  }
+  ///////////////////////
   updateClassEnable(uuid: String, enable: boolean): Observable<any> {
     const formData = new FormData();
     formData.append('uuid', uuid.toString());
@@ -73,20 +96,15 @@ export class KhoaService {
   {
     return this.http.put(this.urlService+'/update-type-report', typeReportForm);
   }
-  
-  
-  
   updateClassName(formData: FormData): Observable<any> {
     return this.http.put(this.urlUAA + '/update-class-name', formData);
   }
- 
   updateAccountEnable(username: String, enable: boolean): Observable<any> {
     const formData = new FormData();
     formData.append('username', username.toString());
     formData.append('activated', enable.toString())
     return this.http.put(this.urlUAA + '/account', formData);
   }
-  
   updateCourseAndDepartmentEnable(uuid: String, enable: boolean): Observable<any> {
     const formData = new FormData();
     formData.append('uuid', uuid.toString());
@@ -101,14 +119,12 @@ export class KhoaService {
   {
     return this.http.delete(`${this.urlService}/delete-evaluation-report/`+id);
   }
- 
   deleteCourseAndDepartment(uuid: String): Observable<any> {
     return this.http.delete(this.urlUAA + '/delete-course-and-department/' + uuid);
   }
   deleteClass(uuid: String): Observable<any> {
     return this.http.delete(this.urlUAA + '/delete-class-by-id/' + uuid);
   }
-  
   deleteAccountRole(username: String): Observable<any> {
     return this.http.delete(this.urlUAA + '/account?username=' + username);
   }

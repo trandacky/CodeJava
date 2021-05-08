@@ -1,5 +1,9 @@
 package qnu.cntt.dacky.web.rest;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +33,14 @@ import qnu.cntt.dacky.service.ReportService;
 import qnu.cntt.dacky.service.TypeReportService;
 import qnu.cntt.dacky.service.dto.UpdateDetailReportScore1AndNoteDTO;
 import qnu.cntt.dacky.service.dto.UpdateReportScore1DTO;
+import qnu.cntt.dacky.web.rest.dto.DetailReportSVDTO;
+import qnu.cntt.dacky.web.rest.dto.InitDetailReportDTO;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/sinhvien")
 public class SVRestControler {
-	
+
 	private final int sizePage = 10;
 	@Autowired
 	private TypeReportService typeReportService;
@@ -46,15 +52,15 @@ public class SVRestControler {
 
 	@GetMapping("/get-all-report-by-username")
 	public ResponseEntity<Map<String, Object>> getAllReportByUsername(@RequestParam(defaultValue = "0") int page) {
-		
+
 		try {
-			String username=SecurityUtils.getCurrentUserLogin().get();
-			
+			String username = SecurityUtils.getCurrentUserLogin().get();
+
 			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").ascending());
-			Page<Report> pageable = reportService.getAllReportByUsername(username,paging);
-			List<Report> typeReports = pageable.getContent();
+			Page<Report> pageable = reportService.getAllReportByUsername(username, paging);
+			List<Report> reports = pageable.getContent();
 			Map<String, Object> response = new HashMap<>();
-			response.put("reports", typeReports);
+			response.put("reports", reports);
 			response.put("currentPage", pageable.getNumber());
 			response.put("totalItems", pageable.getTotalElements());
 			response.put("totalPages", pageable.getTotalPages());
@@ -63,16 +69,67 @@ public class SVRestControler {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/get-detail-report-by-reportid")
-	public List<DetailReport> getDetailReportByReportId(@RequestParam Long id)
-	{
-		return detailReportService.getDetailReportByReportId(id);
+	public ResponseEntity<Map<String, Object>> getDetailReportByReportId(@RequestParam Long id) {
+		String username = SecurityUtils.getCurrentUserLogin().get();
+		if (reportService.checkReportByUsername(id, username)) {
+			List<DetailReport> detailReports = detailReportService.getDetailReportByReportId(id);
+			for (int i = 0; i < detailReports.size(); i++) {
+
+				if (detailReports.get(i).getParentDetailReport() != null) {
+					detailReports.remove(i);
+					i--;
+				}
+
+			}
+			Map<String, Object> response = new HashMap<>();
+			response.put("detailReports", detailReports);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
 	}
-	
+
+	@GetMapping("/get-detail-report")
+	public ResponseEntity<Map<String, Object>> getDetailReportTESTTTTTTTT(@RequestParam Long id) {
+		String username = SecurityUtils.getCurrentUserLogin().get();
+		if (reportService.checkReportByUsername(id, username)) {
+			List<DetailReport> detailReports = detailReportService.getDetailReportByReportId(id);
+			for (int i = 0; i < detailReports.size(); i++) {
+
+				if (detailReports.get(i).getParentDetailReport() != null) {
+					detailReports.remove(i);
+					i--;
+				}
+
+			}
+			List<DetailReportSVDTO> detailReportSVDTOs = new ArrayList<>();
+			for (int i = 0; i < detailReports.size(); i++) {
+
+				detailReportSVDTOs.add(new DetailReportSVDTO(detailReports.get(i)));
+
+			}
+			detailReportSVDTOs.sort(Comparator.comparing(DetailReportSVDTO::getCreatedDate));
+//			Collections.reverse(detailReportSVDTOs);
+			for (DetailReportSVDTO detailReportSVDTO : detailReportSVDTOs) {
+				Collections.reverse(detailReportSVDTO.getDetailReportDTOs());
+				detailReportSVDTO.getDetailReportDTOs().sort(Comparator.comparing(InitDetailReportDTO::getCreatedDate));
+			} 
+			Optional<Report> optional = reportService.getReportByIdAndUserName(id,username);
+			Map<String, Object> response = new HashMap<>();
+			response.put("detailReports", detailReportSVDTOs);
+			response.put("report", optional.get());
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+	}
+
 	@GetMapping("/get-report-by-id")
 	public Optional<Report> getReportById(@RequestParam Long id) {
-		return reportService.getReportById(id);
+		String username = SecurityUtils.getCurrentUserLogin().get();
+		return reportService.getReportByIdAndUserName(id,username);
 	}
 
 	@GetMapping("/get-report-accepted2-false-by-username")
@@ -87,46 +144,14 @@ public class SVRestControler {
 	}
 
 	@PutMapping("/update-report-total-score1")
-	public Report updateReportTotalScore1(@RequestParam Long idreport, @RequestParam int totalscore1) {
-		return reportService.updateTotalScore1(idreport, totalscore1);
+	public Report updateReportTotalScore1(@RequestParam Long idreport) {
+		return reportService.updateTotalScore1(idreport);
 	}
 
 	/* detail report */
 	@PutMapping("/update-detail-report-scrore1-and-note")
-	public DetailReport updateDetailReportScore1(@RequestParam Long id, @RequestParam int score1,
+	public Instant updateDetailReportScore1(@RequestParam Long id, @RequestParam int score1,
 			@RequestParam String note) {
 		return detailReportService.updateScore1AndNote(id, score1, note);
 	}
-
-	@PutMapping("/submit-report-score1")
-	public void updateReportScore1(@RequestBody UpdateReportScore1DTO reportScore1DTO) {
-		if (!reportScore1DTO.getDetailReportScore1AndNoteDTO().isEmpty()) {
-
-			int totalScore1 = functionUpdateReportScore1AndCountTotalScore(
-					reportScore1DTO.getDetailReportScore1AndNoteDTO());
-
-			reportService.updateTotalScore1(reportScore1DTO.getId(), totalScore1);
-		}
-
-	}
-
-	private int functionUpdateReportScore1AndCountTotalScore(
-			List<UpdateDetailReportScore1AndNoteDTO> listUpdateDetailReportDTO) {
-		int total = 0;
-		for (UpdateDetailReportScore1AndNoteDTO detailReport : listUpdateDetailReportDTO) {
-			if (detailReport.getDetailReportScore1AndNoteDTO().isEmpty()) {
-				detailReportService.updateScore1AndNote(detailReport.getId(), detailReport.getScore1(),
-						detailReport.getNote());
-				return detailReport.getScore1();
-			} else {
-				int totalPiece = (0
-						+ functionUpdateReportScore1AndCountTotalScore(detailReport.getDetailReportScore1AndNoteDTO()));
-				total += totalPiece;
-				detailReportService.updateScore1AndNote(detailReport.getId(), totalPiece, detailReport.getNote());
-			}
-		}
-		return total;
-
-	}
-
 }

@@ -40,9 +40,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
-
+import { NotifierModule} from 'angular-notifier';
 @NgModule({
     exports: [
+      NotifierModule,
       A11yModule,
       CdkStepperModule,
       CdkTableModule,

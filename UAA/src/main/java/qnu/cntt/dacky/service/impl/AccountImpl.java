@@ -19,6 +19,7 @@ import qnu.cntt.dacky.security.AuthoritiesConstants;
 import qnu.cntt.dacky.security.SecurityUtils;
 import qnu.cntt.dacky.service.AccountService;
 import qnu.cntt.dacky.service.dto.AccountDTO;
+import qnu.cntt.dacky.service.dto.AccountDTOToReturnDetailAccount;
 import qnu.cntt.dacky.service.dto.AccountSVDTO;
 import qnu.cntt.dacky.service.exception.EmailAlreadyUsedException;
 import qnu.cntt.dacky.service.exception.InvalidPasswordException;
@@ -104,14 +105,13 @@ public class AccountImpl implements AccountService {
 	}
 
 	public Account registerUser(AccountDTO userDTO, String password) {
-		boolean testUsername=true;
+		boolean testUsername = true;
 		try {
 			Long.parseLong(userDTO.getUsername());
 		} catch (Exception e) {
-			testUsername=false;
+			testUsername = false;
 		}
-		if(testUsername)
-		{
+		if (testUsername) {
 			throw new UsernameAlreadyUsedException();
 		}
 		accountRepository.findOneByUsername(userDTO.getUsername().toLowerCase()).ifPresent(existingUser -> {
@@ -261,16 +261,20 @@ public class AccountImpl implements AccountService {
 
 	public void deleteUser(String login) {
 		accountRepository.findOneByUsername(login).ifPresent(user -> {
-			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
+			AccountDTOToReturnDetailAccount account = new AccountDTOToReturnDetailAccount(user);
+			if (account.getAuthorities().contains(AuthoritiesConstants.GV)) {
+				user.setClass1(null);
+			} else {
+				accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
 //			if(!user.getActivated()&&user.isLocked())
 //			{
 //				accountRepository.delete(user);
 //			}
-			if(!user.getActivated())
-			{
-				user.setLocked(true);
+				if (!user.getActivated()) {
+					user.setLocked(true);
+				}
+				user.setActivated(false);
 			}
-			user.setActivated(false);
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});
@@ -280,18 +284,22 @@ public class AccountImpl implements AccountService {
 	@Override
 	public void deleteUserKhoa(String login) {
 		accountRepository.findOneByUsername(login).ifPresent(user -> {
-			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
-			if(!user.getActivated())
-			{
-				user.setLocked(true);
+			AccountDTOToReturnDetailAccount account = new AccountDTOToReturnDetailAccount(user);
+			if (account.getAuthorities().contains(AuthoritiesConstants.GV)) {
+				user.setClass1(null);
+			} else {
+				accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
+				if (!user.getActivated()) {
+					user.setLocked(true);
+				}
+				user.setActivated(false);
+
 			}
-			user.setActivated(false);
-			
-			
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});
 	}
+
 	/**
 	 * Update basic information (first name, last name, email, language) for the
 	 * current user.
@@ -489,10 +497,9 @@ public class AccountImpl implements AccountService {
 	public Account createAccountOfClass(AccountSVDTO accountSVDTO) {
 		Optional<ClaSs> optional = classRepository.findById(accountSVDTO.getClassuuid());
 		if (optional.isPresent()) {
-			Optional<Account> accOptional=accountRepository.findByUsername(accountSVDTO.getUsername());
+			Optional<Account> accOptional = accountRepository.findByUsername(accountSVDTO.getUsername());
 			Account account = new Account();
-			if(accOptional.isPresent()&&accOptional.get().isLocked())
-			{
+			if (accOptional.isPresent() && accOptional.get().isLocked()) {
 				accountRepository.delete(accOptional.get());
 			}
 			account.setActivated(true);
@@ -503,13 +510,13 @@ public class AccountImpl implements AccountService {
 			account.setLastName(accountSVDTO.getLastName());
 			account.setEmail(accountSVDTO.getEmail().toLowerCase());
 			account.setPhoneNumber(accountSVDTO.getPhoneNumber());
-			
+
 			String encryptedPassword = passwordEncoder.encode(accountSVDTO.getPassword());
 			account.setPassword(encryptedPassword);
-			
-			account=accountRepository.save(account);
-			Authority authority=authorityRepository.findByAuthorities(AuthoritiesConstants.USER).get();
-			AccountAuthority accountAuthority= new AccountAuthority();
+
+			account = accountRepository.save(account);
+			Authority authority = authorityRepository.findByAuthorities(AuthoritiesConstants.USER).get();
+			AccountAuthority accountAuthority = new AccountAuthority();
 			accountAuthority.setAccount(account);
 			accountAuthority.setAuthority(authority);
 			accountAuthorityRepository.save(accountAuthority);

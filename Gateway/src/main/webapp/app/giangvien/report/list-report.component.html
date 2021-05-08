@@ -1,0 +1,66 @@
+<notifier-container></notifier-container>
+<div class="text-center">
+    <img src="./logo.png" width="30%" height="30%">
+    <h1>
+        <p>Phiếu đánh giá điểm rèn luyện</p>
+    </h1>
+</div>
+<H2>Danh sách phiếu của lớp: </H2>
+<button class="btn btn-success btn-sm" *ngIf="reports" style="float: right;" (click)="updateAllAccepted2(0)">Duyệt toàn bộ</button>
+<div class="table-responsive text-center" *ngIf="reports">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+        <thead>
+            <tr>
+                <!-- <th scope="col"  jhiSortBy="uuid"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+                <th>Tên Loại</th>
+                <th>User Name</th>
+                <th>Năm học</th>
+                <th>Học kỳ</th>
+                <th>Tổng điểm lần 1</th>
+                <th>Tổng điểm lần 2</th>
+                <th>Tổng điểm lần 3</th>
+                <th>Duyệt lần 2</th>
+                <th>Duyệt lần 3</th>
+                <th>Ngày tạo</th>
+                <th>Ngày Cập nhật</th>
+
+            </tr>
+        </thead>
+        <tbody *ngIf="reports">
+            <tr *ngFor="let report of reports">
+                <td><a [routerLink]="['./', report.id]">{{ report.typeReport.typeName }}</a></td>
+                <td>{{report.username}}</td>
+                <td>{{report.year}}</td>
+                <td>{{report.semester}}</td>
+                <td>{{report.totalScore1}}</td>
+                <td>{{report.totalScore2}}</td>
+                <td>{{report.totalScore3}}</td>
+                <td>
+                    <button class="btn btn-success btn-sm" (click)="updateAccepted2(report.id,!report.accepted2,0)" *ngIf="!report.accepted2">Chưa
+                        duyệt</button>
+                    <button class="btn btn-danger btn-sm" (click)="updateAccepted2(report.id,!report.accepted2,0)" *ngIf="report.accepted2">Đã
+                        duyệt</button>
+                    <!--(click)=""-->
+                </td>
+                <td>
+                    <button class="btn btn-success btn-sm" [disabled]="true" *ngIf="!report.accepted3">Chưa
+                        duyệt</button>
+                    <button class="btn btn-danger btn-sm" [disabled]="true" *ngIf="report.accepted3">Đã
+                        duyệt</button>
+                </td>
+                <td>{{ report.createDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                <td>{{ report.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="reports">
+    <div class="row justify-content-center">
+        <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+            [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
+    </div>
+</div>

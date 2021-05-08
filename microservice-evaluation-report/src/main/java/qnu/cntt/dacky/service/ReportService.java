@@ -31,19 +31,15 @@ public interface ReportService {
 
 	List<Report> getAllByAccepted2True();
 
-	List<Report> getAllByClassId(Long classId);
+	List<Report> getAllByClassId(UUID uuid);
 	
 	Page<Report> getAllByClassIdAndPageable(UUID classid,Pageable pageable);
 	
-	Page<Report> getAllByClassIdAccepted2FalseAndPageable(Long classId,Pageable pageable);
-	
-	List<Report> getAllByClassIdAndAccepted2False(Long classId);
-
-	List<Report> getAllByClassIdAndAccepted2True(Long classId);
+	Page<Report> getAllByClassIdAccepted2FalseAndPageable(UUID classid,Pageable pageable);
 
 	List<Report> seachReport(String username, Long classId, int year, int semester);
 	
-	Page<Report> getAllByAccepted3FalseByClassIdByPagable(Long id, Pageable pageable);
+	Page<Report> getAllByAccepted3FalseByClassIdByPagable(UUID classid, Pageable pageable);
 
 	/* create */
 
@@ -58,9 +54,6 @@ public interface ReportService {
 	List<Report> getByUsernameAndAccepted2True(String username);
 
 	Optional<Report> getByUsernameAndTypeReportId(String username, Long typeReportId);
-
-	Optional<Report> getReportById(Long reportId);
-
 	/* update */
 	Report updateReport(ReportDTO reportDTO);
 
@@ -68,9 +61,9 @@ public interface ReportService {
 
 	Report updateAccepted3(Long id, boolean accepted3);
 
-	Report updateTotalScore1(Long id, int totalScore1);
+	Report updateTotalScore1(Long id);
 
-	Report updateTotalScore2(Long id, int totalScore2);
+	Report updateTotalScore2(Long id);
 
 		Report updateTotalScore3(Long id, int totalScore3);
 /*admin*/
@@ -83,5 +76,13 @@ public interface ReportService {
 	boolean checkReport(CreateReportDTO createReportDTO, String username);
 
 	Page<Report> getAllReportByUsername(String username, Pageable paging);
+
+	boolean checkReportByUsername(Long id, String username);
+
+	Optional<Report> getReportByIdAndUserName(Long id, String username);
+
+	Optional<Report> getReportById(Long id);
+
+	List<Report> updateAllAccepted2ByClass(UUID classUUID);
 
 }

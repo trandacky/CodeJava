@@ -20,7 +20,8 @@ export class EvaluationCriteriaComponent implements OnInit {
   treeControl = new NestedTreeControl<Evaluation>(node => node.childEvaluationCriterias);
   dataSource = new MatTreeNestedDataSource<Evaluation>();
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private evaluationService: KhoaService) { }
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder,
+     private evaluationService: KhoaService) { }
   hasChild = (_: number, node: Evaluation) => !!node.childEvaluationCriterias && node.childEvaluationCriterias.length > 0;
   ngOnInit(): void {
 

@@ -1,5 +1,9 @@
 package qnu.cntt.dacky.web.rest;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,16 +27,14 @@ import qnu.cntt.dacky.domain.DetailReport;
 import qnu.cntt.dacky.domain.Report;
 import qnu.cntt.dacky.service.DetailReportService;
 import qnu.cntt.dacky.service.ReportService;
-import qnu.cntt.dacky.service.dto.UpdateDetailReportScore1AndNoteDTO;
-import qnu.cntt.dacky.service.dto.UpdateDetailReportScore23DTO;
-import qnu.cntt.dacky.service.dto.UpdateReportScore1DTO;
-import qnu.cntt.dacky.service.dto.UpdateReportScore23DTO;
+import qnu.cntt.dacky.web.rest.dto.DetailReportSVDTO;
+import qnu.cntt.dacky.web.rest.dto.InitDetailReportDTO;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api/cbl")
+@RequestMapping("/api/canbolop")
 public class CBLRestController {
-	private final int sizePage = 20;
+	private final int sizePage = 10;
 
 	@Autowired
 	private DetailReportService detailReportService;
@@ -41,13 +42,16 @@ public class CBLRestController {
 	@Autowired
 	private ReportService reportService;
 
+	@Autowired
+	private CallUAA callUAA;
+
 	@GetMapping("/get-all-report-by-classid")
-	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam UUID classid,
-			@RequestParam(defaultValue = "0") int page) {
+	public ResponseEntity<Map<String, Object>> getReportInClass(@RequestParam(defaultValue = "0") int page) {
 
 		try {
-			Pageable paging = PageRequest.of(page, sizePage);
-			Page<Report> pageable = reportService.getAllByClassIdAndPageable(classid, paging);
+			UUID classid = callUAA.getClassUUID();
+			Pageable paging = PageRequest.of(page, sizePage, Sort.by("updateDate").descending());
+			Page<Report> pageable = reportService.getAllByClassIdAccepted2FalseAndPageable(classid, paging);
 			List<Report> reports = pageable.getContent();
 			Map<String, Object> response = new HashMap<>();
 			response.put("reports", reports);
@@ -60,87 +64,72 @@ public class CBLRestController {
 		}
 	}
 
-	@GetMapping("/get-report-by-id")
-	public Optional<Report> getReportById(@RequestParam Long id) {
-		return reportService.getReportById(id);
-	}
+//
+//	@GetMapping("/get-report-by-id")
+//	public Optional<Report> getReportById(@RequestParam Long id) {
+//		return reportService.getReportById(id);
+//	}
+
 	@GetMapping("/get-detail-report-by-report-id")
-	public List<DetailReport> getDetailReportByReportId(@RequestParam Long id)
-	{
-		return detailReportService.getDetailReportByReportId(id);
+	public ResponseEntity<Map<String, Object>> getDetailReportByReportId(@RequestParam Long id) {
+
+		Optional<Report> optional = reportService.getReportById(id);
+		if (optional.isPresent()) {
+			if (optional.get().getClassId().equals(callUAA.getClassUUID())) {
+				List<DetailReport> detailReports = detailReportService.getDetailReportByReportId(id);
+				for (int i = 0; i < detailReports.size(); i++) {
+
+					if (detailReports.get(i).getParentDetailReport() != null) {
+						detailReports.remove(i);
+						i--;
+					}
+
+				}
+				List<DetailReportSVDTO> detailReportSVDTOs = new ArrayList<>();
+				for (int i = 0; i < detailReports.size(); i++) {
+
+					detailReportSVDTOs.add(new DetailReportSVDTO(detailReports.get(i)));
+
+				}
+				detailReportSVDTOs.sort(Comparator.comparing(DetailReportSVDTO::getCreatedDate));
+//		Collections.reverse(detailReportSVDTOs);
+				for (DetailReportSVDTO detailReportSVDTO : detailReportSVDTOs) {
+					Collections.reverse(detailReportSVDTO.getDetailReportDTOs());
+					detailReportSVDTO.getDetailReportDTOs()
+							.sort(Comparator.comparing(InitDetailReportDTO::getCreatedDate));
+				}
+
+				Map<String, Object> response = new HashMap<>();
+				response.put("detailReports", detailReportSVDTOs);
+				response.put("report", optional.get());
+				response.put("infoAccount", callUAA.getAccountInfoClass(optional.get().getUsername()));
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@GetMapping("/get-all-report-by-classid-accepted2-false")
-	public ResponseEntity<Map<String, Object>> getReportFalseInClass(@RequestParam UUID classid,
-			@RequestParam(defaultValue = "0") int page) {
+	@PutMapping("/update-score2")
+	public Instant updateScore2(@RequestParam("id") Long id,
+			@RequestParam("score2") int score2) {
+		return detailReportService.updateScore2(id, score2);		
+	}
+
+	@PutMapping("/update-total-score2")
+	public ResponseEntity<Map<String, Object>> updateTotalScore2(@RequestParam("id") Long id) {
 		try {
-			Pageable paging = PageRequest.of(page, sizePage);
-			Page<Report> pageable = reportService.getAllByClassIdAndPageable(classid, paging);
-			List<Report> reports = pageable.getContent();
-			Map<String, Object> response = new HashMap<>();
-			response.put("reports", reports);
-			response.put("currentPage", pageable.getNumber());
-			response.put("totalItems", pageable.getTotalElements());
-			response.put("totalPages", pageable.getTotalPages());
-			return new ResponseEntity<>(response, HttpStatus.OK);
+
+			Optional<Report> report = reportService.getReportById(id);
+			if (report.isPresent()) {
+				if (report.get().getClassId().equals(callUAA.getClassUUID())) {
+					Map<String, Object> response = new HashMap<>();
+					response.put("detailReports", reportService.updateTotalScore2(id));
+					return new ResponseEntity<>(response, HttpStatus.OK);
+				}
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		return null;
 	}
-	/* begin do submit report */
-
-	@PutMapping("/submit-report-score1")
-	public void updateReportScore1(@RequestBody UpdateReportScore1DTO reportScore1DTO) {
-		if (!reportScore1DTO.getDetailReportScore1AndNoteDTO().isEmpty()) {
-			int totalScore1 = functionUpdateReportScore1AndCountTotalScore(
-					reportScore1DTO.getDetailReportScore1AndNoteDTO());
-			reportService.updateTotalScore1(reportScore1DTO.getId(), totalScore1);
-		}
-	}
-
-	@PutMapping("/submit-report-score2")
-	public void updateReportScore2(@RequestBody UpdateReportScore23DTO reportScore23DTO) {
-		if (!reportScore23DTO.getDetailReportScore23DTOs().isEmpty()) {
-			int totalScore2 = functionUpdateReportScore2AndCountTotalScore2(
-					reportScore23DTO.getDetailReportScore23DTOs());
-			reportService.updateTotalScore1(reportScore23DTO.getId(), totalScore2);
-		}
-
-	}
-
-	private int functionUpdateReportScore1AndCountTotalScore(
-			List<UpdateDetailReportScore1AndNoteDTO> listUpdateDetailReportDTO) {
-		int total = 0;
-		for (UpdateDetailReportScore1AndNoteDTO detailReport : listUpdateDetailReportDTO) {
-			if (detailReport.getDetailReportScore1AndNoteDTO().isEmpty()) {
-				detailReportService.updateScore1AndNote(detailReport.getId(), detailReport.getScore1(),
-						detailReport.getNote());
-				return detailReport.getScore1();
-			} else {
-				int totalPiece = (0
-						+ functionUpdateReportScore1AndCountTotalScore(detailReport.getDetailReportScore1AndNoteDTO()));
-				total += totalPiece;
-				detailReportService.updateScore1AndNote(detailReport.getId(), totalPiece, detailReport.getNote());
-			}
-		}
-		return total;
-	}
-
-	private int functionUpdateReportScore2AndCountTotalScore2(
-			List<UpdateDetailReportScore23DTO> listDetailReportScore23DTOs) {
-		int total = 0;
-		for (UpdateDetailReportScore23DTO detailReport : listDetailReportScore23DTOs) {
-			if (detailReport.getDetailReportScore23DTOs().isEmpty()) {
-				detailReportService.updateScore2(detailReport.getId(), detailReport.getScore());
-				return detailReport.getScore();
-			} else {
-				int totalPiece = (0
-						+ functionUpdateReportScore2AndCountTotalScore2(detailReport.getDetailReportScore23DTOs()));
-				total += totalPiece;
-				detailReportService.updateScore2(detailReport.getId(), totalPiece);
-			}
-		}
-		return total;
-	}
-
 }

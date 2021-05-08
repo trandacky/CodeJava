@@ -1,5 +1,6 @@
 package qnu.cntt.dacky.service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +25,9 @@ public interface DetailReportService {
 	
 	
 
-	DetailReport updateScore1AndNote(Long idDetailReport, int score1, String note);
+	Instant updateScore1AndNote(Long idDetailReport, int score1, String note);
 
-	DetailReport updateScore2(Long idDetailReport, int score2);
+	Instant updateScore2(Long idDetailReport, int score2);
 
 	DetailReport updateScore3(Long idDetailReport, int score3);
 
