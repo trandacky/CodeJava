@@ -137,4 +137,10 @@ public class ClassImpl implements ClassService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<ClaSs> getClassByUuids(List<UUID> uuids) {
+		
+		return classRepository.findAllById(uuids);
+	}
 }

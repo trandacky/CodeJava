@@ -39,4 +39,6 @@ public interface ClassService {
 	List<Account> getAllAccountByClass(UUID uuid);
 
 	ClaSs updateName(ClassDTOUpdate dtoUpdate);
+
+	List<ClaSs> getClassByUuids(List<UUID> uuids);
 }

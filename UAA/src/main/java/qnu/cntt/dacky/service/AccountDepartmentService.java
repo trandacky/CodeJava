@@ -16,4 +16,6 @@ public interface AccountDepartmentService {
 	Page<CourseAndDepartment> getByUsername(String username, Pageable paging);
 	List<ClaSs> getCADByUsernameKhoa(String username);
 	Page<ClaSs> getCADByUsernameKhoaAndPaging(String string, Pageable paging);
+	void createAccountClass(String username, UUID classUUID);
+	void deleteAccountClass(String username, UUID classUUID);
 }

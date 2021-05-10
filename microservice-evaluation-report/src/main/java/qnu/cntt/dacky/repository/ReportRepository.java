@@ -8,13 +8,13 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import qnu.cntt.dacky.domain.Report;
 import qnu.cntt.dacky.domain.TypeReport;
-
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
@@ -54,10 +54,10 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
 	@Query("select e from Report e where e.classId= :classId and e.accepted3=False")
 	Page<Report> findByAccepted3FalseAndClassIdLike(@Param(value = "classId") UUID id, Pageable pageable);
-	
+
 	@Query("update Report e set e.accepted3=True where e.classId= :classId")
 	List<Report> updateAccepted3TrueByClassIdLike(Long classId);
-	
+
 	@Query("update Report e set  e.accepted3=False where e.classId= :classId ")
 	List<Report> updateAccepted3FalseByClassIdLike(Long classId);
 
@@ -75,5 +75,25 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 	List<Report> findAllByClassId(UUID classUUID);
 
 	List<Report> findByClassId(UUID classId);
+
+	@Query("SELECT COUNT(e.id) FROM Report e WHERE e.classId = :uuid AND e.year = :year AND e.semester = :semester "
+			+ "AND CAST(e.typeReport.id AS string) LIKE %:type% ")
+	int findCountReportByClass(@Param(value = "uuid") UUID uuid, @Param(value = "year") int year,
+			@Param(value = "semester") int semester,@Param(value = "type") String type);
+
+	@Query("SELECT e FROM Report e WHERE e.classId = :uuid AND e.year = :year AND e.semester = :semester "
+			+ "AND CAST(e.typeReport.id AS string) LIKE %:type% ")
+	Page<Report> findByCondition(@Param(value = "uuid") UUID uuid, @Param(value = "year") int year,
+			@Param(value = "semester") int semester,@Param(value = "type") String type, Pageable paging);
+	
+	@Query("SELECT COUNT(e.id) FROM Report e WHERE e.classId = :uuid AND e.accepted3 = TRUE AND e.year = :year AND e.semester = :semester "
+			+ "AND CAST(e.typeReport.id AS string) LIKE %:type% ")
+	int findCountReportAccepted3TrueByClass(@Param(value = "uuid") UUID uuid, @Param(value = "year") int year,
+			@Param(value = "semester") int semester,@Param(value = "type") String type);
+
+	@Query("SELECT e FROM Report e WHERE e.classId = :uuid AND e.year = :year AND e.semester = :semester "
+			+ "AND CAST(e.typeReport.id AS string) LIKE %:type% ")
+	List<Report> findAllByCondition(@Param(value = "uuid") UUID uuid, @Param(value = "year") int year,
+			@Param(value = "semester") int semester,@Param(value = "type") String type);
 
 }

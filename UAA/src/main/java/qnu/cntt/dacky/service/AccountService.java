@@ -49,4 +49,5 @@ public interface AccountService {
 	public List<Account> accountRoleKhoaNot();
 	public Account createAccountOfClass(AccountSVDTO accountSVDTO);
 	void deleteUserKhoa(String login);
+	public List<Account> accountRoleSVNot();
 }

@@ -5,11 +5,15 @@ import java.util.UUID;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import qnu.cntt.dacky.client.AuthorizedFeignClient;
 import qnu.cntt.dacky.client.AuthorizedUserFeignClient;
+import qnu.cntt.dacky.web.rest.dto.ClassKhoaAndCountDTO;
+import qnu.cntt.dacky.web.rest.dto.ClassKhoaDTO;
 import qnu.cntt.dacky.web.rest.dto.CommunicateAccountClassDTO;
 
 @AuthorizedUserFeignClient(name = "uaa")
@@ -22,4 +26,7 @@ public interface CallUAA {
 	 UUID getClassUUID();
 	 @GetMapping(value="/api/canbolop/get-account-info-class?username={username}")
 	 Object getAccountInfoClass(@PathVariable("username") String username);
+	 
+	 @GetMapping(value="/api/khoa/get-all-class-khoa?page={page}")
+	 ClassKhoaAndCountDTO getAllClassKhoa(@PathVariable("page") int i);
 }

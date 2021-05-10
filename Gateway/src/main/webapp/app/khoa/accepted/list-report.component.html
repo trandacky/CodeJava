@@ -1,12 +1,13 @@
 <notifier-container></notifier-container>
+<button (click)=back() class="btn btn-info">
+    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+</button>
 <div class="text-center">
     <img src="./logo.png" width="30%" height="30%">
-    <h1>
-        <p>Phiếu đánh giá điểm rèn luyện</p>
-    </h1>
 </div>
+<!-- {{condition.value|json}} -->
 <H2>Danh sách phiếu của lớp: </H2>
-<button class="btn btn-success btn-sm" *ngIf="reports" style="float: right;" (click)="updateAllAccepted2(0)">Duyệt toàn bộ</button>
+<button class="btn btn-success btn-sm" *ngIf="reports" style="float: right;" (click)="updateAllAccepted3(0)">Duyệt toàn bộ</button>
 <div class="table-responsive text-center" *ngIf="reports">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
@@ -36,18 +37,18 @@
                 <td>{{report.totalScore2}}</td>
                 <td>{{report.totalScore3}}</td>
                 <td>
-                    <button class="btn btn-success btn-sm" (click)="updateAccepted2(report.id,!report.accepted2,0)" *ngIf="!report.accepted2">Chưa
+                    <button class="btn btn-success btn-sm" [disabled]="true" *ngIf="!report.accepted2">Chưa
                         duyệt</button>
-                    <button class="btn btn-danger btn-sm" (click)="updateAccepted2(report.id,!report.accepted2,0)" *ngIf="report.accepted2">Đã
+                    <button class="btn btn-danger btn-sm" [disabled]="true" *ngIf="report.accepted2">Đã
                         duyệt</button>
-                    <!--(click)=""-->
                 </td>
                 <td>
-                    <button class="btn btn-success btn-sm" [disabled]="true" *ngIf="!report.accepted3">Chưa
+                    <button class="btn btn-success btn-sm" (click)="updateAccepted3(report.id,!report.accepted3,0)" *ngIf="!report.accepted3">Chưa
                         duyệt</button>
-                    <button class="btn btn-danger btn-sm" [disabled]="true" *ngIf="report.accepted3">Đã
+                    <button class="btn btn-danger btn-sm" (click)="updateAccepted3(report.id,!report.accepted3,0)" *ngIf="report.accepted3">Đã
                         duyệt</button>
                 </td>
+               
                 <td>{{ report.createDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td>{{ report.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
             </tr>

@@ -21,6 +21,10 @@ import { RouterModule } from '@angular/router';
             path: 'report-manager',
             loadChildren: () => import('./report/report.module').then(m => m.ReportModule),
           },
+          {
+            path: 'accepted3',
+            loadChildren: () => import('./accepted/list-report.module').then(m => m.AcceptedReportModule),
+          },
         /* jhipster-needle-add-admin-route - JHipster will add admin routes here */
       ]),
     ],

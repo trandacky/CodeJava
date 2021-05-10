@@ -1,5 +1,7 @@
 package qnu.cntt.dacky.web.rest;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +40,13 @@ import qnu.cntt.dacky.service.dto.NewDetailReportDTO;
 import qnu.cntt.dacky.service.dto.TypeReportDTO;
 import qnu.cntt.dacky.service.dto.UpdateDetailReportScore23DTO;
 import qnu.cntt.dacky.service.dto.UpdateReportScore23DTO;
+import qnu.cntt.dacky.web.rest.dto.ClassKhoaAndCountDTO;
+import qnu.cntt.dacky.web.rest.dto.ClassKhoaDTO;
 import qnu.cntt.dacky.web.rest.dto.CommunicateAccountClassDTO;
 import qnu.cntt.dacky.web.rest.dto.CreateReportDTO;
+import qnu.cntt.dacky.web.rest.dto.DetailReportSVDTO;
+import qnu.cntt.dacky.web.rest.dto.InitDetailReportDTO;
+import qnu.cntt.dacky.web.rest.dto.PageYearSemester;
 import qnu.cntt.dacky.web.rest.errors.BadRequestAlertException;
 
 @RestController
@@ -101,8 +108,8 @@ public class KhoaRestController {
 		return evaluationCriterias.stream().sorted(Comparator.comparing(EvaluationCriteria::getCreateDate))
 				.collect(Collectors.toList());
 	}
-	private void sort(List<EvaluationCriteria> evaluationCriterias)
-	{
+
+	private void sort(List<EvaluationCriteria> evaluationCriterias) {
 		for (EvaluationCriteria criteria : evaluationCriterias) {
 			if (!criteria.getChildEvaluationCriterias().isEmpty()) {
 				sort(criteria.getChildEvaluationCriterias());
@@ -110,6 +117,7 @@ public class KhoaRestController {
 			}
 		}
 	}
+
 	@GetMapping("/get-all-type-report-enable")
 	public List<TypeReport> getAllTypeReportEnable() {
 		return typeReportService.getEnableTypeReport();
@@ -202,35 +210,36 @@ public class KhoaRestController {
 
 	/* end create detail */
 
-	@GetMapping("/get-all-report-accepted3-false-by-class-id")
-	public ResponseEntity<Map<String, Object>> getReportAccepted3FalseInClass(@RequestParam UUID classid,
-			@RequestParam(defaultValue = "0") int page) {
+	@PostMapping("/get-all-class-by-year-and-semester")
+	public ResponseEntity<Map<String, Object>> getAllReportByYearAndSemester(
+			@RequestBody PageYearSemester pageYearSemester) {
 		try {
-			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").descending());
-			Page<Report> pageable = reportService.getAllByAccepted3FalseByClassIdByPagable(classid, paging);
-			List<Report> reports = pageable.getContent();
+			ClassKhoaAndCountDTO khoaAndCountDTO = callUAA.getAllClassKhoa(pageYearSemester.getPage());
+			List<ClassKhoaDTO> classReturnDTOs = khoaAndCountDTO.getClassKhoaDTOs();
+			for (ClassKhoaDTO classReturnDTO : classReturnDTOs) {
+				classReturnDTO.setCountReport(reportService.getCountReportByClass(classReturnDTO.getUuid(),
+						pageYearSemester.getYear(), pageYearSemester.getSemester(),pageYearSemester.getTypeReportId()));
+				classReturnDTO.setCountAccepted3(reportService.getCountReportAccepted3TrueByClass(classReturnDTO.getUuid(),
+						pageYearSemester.getYear(), pageYearSemester.getSemester(),pageYearSemester.getTypeReportId()));
+			}
 			Map<String, Object> response = new HashMap<>();
-			response.put("reports", reports);
-			response.put("currentPage", pageable.getNumber());
-			response.put("totalItems", pageable.getTotalElements());
-			response.put("totalPages", pageable.getTotalPages());
+			response.put("classList", classReturnDTOs);
+			response.put("totalItems", khoaAndCountDTO.getTotalItems());
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
-	@GetMapping("/get-all-report")
-	public ResponseEntity<Map<String, Object>> getAllReport(@RequestParam(defaultValue = "0") int page) {
+	@PostMapping("/get-all-report-by-class-year-and-semester")
+	public ResponseEntity<Map<String, Object>> getAllReportByClassYearAndSemester(
+			@RequestBody PageYearSemester pageYearSemester) {
 		try {
-			Pageable paging = PageRequest.of(page, sizePage, Sort.by("createDate").descending());
-			Page<Report> pageable = reportService.getAllByPageable(paging);
+			Pageable paging = PageRequest.of(pageYearSemester.getPage(), sizePage, Sort.by("createDate").descending());
+			Page<Report> pageable = reportService.getAllByCondition(pageYearSemester,paging);
 			List<Report> reports = pageable.getContent();
 			Map<String, Object> response = new HashMap<>();
 			response.put("reports", reports);
-			response.put("currentPage", pageable.getNumber());
 			response.put("totalItems", pageable.getTotalElements());
-			response.put("totalPages", pageable.getTotalPages());
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -238,8 +247,36 @@ public class KhoaRestController {
 	}
 
 	@GetMapping("/get-detail-report-by-report-id")
-	public List<DetailReport> getDetailReportByReportId(@RequestParam Long id) {
-		return detailReportService.getDetailReportByReportId(id);
+	public ResponseEntity<Map<String, Object>> getDetailReportByReportId(@RequestParam Long id) {
+		Optional<Report> optional = reportService.getReportById(id);
+		if (optional.isPresent()) {
+				List<DetailReport> detailReports = detailReportService.getDetailReportByReportId(id);
+				for (int i = 0; i < detailReports.size(); i++) {
+
+					if (detailReports.get(i).getParentDetailReport() != null) {
+						detailReports.remove(i);
+						i--;
+					}
+				}
+				List<DetailReportSVDTO> detailReportSVDTOs = new ArrayList<>();
+				for (int i = 0; i < detailReports.size(); i++) {
+
+					detailReportSVDTOs.add(new DetailReportSVDTO(detailReports.get(i)));
+
+				}
+				detailReportSVDTOs.sort(Comparator.comparing(DetailReportSVDTO::getCreatedDate));
+				for (DetailReportSVDTO detailReportSVDTO : detailReportSVDTOs) {
+					Collections.reverse(detailReportSVDTO.getDetailReportDTOs());
+					detailReportSVDTO.getDetailReportDTOs()
+							.sort(Comparator.comparing(InitDetailReportDTO::getCreatedDate));
+				}
+				Map<String, Object> response = new HashMap<>();
+				response.put("detailReports", detailReportSVDTOs);
+				response.put("report", optional.get());
+				response.put("infoAccount", callUAA.getAccountInfoClass(optional.get().getUsername()));
+				return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PutMapping("update-evaluation-criteria")
@@ -247,13 +284,9 @@ public class KhoaRestController {
 		return evaluationCriteriaService.updateEvaluaCriteria(evaluationCriteriaUpdateDTO);
 	}
 
-	@PutMapping("/update-all-accepted3-by-classid")
-	public List<Report> updateAllAccepted3TrueByClassId(@RequestParam Long classid) {
-		try {
-			return reportService.updateAllReportAccepted3TrueByClassId(classid);
-		} catch (Exception e) {
-			return null;
-		}
+	@PutMapping("/update-all-accepted3")
+	public List<Report> updateAllAccepted3(@RequestBody PageYearSemester pageYearSemester) {
+		return reportService.updateAllReportAccepted3(pageYearSemester);
 	}
 
 	@PutMapping("/dis-update-all-accepted3-by-classid")
@@ -264,10 +297,17 @@ public class KhoaRestController {
 			return null;
 		}
 	}
-
+	@PutMapping("/update-total-score3")
+	public Report updateTotalScore3(@RequestParam Long id) {
+		return reportService.updateTotalScore3(id);
+	}
 	@PutMapping("/update-accepted3")
-	public Report updateAccepted3(@RequestParam Long id, boolean accepted3) {
+	public Report updateAccepted3(@RequestParam Long id,@RequestParam boolean accepted3) {
 		return reportService.updateAccepted3(id, accepted3);
+	}
+	@PutMapping("/update-detail-score3")
+	public DetailReport updateDetailScore3(@RequestParam Long id,@RequestParam int score3) {
+		return detailReportService.updateScore3(id, score3);
 	}
 
 	@DeleteMapping("/delete-evaluation-report/{id}")

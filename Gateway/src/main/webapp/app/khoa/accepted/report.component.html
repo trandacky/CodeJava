@@ -1,4 +1,4 @@
-<button type="submit" routerLink="../" class="btn btn-info">
+<button (click)=back() class="btn btn-info">
     <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
 </button>
 <notifier-container></notifier-container>
@@ -71,7 +71,10 @@
                     </td>
                     <td>{{detail.score1}}</td>
                     <td>{{detail.score2}}</td>
-                    <td>{{detail.score3}}</td>
+                    <td><input
+                        (input)="onKeyScore(detail.id,$event,0,detail.maxScore)" type="number"
+                        maxlength="2" max="10" min="0" *ngIf="detail.isChild" class="form-control"
+                        value="{{detail.score3}}"></td>
                     <td><textarea readonly cols="30" value="{{detail.note}}" rows="2"></textarea>
                     </td>
                 </tr>
@@ -84,7 +87,10 @@
                     </td>
                     <td>{{detailChild.score1}}</td>
                     <td>{{detailChild.score2}}</td>
-                    <td>{{detailChild.score3}}</td>
+                    <td><input
+                        (input)="onKeyScore(detailChild.id,$event,0,detailChild.maxScore)" type="number"
+                        maxlength="2" max="10" min="0" *ngIf="detailChild.isChild" class="form-control"
+                        value="{{detailChild.score3}}"></td>
                     <td><textarea cols="30" readonly value="{{detailChild.note}}" rows="2"></textarea></td>
             </tbody>
             <tr>
@@ -102,15 +108,15 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td><button type="submit"(click)="back()" class="btn btn-info">
+                    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+                </button></td>
                 <td>
-                    <button type="submit" routerLink="../" class="btn btn-info">
-                        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
-                    </button>
-                    <button class="btn btn-success" style="float: right;" (click)="updateAccepted2(report.id,true,0)"
-                        *ngIf="!report.accepted2">Duyệt</button>
-                    <button class="btn btn-danger" style="float: right;" (click)="updateAccepted2(report.id,false,0)"
-                        *ngIf="report.accepted2">Bỏ duyệt</button>
+                    <button class="btn btn-success"(click)="updateTotalScore3(0)">Cập nhật điểm</button>
+                    <button class="btn btn-success" style="float: right;" (click)="updateAccepted3(report.id,true,0)"
+                        *ngIf="!report.accepted3">Duyệt</button>
+                    <button class="btn btn-danger" style="float: right;" (click)="updateAccepted3(report.id,false,0)"
+                        *ngIf="report.accepted3">Bỏ duyệt</button>
 
                 </td>
                 <td></td>

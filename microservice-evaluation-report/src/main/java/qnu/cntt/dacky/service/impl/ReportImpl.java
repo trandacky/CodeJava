@@ -20,6 +20,7 @@ import qnu.cntt.dacky.security.SecurityUtils;
 import qnu.cntt.dacky.service.ReportService;
 import qnu.cntt.dacky.service.dto.ReportDTO;
 import qnu.cntt.dacky.web.rest.dto.CreateReportDTO;
+import qnu.cntt.dacky.web.rest.dto.PageYearSemester;
 import qnu.cntt.dacky.web.rest.errors.BadRequestAlertException;
 
 @Service
@@ -95,7 +96,7 @@ public class ReportImpl implements ReportService {
 		Optional<Report> reportOptional = reportRepository.findById(id);
 		if (reportOptional.isPresent()) {
 			Report report = reportOptional.get();
-			report.setAccepted2(accepted3);
+			report.setAccepted3(accepted3);
 			return reportRepository.save(report);
 		}
 		return null;
@@ -212,14 +213,59 @@ public class ReportImpl implements ReportService {
 	}
 
 	@Override
-	public Report updateTotalScore3(Long id, int totalScore3) {
-		Optional<Report> reportOptional = reportRepository.findById(id);
-		if (reportOptional.isPresent()) {
-			Report report = reportOptional.get();
-			report.setTotalScore1(totalScore3);
+	public Report updateTotalScore3(Long id) {
+		int totalScore3 = 0;
+		int sumScore3 = 0;
+		Report report;
+		Optional<Report> optional = reportRepository.findById(id);
+		if (optional.isPresent()) {
+			report = optional.get();
+			List<DetailReport> detailReports = detailReportRepository.findByReport(report);
+			for (int i = 0; i < detailReports.size(); i++) {
+
+				if (detailReports.get(i).getParentDetailReport() != null) {
+					detailReports.remove(i);
+					i--;
+				}
+
+			}
+			for (DetailReport detailReport : detailReports) {
+				if (detailReport.getChildDetailReport().isEmpty()) {
+					int score = detailReport.getScore3();
+					if (score > detailReport.getEvaluationCriteria().getMaxScore()) {
+						score = detailReport.getEvaluationCriteria().getMaxScore();
+					}
+				} else {
+					sumScore3 = sumScore3(detailReport.getChildDetailReport(), 0);
+					if (sumScore3 > detailReport.getEvaluationCriteria().getMaxScore()) {
+						sumScore3 = detailReport.getEvaluationCriteria().getMaxScore();
+					}
+					totalScore3 = totalScore3 + sumScore3;
+					detailReport.setScore3(sumScore3);
+					detailReportRepository.save(detailReport);
+				}
+			}
+
+			report.setTotalScore3(totalScore3);
 			return reportRepository.save(report);
 		}
 		return null;
+
+	}
+
+	private int sumScore3(List<DetailReport> detailReports, int sum) {
+		for (DetailReport detailReport : detailReports) {
+			if (detailReport.getChildDetailReport().isEmpty()) {
+				int score = detailReport.getScore3();
+				if (score > detailReport.getEvaluationCriteria().getMaxScore()) {
+					score = detailReport.getEvaluationCriteria().getMaxScore();
+				}
+				sum = sum + score;
+			} else {
+				sum = sumScore3(detailReport.getChildDetailReport(), sum);
+			}
+		}
+		return sum;
 	}
 
 	@Override
@@ -256,6 +302,7 @@ public class ReportImpl implements ReportService {
 	public List<Report> getAllByClassId(UUID classId) {
 		return reportRepository.findByClassId(classId);
 	}
+
 	@Override
 	public List<Report> seachReport(String username, Long classId, int year, int semester) {
 
@@ -371,10 +418,39 @@ public class ReportImpl implements ReportService {
 
 	@Override
 	public List<Report> updateAllAccepted2ByClass(UUID classUUID) {
-		List<Report> reports= reportRepository.findByClassId(classUUID);
+		List<Report> reports = reportRepository.findByClassId(classUUID);
+		for (Report report : reports) {
+			report.setAccepted2(true);
+		}
+		return reportRepository.saveAll(reports);
+	}
+
+	@Override
+	public int getCountReportByClass(UUID uuid, int year, int semester, String type) {
+
+		return reportRepository.findCountReportByClass(uuid, year, semester, type);
+	}
+
+	@Override
+	public Page<Report> getAllByCondition(PageYearSemester pageYearSemester, Pageable paging) {
+
+		return reportRepository.findByCondition(pageYearSemester.getClassUUID(), pageYearSemester.getYear(),
+				pageYearSemester.getSemester(), pageYearSemester.getTypeReportId(), paging);
+	}
+
+	@Override
+	public int getCountReportAccepted3TrueByClass(UUID uuid, int year, int semester, String type) {
+		return reportRepository.findCountReportAccepted3TrueByClass(uuid, year, semester, type);
+	}
+
+	@Override
+	public List<Report> updateAllReportAccepted3(PageYearSemester pageYearSemester) {
+
+		List<Report> reports = reportRepository.findAllByCondition(pageYearSemester.getClassUUID(),
+				pageYearSemester.getYear(), pageYearSemester.getSemester(), pageYearSemester.getTypeReportId());
 		for(Report report:reports)
 		{
-			report.setAccepted2(true);
+			report.setAccepted3(true);
 		}
 		return reportRepository.saveAll(reports);
 	}

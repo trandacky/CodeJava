@@ -1,11 +1,9 @@
-package qnu.cntt.dacky.service.dto;
+package qnu.cntt.dacky.web.rest.dto;
 
 import java.time.Instant;
 import java.util.UUID;
 
-import qnu.cntt.dacky.domain.ClaSs;
-
-public class ClassReturnDTO {
+public class ClassKhoaDTO {
 	private UUID uuid;
 	private UUID courseUUID;
 	private UUID departmentUUID;
@@ -19,20 +17,7 @@ public class ClassReturnDTO {
 	private String name;
 	private int count=0;
 	private int countReport=0;
-	public ClassReturnDTO(ClaSs ss) {
-		super();
-		this.uuid = ss.getUUID();
-		this.course = ss.getCourseAndDepartment().getCourse().getCourse();
-		this.departmentName = ss.getCourseAndDepartment().getDepartment().getDepartmentName();
-		this.createdDate = ss.getCreatedDate();
-		this.updateDate = ss.getUpdateDate();
-		this.enable = ss.getEnable();
-		this.createBy = ss.getCreatedBy();
-		this.updateBy = ss.getUpdateBy();
-		this.courseUUID = ss.getCourseAndDepartment().getCourse().getUUID();
-		this.departmentUUID= ss.getCourseAndDepartment().getDepartment().getUUID();
-		this.name=ss.getName();
-	}
+	private int countAccepted3=0;
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -110,6 +95,12 @@ public class ClassReturnDTO {
 	}
 	public void setCountReport(int countReport) {
 		this.countReport = countReport;
+	}
+	public int getCountAccepted3() {
+		return countAccepted3;
+	}
+	public void setCountAccepted3(int countAccepted3) {
+		this.countAccepted3 = countAccepted3;
 	}
 	
 }

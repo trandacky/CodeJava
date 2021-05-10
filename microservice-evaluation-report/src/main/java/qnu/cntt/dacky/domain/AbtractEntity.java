@@ -32,7 +32,6 @@ public abstract class AbtractEntity {
 
 	@CreatedBy
 	@Column(name = "created_by", nullable = false, length = 50, updatable = false)
-	@JsonIgnore
 	private String createdBy = "Client";
 	
 	@LastModifiedDate
@@ -41,7 +40,6 @@ public abstract class AbtractEntity {
 
 	@LastModifiedBy
 	@Column(name = "update_by", length = 50)
-	@JsonIgnore
 	private String updateBy = "Client";
 
 	public Instant getCreateDate() {
@@ -68,4 +66,20 @@ public abstract class AbtractEntity {
 		this.id = id;
 	}
 
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
+	
 }

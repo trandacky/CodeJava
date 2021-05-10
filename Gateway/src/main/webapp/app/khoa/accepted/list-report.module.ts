@@ -5,7 +5,7 @@ import { GatewaySharedModule } from 'app/shared/shared.module';
 // import { SVReportComponent } from './report.component';
 import { ListReportComponent } from './list-report.component';
 import { ReportComponent } from './report.component';
-
+import { ClassListComponent } from './class-list.component';
 import { AcceptedRoute } from './accepted.route';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 const customNotifierOptions: NotifierOptions = {
@@ -51,6 +51,6 @@ const customNotifierOptions: NotifierOptions = {
 
 @NgModule({
   imports: [NotifierModule.withConfig(customNotifierOptions),GatewaySharedModule, RouterModule.forChild(AcceptedRoute)],
-  declarations: [ListReportComponent,ReportComponent],
+  declarations: [ListReportComponent,ReportComponent,ClassListComponent],
 })
 export class AcceptedReportModule {} 

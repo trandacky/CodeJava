@@ -47,14 +47,35 @@ public class AccountDepartmentController {
 		}
 		return accountDTOs;
 	}
+	@GetMapping("/account-sinhvien-not")
+	public List<AccountDTO> accountRoleSVNot() {
+		List<Account> accounts= accountService.accountRoleSVNot();
+		List<AccountDTO> accountDTOs = new ArrayList<>();
+		AccountDTO accountDTO;
+		for (Account account : accounts) {
+			accountDTO = new AccountDTO(account);
+			accountDTOs.add(accountDTO);
+		}
+		return accountDTOs;
+	}
 	@PostMapping("/create-account-khoa")
 	private void createAccountKhoa(@RequestParam("username") String username, @RequestParam("departmentuuid") UUID departmentuuid)
 	{
 		accountDepartmentService.createAccountDepartment(username, departmentuuid);
 	}
+	@PostMapping("/create-account-sinhvien-khoa")
+	public void createAccountSinhVienKhoa(@RequestParam("username") String username, @RequestParam("classUUID") UUID classUUID)
+	{
+		accountDepartmentService.createAccountClass(username, classUUID);
+	}
 	@DeleteMapping("/delete-account-khoa")
 	private void deleteAccountKhoa(@RequestParam("username") String username, @RequestParam("departmentuuid") UUID departmentuuid)
 	{
 		accountDepartmentService.delete(username, departmentuuid);
+	}
+	@DeleteMapping("/delete-account-class")
+	private void deleteAccountClass(@RequestParam("username") String username, @RequestParam("classUUID") UUID classUUID)
+	{
+		accountDepartmentService.deleteAccountClass(username, classUUID);
 	}
 }

@@ -123,4 +123,29 @@ public class AccountDepartmentImpl implements AccountDepartmentService {
 		return null;
 	}
 
+	@Override
+	public void createAccountClass(String username, UUID classUUID) {
+		
+		Optional<Account> account= accountRepository.findByUsername(username);
+		Optional<ClaSs> class1= classRepository.findById(classUUID);
+		if(account.isPresent()&&class1.isPresent())
+		{
+			Account account2= account.get();
+			account2.setClass1(class1.get());
+			accountRepository.save(account2);
+		}
+	}
+
+	@Override
+	public void deleteAccountClass(String username, UUID classUUID) {
+		Optional<Account> account = accountRepository.findByUsername(username);
+		Optional<ClaSs> class1 = classRepository.findById(classUUID);
+		if (account.isPresent() && class1.isPresent()) {
+			Account account2= account.get();
+			account2.setClass1(null);
+			accountRepository.save(account2);
+		} else
+			throw new InvalidPasswordException();
+	}
+
 }

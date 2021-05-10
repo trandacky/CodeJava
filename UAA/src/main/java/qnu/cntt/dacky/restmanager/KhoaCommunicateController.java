@@ -1,15 +1,26 @@
 package qnu.cntt.dacky.restmanager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import qnu.cntt.dacky.domain.Account;
@@ -22,6 +33,8 @@ import qnu.cntt.dacky.service.AccountDepartmentService;
 import qnu.cntt.dacky.service.AccountService;
 import qnu.cntt.dacky.service.ClassService;
 import qnu.cntt.dacky.service.CourseAndDepartmentService;
+import qnu.cntt.dacky.service.dto.ClassAndCountCommunicateDTO;
+import qnu.cntt.dacky.service.dto.ClassReturnDTO;
 import qnu.cntt.dacky.service.dto.CommunicateAccountClassDTO;
 
 @RestController
@@ -29,7 +42,7 @@ import qnu.cntt.dacky.service.dto.CommunicateAccountClassDTO;
 @RequestMapping("/api/khoa")
 
 public class KhoaCommunicateController {
-
+	private final int sizePage = 10;
 	@Autowired
 	private AccountService accountService;
 	@Autowired
@@ -61,10 +74,9 @@ public class KhoaCommunicateController {
 	@GetMapping("/get-list-account-by-khoa")
 	public List<CommunicateAccountClassDTO> getAccountByLogin() {
 		String username = SecurityUtils.getCurrentUserLogin().get();
-		List<ClaSs> claSs=accountDepartmentService.getCADByUsernameKhoa(username);
+		List<ClaSs> claSs = accountDepartmentService.getCADByUsernameKhoa(username);
 		List<Account> accounts = new ArrayList<Account>();
-		for(ClaSs ss:claSs)
-		{
+		for (ClaSs ss : claSs) {
 			accounts.addAll(classService.getAllAccountByClass(ss.getUUID()));
 		}
 		List<CommunicateAccountClassDTO> list = new ArrayList<>();
@@ -80,6 +92,24 @@ public class KhoaCommunicateController {
 			}
 		}
 		return list;
+	}
+
+	@GetMapping("/get-all-class-khoa")
+	public ClassAndCountCommunicateDTO getClassPagingByUserName(@RequestParam(defaultValue = "0") int page) {
+		Pageable paging = PageRequest.of(page, sizePage, Sort.by("createdDate").descending());
+		Optional<String> username = SecurityUtils.getCurrentUserLogin();
+		Page<ClaSs> pageable=accountDepartmentService.getCADByUsernameKhoaAndPaging(username.get(),paging);
+		List<ClassReturnDTO> classReturnDTOs = new ArrayList<>();
+		ClassReturnDTO classReturnDTO;
+		for (ClaSs ss : pageable.getContent()) {
+			classReturnDTO = new ClassReturnDTO(ss);
+			classReturnDTO.setCount(accountService.getCount(ss));
+			classReturnDTOs.add(classReturnDTO);
+		}
+		ClassAndCountCommunicateDTO countCommunicateDTO= new ClassAndCountCommunicateDTO();
+		countCommunicateDTO.setClassKhoaDTOs(classReturnDTOs);
+		countCommunicateDTO.setTotalItems(pageable.getTotalElements());
+		return countCommunicateDTO;
 	}
 
 }

@@ -524,4 +524,19 @@ public class AccountImpl implements AccountService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<Account> accountRoleSVNot() {
+		List<Account> accountSV = accountRepository.findByAuthorities(AuthoritiesConstants.SV);
+		List<Account> accountGV = accountRepository.findByAuthorities(AuthoritiesConstants.GV);
+		List<Account> accounts = new ArrayList<Account>(accountSV);
+		accounts.addAll(accountGV);
+		for (int i = 0; i < accounts.size(); i++) {
+			if (accounts.get(i).getClass1()!=null) {
+				accounts.remove(i);
+				i--;
+			}
+		}
+		return accounts;
+	}
 }

@@ -16,7 +16,6 @@ export class KhoaService {
   }
   getAllTypeReport(page: Number): Observable<any> {
     return this.http.get(this.urlService + `/get-all-type-report?page=${page}`);
-    // return this.http.get(`${this.url}` + `/get-all-type-report${paging? paging: ''}`);
   }
   getAccountByClassId(page: Number, classUUID: String): Observable<any> {
     return this.http.get(this.urlUAA + '/get-account-by-class?page='
@@ -38,6 +37,12 @@ export class KhoaService {
   }
   getClassByUsernameKhoa(page:number): Observable<any> {
     return this.http.get(this.urlUAA + '/get-class-paging-by-username?page='+page);
+  }
+  getClassReportKhoa(formData:FormData): Observable<any> {
+    return this.http.post(this.urlService + '/get-all-class-by-year-and-semester',formData);
+  }
+  getReportByClassKhoa(formData:FormData): Observable<any> {
+    return this.http.post(this.urlService + '/get-all-report-by-class-year-and-semester',formData);
   }
   createReportAndDetailbyClass(data: FormData): Observable<any> {
     return this.http.post(this.urlService+
@@ -62,23 +67,32 @@ export class KhoaService {
   createAccount(account: FormData): Observable<{}> {
     return this.http.post(this.urlUAA + '/create-account', account);
   }
-  ///////////////
-  getAllReport(page: Number): Observable<any> {
-    return this.http.get(this.urlService + `/get-all-report-by-class-id?page=${page}`);
+  getAllReport(formData: FormData): Observable<any> {
+    return this.http.post(this.urlService + `/get-all-report-by-class-year-and-semester`,formData);
   }
   getDetailReport(id: Number): Observable<any> {
     return this.http.get(this.urlService + `/get-detail-report-by-report-id?id=${id}`);
   }
-  updateAllAccepted3(): Observable<any> {
-    return this.http.put(this.urlService + '/update-all-report-accepted2',null);
+  updateAllAccepted3(formData: FormData): Observable<any> {
+    return this.http.put(this.urlService + '/update-all-accepted3',formData);
   }
-  updateAccepted3(id: Number, accepted2:Boolean): Observable<any> {
+  updateAccepted3(id: Number, accepted3:Boolean): Observable<any> {
     const formData = new FormData();
     formData.append('id', id.toString());
-    formData.append('accepted2', accepted2.toString());
-    return this.http.put(this.urlService + '/update-accepted2', formData);
+    formData.append('accepted3', accepted3.toString());
+    return this.http.put(this.urlService + '/update-accepted3', formData);
   }
-  ///////////////////////
+  updateTotalScore3(id: Number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    return this.http.put(this.urlService + '/update-total-score3', formData);
+  }
+  updateDetailScore3(id: Number, score3:Number): Observable<any> {
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('score3', score3.toString());
+    return this.http.put(this.urlService + '/update-detail-score3', formData);
+  }
   updateClassEnable(uuid: String, enable: boolean): Observable<any> {
     const formData = new FormData();
     formData.append('uuid', uuid.toString());

@@ -12,6 +12,7 @@ import qnu.cntt.dacky.domain.Report;
 import qnu.cntt.dacky.domain.TypeReport;
 import qnu.cntt.dacky.service.dto.ReportDTO;
 import qnu.cntt.dacky.web.rest.dto.CreateReportDTO;
+import qnu.cntt.dacky.web.rest.dto.PageYearSemester;
 
 public interface ReportService {
 	/* get */
@@ -64,8 +65,6 @@ public interface ReportService {
 	Report updateTotalScore1(Long id);
 
 	Report updateTotalScore2(Long id);
-
-		Report updateTotalScore3(Long id, int totalScore3);
 /*admin*/
 	List<Report> updateAllReportAccepted3TrueByClassId(Long classId);
 	
@@ -84,5 +83,15 @@ public interface ReportService {
 	Optional<Report> getReportById(Long id);
 
 	List<Report> updateAllAccepted2ByClass(UUID classUUID);
+
+	int getCountReportByClass(UUID uuid, int year, int semester, String string);
+
+	Page<Report> getAllByCondition(PageYearSemester pageYearSemester, Pageable paging);
+
+	int getCountReportAccepted3TrueByClass(UUID uuid, int year, int semester, String string);
+
+	Report updateTotalScore3(Long id);
+
+	List<Report> updateAllReportAccepted3(PageYearSemester pageYearSemester);
 
 }

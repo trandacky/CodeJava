@@ -4,4 +4,6 @@ export class TypeReport {
     updateDate?: Date;
     typeName?: String;
     enable?: boolean;
+    createdBy?: boolean;
+    updateBy?: boolean;
 }

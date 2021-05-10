@@ -65,7 +65,7 @@
                 <tr *ngIf="detail.isChild===true">
                     <td><ul style="margin-left: 35px"><li>{{detail.content}} ({{detail.maxScore}}đ)</li></ul></td>
                     <td>{{detail.score1}}</td>
-                    <td><input placeholder="{{detail.score1}}"
+                    <td><input
                         (input)="onKeyScore(detail.id,$event,0,detail.maxScore)" type="number"
                         maxlength="2" max="10" min="0" *ngIf="detail.isChild" class="form-control"
                         value="{{detail.score2}}"></td>
@@ -81,7 +81,7 @@
                     </td>
                     <td>{{detailChild.score1}}</td>
                     <td>
-                        <input placeholder="Nhập điểm"
+                        <input
                         (input)="onKeyScore(detailChild.id,$event,0,detailChild.maxScore)"
                         type="number" maxlength="2" max="{{detailChild.maxScore}}" min="-90" *ngIf="detailChild.isChild"
                         class="form-control" value="{{detailChild.score2}}">
