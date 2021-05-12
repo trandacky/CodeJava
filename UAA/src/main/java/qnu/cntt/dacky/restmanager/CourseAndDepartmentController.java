@@ -30,6 +30,8 @@ import qnu.cntt.dacky.domain.CourseAndDepartment;
 import qnu.cntt.dacky.security.SecurityUtils;
 import qnu.cntt.dacky.service.AccountService;
 import qnu.cntt.dacky.service.CourseAndDepartmentService;
+import qnu.cntt.dacky.service.dto.AccountDTO;
+import qnu.cntt.dacky.service.dto.AccountDTOToReturnDetailAccount;
 import qnu.cntt.dacky.service.dto.ClassReturnDTO;
 import qnu.cntt.dacky.service.dto.CourseAndDepartmentDTO;
 import qnu.cntt.dacky.service.dto.CourseAndDepartmentReturnDTO;
@@ -42,7 +44,7 @@ public class CourseAndDepartmentController {
 	private CourseAndDepartmentService courseAndDepartmentService;
 	@Autowired
 	private AccountService accountService;
-	
+
 	@GetMapping("/get-all-course-and-department")
 	private List<CourseAndDepartment> getAllCourseAndDepartment() {
 		return courseAndDepartmentService.getAllCourseAndDepartment();
@@ -93,21 +95,37 @@ public class CourseAndDepartmentController {
 		}
 	}
 
+	@GetMapping("/get-account-role-sv-not")
+	public List<AccountDTO> getAccountRoleSVNote() {
+		List<Account> accounts = accountService.accountRoleSVNot();
+		List<AccountDTO> detailAccounts = new ArrayList<>();
+		for (Account account : accounts) {
+			detailAccounts.add(new AccountDTO(account));
+		}
+		return detailAccounts;
+	}
+
+	@PostMapping("/create-account-to-class")
+	public Account getAccountRoleSVNote(@RequestParam(value = "userUUID") UUID userUUID,
+			@RequestParam(value = "classUUID") UUID classUUID) {
+		 return accountService.createAccountToClass(userUUID,classUUID);
+		
+	}
+
 	@GetMapping("/get-class-by-cad-id")
 	private ResponseEntity<Map<String, Object>> getClassByCADId(@RequestParam("uuid") UUID uuid) {
 		try {
 			List<ClaSs> sses = courseAndDepartmentService.getClassByCADId(uuid);
-			List<ClassReturnDTO> classReturnDTOs= new ArrayList<>();
+			List<ClassReturnDTO> classReturnDTOs = new ArrayList<>();
 			ClassReturnDTO classReturnDTO;
-			for(ClaSs ss:sses)
-			{
-				classReturnDTO= new ClassReturnDTO(ss);
+			for (ClaSs ss : sses) {
+				classReturnDTO = new ClassReturnDTO(ss);
 				classReturnDTO.setCount(accountService.getCount(ss));
 				classReturnDTOs.add(classReturnDTO);
-			} 
+			}
 			classReturnDTOs.sort(Comparator.comparing(ClassReturnDTO::getCreatedDate));
 			Map<String, Object> response = new HashMap<>();
-			response.put("classList", classReturnDTOs); 
+			response.put("classList", classReturnDTOs);
 			response.put("courseAndDepartment",
 					new CourseAndDepartmentReturnDTO(courseAndDepartmentService.getCourseAndDepartmentById(uuid)));
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -117,8 +135,8 @@ public class CourseAndDepartmentController {
 	}
 
 	@PostMapping("/create-course-and-department")
-	private CourseAndDepartment addCourseAndDepartment(@RequestParam UUID courseId,@RequestParam UUID departmentId ) {
-		CourseAndDepartmentDTO dto= new CourseAndDepartmentDTO();
+	private CourseAndDepartment addCourseAndDepartment(@RequestParam UUID courseId, @RequestParam UUID departmentId) {
+		CourseAndDepartmentDTO dto = new CourseAndDepartmentDTO();
 		dto.setCourseId(courseId);
 		dto.setDepartmentId(departmentId);
 		return courseAndDepartmentService.addCourseAndDepartment(dto);

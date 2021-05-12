@@ -265,7 +265,7 @@ public class AccountImpl implements AccountService {
 			if (account.getAuthorities().contains(AuthoritiesConstants.GV)) {
 				user.setClass1(null);
 			} else {
-				accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
+				
 //			if(!user.getActivated()&&user.isLocked())
 //			{
 //				accountRepository.delete(user);
@@ -275,6 +275,7 @@ public class AccountImpl implements AccountService {
 				}
 				user.setActivated(false);
 			}
+			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});
@@ -288,13 +289,14 @@ public class AccountImpl implements AccountService {
 			if (account.getAuthorities().contains(AuthoritiesConstants.GV)) {
 				user.setClass1(null);
 			} else {
-				accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
+//				accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
 				if (!user.getActivated()) {
 					user.setLocked(true);
 				}
 				user.setActivated(false);
 
 			}
+			accountAuthorityRepository.deleteAll(user.getAccountAuthoritys());
 			this.clearUserCaches(user);
 			log.debug("Deleted User: {}", user);
 		});
@@ -538,5 +540,18 @@ public class AccountImpl implements AccountService {
 			}
 		}
 		return accounts;
+	}
+
+	@Override
+	public Account createAccountToClass(UUID userUUID, UUID classUUID) {
+		Optional<ClaSs> optional=classRepository.findById(classUUID);
+		Optional<Account> optional2= accountRepository.findById(userUUID);
+		if(optional.isPresent()&&optional2.isPresent())
+		{
+			Account account= optional2.get();
+			account.setClass1(optional.get());
+			return accountRepository.save(account);
+		}
+		return null;
 	}
 }

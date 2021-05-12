@@ -19,6 +19,7 @@ export class ListReportComponent implements OnInit {
     reports: any;
     conditionRequest: any;
     condition!: FormGroup;
+    class:any;
     constructor(private location: Location,private formBuilder: FormBuilder,private router:ActivatedRoute, notifier: NotifierService, private khoaService: KhoaService) {
         this.notifier = notifier;
     }
@@ -37,6 +38,9 @@ export class ListReportComponent implements OnInit {
             this.reports = data.reports;
             this.totalItems = data.totalItems;
         });
+        this.khoaService.getClassById(this.condition.get('classUUID')?.value).subscribe(
+            data=>  { this.class=data;}
+        );
     }
     
     addCondition(): FormGroup {

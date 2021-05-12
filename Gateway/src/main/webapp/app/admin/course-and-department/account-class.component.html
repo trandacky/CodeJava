@@ -1,9 +1,16 @@
 <button type="submit" routerLink="../../{{class.courseAndDepartment.uuid}}" class="btn btn-info">
     <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
 </button>
-<h2>Khóa: {{class.courseAndDepartment.course.course}} - {{class.courseAndDepartment.department.departmentName}} - {{class.name}}</h2>
+<h2>Khóa: {{class.courseAndDepartment.course.course}} - {{class.courseAndDepartment.department.departmentName}} -
+    {{class.name}}</h2>
+<select class="form-control" [(ngModel)]="userUUID" (change)="createAccountSVClass()">
+    <option [ngValue]="" selected>Select Value</option>
+    <option [ngValue]="account.uuid" selected="false" *ngFor="let account of accountNot">Username: {{account.username}} - Email: {{account.email}} -
+       Họ tên: {{account.firstName}} {{account.lastName}}
+       - Điện thoại: {{account.phoneNumber}}</option>
+</select>
 <div class="table-responsive text-center" *ngIf="accountList">
-    
+
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
             <tr>

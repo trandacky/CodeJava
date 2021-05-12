@@ -24,6 +24,9 @@ export class KhoaService {
   getClass(page: Number): Observable<any> {
     return this.http.get(this.urlUAA + `/get-cad-by-username?page=`+page);
   }
+  getClassById(uuid: String): Observable<any> {
+    return this.http.get(this.urlUAA + `/get-class-by-id?id=`+uuid);
+  }
   getEvaluationByTypeId(id: Number): Observable<any> {
     return this.http.get(this.urlService + '/get-report-example-by-type-id/'+id);
 

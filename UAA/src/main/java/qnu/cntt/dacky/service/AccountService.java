@@ -50,4 +50,5 @@ public interface AccountService {
 	public Account createAccountOfClass(AccountSVDTO accountSVDTO);
 	void deleteUserKhoa(String login);
 	public List<Account> accountRoleSVNot();
+	public Account createAccountToClass(UUID userUUID, UUID classUUID);
 }

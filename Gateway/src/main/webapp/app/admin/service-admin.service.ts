@@ -73,6 +73,15 @@ export class AdminService {
   getAccountKhoaNot(): Observable<any> {
     return this.http.get(this.urlUAA + '/account-khoa-not');
   }
+  getAccountSVNot(): Observable<any> {
+    return this.http.get(this.urlUAA + '/get-account-role-sv-not');
+  }
+  createAccountSVClass(username: String, classUUID: String): Observable<{}> {
+    const formData = new FormData();
+    formData.append('userUUID', username.toString());
+    formData.append('classUUID', classUUID.toString())
+    return this.http.post(this.urlUAA + '/create-account-to-class', formData);
+  }
   updateCourseEnable(uuid: String, enable: boolean): Observable<any> {
     const formData = new FormData();
     formData.append('uuid', uuid.toString());

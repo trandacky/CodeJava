@@ -15,6 +15,8 @@ export class AccountClassComponent implements OnInit {
     accountList:any;
     class:any;
     classUUID:any;
+    accountNot:any;
+    userUUID!:String;
     constructor(private route: ActivatedRoute,private fb: FormBuilder, private adminService: AdminService) { }
 
     ngOnInit(): void {
@@ -26,6 +28,9 @@ export class AccountClassComponent implements OnInit {
         this.adminService.getAccountByClassId(--page,this.classUUID).subscribe(data => {
             this.accountList=data.accountList;
             this.class=data.class;
+        });
+        this.adminService.getAccountSVNot().subscribe(data => {
+            this.accountNot=data;
         });
     }
     public transition(): void {
@@ -39,6 +44,13 @@ export class AccountClassComponent implements OnInit {
     }
     delete(username: String):void {
         this.adminService.deleteAccountRole(username).subscribe(
+            () => { this.loadAll(this.page); },
+            () => { alert("error"); }
+        );
+    }
+    createAccountSVClass():void
+    {
+        this.adminService.createAccountSVClass(this.userUUID,this.classUUID).subscribe(
             () => { this.loadAll(this.page); },
             () => { alert("error"); }
         );

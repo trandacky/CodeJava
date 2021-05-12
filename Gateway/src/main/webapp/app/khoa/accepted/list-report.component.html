@@ -5,9 +5,10 @@
 <div class="text-center">
     <img src="./logo.png" width="30%" height="30%">
 </div>
-<!-- {{condition.value|json}} -->
-<H2>Danh sách phiếu của lớp: </H2>
-<button class="btn btn-success btn-sm" *ngIf="reports" style="float: right;" (click)="updateAllAccepted3(0)">Duyệt toàn bộ</button>
+<H2>Danh sách phiếu của lớp: {{class.name}} - Khoa: {{class.courseAndDepartment.department.departmentName}} - Khóa:
+    {{class.courseAndDepartment.course.course}}</H2>
+<button class="btn btn-success btn-sm" *ngIf="reports" style="float: right;" (click)="updateAllAccepted3(0)">Duyệt toàn
+    bộ</button>
 <div class="table-responsive text-center" *ngIf="reports">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
@@ -43,12 +44,14 @@
                         duyệt</button>
                 </td>
                 <td>
-                    <button class="btn btn-success btn-sm" (click)="updateAccepted3(report.id,!report.accepted3,0)" *ngIf="!report.accepted3">Chưa
+                    <button class="btn btn-success btn-sm" (click)="updateAccepted3(report.id,!report.accepted3,0)"
+                        *ngIf="!report.accepted3">Chưa
                         duyệt</button>
-                    <button class="btn btn-danger btn-sm" (click)="updateAccepted3(report.id,!report.accepted3,0)" *ngIf="report.accepted3">Đã
+                    <button class="btn btn-danger btn-sm" (click)="updateAccepted3(report.id,!report.accepted3,0)"
+                        *ngIf="report.accepted3">Đã
                         duyệt</button>
                 </td>
-               
+
                 <td>{{ report.createDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
                 <td>{{ report.updateDate | date:'HH:mm:ss dd/MM/yyyy' }}</td>
             </tr>

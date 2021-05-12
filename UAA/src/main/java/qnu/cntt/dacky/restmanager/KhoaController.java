@@ -91,8 +91,8 @@ public class KhoaController {
 		}
 	}
 
-	@PostMapping("/get-class-by-id")
-	private ClaSs getClassById(@RequestParam("id") UUID id) {
+	@GetMapping("/get-class-by-id")
+	public ClaSs getClassById(@RequestParam("id") UUID id) {
 		return classService.getClassById(id);
 	}
 
