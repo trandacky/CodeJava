@@ -4,40 +4,66 @@
     </div>
 
     <div class="col-md-9">
-        <h1 class="display-4">Chào Mừng!</h1>
-
-        <p class="lead">This is your homepage</p>
-
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
-                <span id="home-logged-message" *ngIf="account">You are logged in as user "{{ account.username }}".</span>
-            </div>
-
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span>If you want to </span>
-                <a class="alert-link" (click)="login()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
-            </div>
-
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span>You don't have an account yet?</span>&nbsp;
-                <a class="alert-link" routerLink="account/register">Register a new account</a>
+                <span id="home-logged-message" *ngIf="account">You are logged in as user "{{ account.username
+                    }}".</span>
             </div>
         </div>
-
-        <p>
-            If you have any question on JHipster:
-        </p>
-
-        <ul>
-            <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">JHipster homepage</a></li>
-            <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">JHipster on Stack Overflow</a></li>
-            <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer">JHipster bug tracker</a></li>
-            <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">JHipster public chat room</a></li>
-            <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">follow @jhipster on Twitter</a></li>
-        </ul>
-
-        <p>
-            <span>If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
-        </p>
+        <div class="text-center">
+            <div *jhiHasAnyAuthority="'ROLE_ADMIN'" class="row">
+                <a routerLink="admin/user-management" class="col btn btn-outline-success">
+                    <img src="../../content/images/Accountmanager.png" width="80px" height="80px">
+                    <br>   Quản lý tài khoản
+                </a>
+                <a routerLink="admin/role" class="col btn btn-outline-success">
+                    <img src="../../content/images/RoleManager.png" width="80px" height="80px">
+                    <br>   Quản lý quyền
+                </a>
+                <a  routerLink="admin/course-management" class="col btn btn-outline-success">
+                    <img src="../../content/images/CourseManager.png" width="80px" height="80px">
+                    <br>   Quản lý khóa
+                </a>
+                <a routerLink="admin/department-management" class="col btn btn-outline-success">
+                    <img src="../../content/images/DepartmentManager.png"
+                        width="80px" height="80px" routerLink="admin/role">
+                        <br>   Quản lý khoa
+                </a>
+            </div>
+            <div *jhiHasAnyAuthority="'ROLE_KHOA'" class="row">
+                <a routerLink="khoa/course-department" class="col btn btn-outline-success">
+                    <img src="../../content/images/Classmanager.png" width="80px" height="80px">
+                    <br>    Quản lý lớp
+                </a>
+                <a routerLink="khoa/type-report" class="col btn btn-outline-success">
+                    <img src="../../content/images/createReport.png" width="80px" height="80px">
+                  <br>  Tạo phiếu
+                </a>
+                <a routerLink="khoa/report-manager" class="col btn btn-outline-success">
+                    <img src="../../content/images/SendReport.png" width="80px" height="80px">
+                    <br>   Phát phiếu
+                </a>
+                <a routerLink="khoa/accepted3" class="col btn btn-outline-success">
+                    <img src="../../content/images/Report.png" width="80px" height="80px">
+                    <br>  Duyệt phiếu lần 3
+                </a>
+            </div>
+            <div *jhiHasAnyAuthority="'ROLE_GVHD'"  class="row">
+                <a routerLink="giangvien/report" class="col btn btn-outline-success">
+                    <img src="../../content/images/Report.png" width="80px" height="80px">
+                    <br>  Duyệt phiếu lần 2
+                </a>
+            </div>
+            <div *jhiHasAnyAuthority="'ROLE_SV'" class="row">
+                <a *jhiHasAnyAuthority="'ROLE_CBL'" routerLink="canbolop/report" class="col btn btn-outline-success">
+                    <img src="../../content/images/MoreReport.png" width="80px" height="80px">
+                    <br>   Phiếu của lớp
+                </a>
+                <a routerLink="sinhvien/report" class="col btn btn-outline-success">
+                    <img src="../../content/images/DoReport.png" width="80px" height="80px">
+                    <br>   Phiếu đánh giá
+                </a>
+            </div>
+        </div>
     </div>
 </div>
