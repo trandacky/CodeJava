@@ -386,7 +386,7 @@ public class AccountImpl implements AccountService {
 		Authority authority = new Authority();
 		authority.setAuthorities("ROLE_ADMIN");
 		authority.setCreatedBy("Anonymus");
-		if (authorityRepository.findByAuthorities(authority.getAuthorities()).isEmpty()) {
+		if (!authorityRepository.findByAuthorities(authority.getAuthorities()).isPresent()) {
 			authorityRepository.save(authority);
 		}
 
