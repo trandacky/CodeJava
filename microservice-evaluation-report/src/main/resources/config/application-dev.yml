@@ -44,7 +44,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/MicroserviceEvaluationReport
+    url: jdbc:postgresql://localhost:5432/MicroserviceEvaluationCriteria
     username: postgres
     password: 123
     hikari:
