@@ -40,7 +40,7 @@
 			baseTableName="jhi_user_authority" constraintName="fk_user_id" referencedColumnNames="id" 
 			referencedTableName="jhi_user"/> <addNotNullConstraint columnName="password_hash" 
 			columnDataType="varchar(60)" tableName="jhi_user"/> -->
-		<loadData file="config/liquibase/data/account.csv"
+<!-- 		<loadData file="config/liquibase/data/account.csv"
 			separator=";" tableName="account">
 			<column name="uuid" type="uuid" />
 			<column name="activated" type="boolean" />
@@ -52,14 +52,14 @@
 			<column name="update_date" type="timestamp" />
 			<column name="email" type="varchar(150)"/>
 			<column name="first_name" type="varchar(150)"/>
-			<column name="phone_number" type="varchar(15)"/>
+			<column name="phone_number" type="varchar(64)"/>
 			<column name="last_name" type="varchar(150)"/>
 			<column name="reset_date" type="timestamp"/>
 			<column name="reset_key" type="varchar(150)"/>
 			<column name="username" type="varchar(150)"/>
-		</loadData>
+		</loadData> -->
 		<!-- <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/> -->
-		<loadData file="config/liquibase/data/authority.csv"
+		<!-- <loadData file="config/liquibase/data/authority.csv"
 			separator=";" tableName="authority">
 			<column name="uuid" type="uuid" />
 			<column name="authorities" type="string" />
@@ -74,7 +74,7 @@
 			<column name="authority_uuid" type="uuid" />
 			<column name="created_date" type="timestamp" />
 			<column name="update_date" type="timestamp" />
-		</loadData>
+		</loadData> -->
 	<!-- 	<addForeignKeyConstraint
 			baseColumnNames="uuid" baseTableName="account_authority"
 			constraintName="fk_uuid_account" referencedColumnNames="account_uuid"

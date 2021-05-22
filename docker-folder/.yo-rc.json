@@ -3,8 +3,8 @@
     "appsFolders": ["Gateway", "microservice-evaluation-report", "UAA"],
     "directoryPath": "../",
     "gatewayType": "zuul",
-    "monitoring": "elk",
-    "consoleOptions": ["curator", "zipkin"],
+    "monitoring": "no",
+    "consoleOptions": [],
     "serviceDiscoveryType": "eureka",
     "jwtSecretKey": "NjQ1NGIzYWY5NTg3MjA2MDMzYTQ1MTk2MWNmYTlkZDRjZDg3ZDNiNzAzYTNhZGQxODk0MTIyYzRlMWM3Mjc3YWM0NTkxODllMjcwZTBmNmRkYTg1MjQ4ZDc1ODI3NzY1NTJlZQ=="
   }
