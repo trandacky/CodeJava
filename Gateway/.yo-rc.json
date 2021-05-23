@@ -35,9 +35,6 @@
     "dtoSuffix": "DTO",
     "otherModules": [],
     "enableTranslation": false,
-    "blueprints": [],
-    "herokuAppName": "young-depths-15228",
-    "herokuDeployType": "jar",
-    "herokuJavaVersion": "1.8"
+    "blueprints": []
   }
 }
