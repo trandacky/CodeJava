@@ -38,8 +38,7 @@ export class LoginModalComponent implements AfterViewInit {
     this.activeModal.dismiss('cancel');
   }
 
-  login(temp: number): void {
-    if (temp < 10) {
+  login(): void {
       this.loginService
         .login({
           username: this.loginForm.get('username')!.value,
@@ -48,7 +47,6 @@ export class LoginModalComponent implements AfterViewInit {
         })
         .subscribe(
           () => {
-            temp=100;
             this.authenticationError = false;
             this.activeModal.close();
             if (
@@ -59,9 +57,8 @@ export class LoginModalComponent implements AfterViewInit {
               this.router.navigate(['']);
             }
           },
-          () => { if (temp === 9) { this.authenticationError = true; } temp++; this.login(temp); }
+          () => { this.authenticationError = true; }
         );
-    }
   }
 
   register(): void {

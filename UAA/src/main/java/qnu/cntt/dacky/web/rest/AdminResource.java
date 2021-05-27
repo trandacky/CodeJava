@@ -25,9 +25,6 @@ import qnu.cntt.dacky.service.dto.AuthorityDTO;
 public class AdminResource {
 	@Autowired
 	private AuthorityService authorityService;
-	
-	
-
 	@GetMapping("/get-all-authority")
 	public List<Authority> getAllAuthority() {
 		return authorityService.getAllAuthority();

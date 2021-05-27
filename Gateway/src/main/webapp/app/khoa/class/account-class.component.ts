@@ -55,6 +55,7 @@ export class AccountClassComponent implements OnInit {
     private loadAll(page: number): void {
         this.khoaService.getAccountByClassId(--page, this.classUUID).subscribe(data => {
             this.accountList = data.accountList;
+            this.totalItems = data.totalItems;
             this.class = data.class;
         });
     }

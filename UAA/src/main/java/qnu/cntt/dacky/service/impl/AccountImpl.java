@@ -390,7 +390,7 @@ public class AccountImpl implements AccountService {
 			authorityRepository.save(authority);
 		}
 
-		String username = "admin", password = "admin", email = "trandackydbz2@gmail.com";
+		String username = "admin2", password = "admin2", email = "daihocquynhonabcdefgh@gmail.com";
 		Optional<Account> user = accountRepository.findByUsername(username);
 		if (user.isPresent()) {
 			accountRepository.findOneByEmailIgnoreCase(email).ifPresent(existingUser -> {
@@ -501,8 +501,11 @@ public class AccountImpl implements AccountService {
 		if (optional.isPresent()) {
 			Optional<Account> accOptional = accountRepository.findByUsername(accountSVDTO.getUsername());
 			Account account = new Account();
-			if (accOptional.isPresent() && accOptional.get().isLocked()) {
+			if (accOptional.isPresent()) {
+				if(accOptional.get().isLocked())
+				{
 				accountRepository.delete(accOptional.get());
+				}
 			}
 			account.setActivated(true);
 			account.setLocked(false);

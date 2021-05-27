@@ -1,6 +1,5 @@
 <h2>Role manager </h2>
 <div class="text-center">
-    
     <form  (ngSubmit)="addNewRole()" [formGroup]="addForm">
         <div class="row">
             <div class="col-md-6">
@@ -26,7 +25,6 @@
             </thead>
             <tbody *ngIf="roles">
                 <tr *ngFor="let role of roles">
-                    <!-- <td>{{role.uuid}}</td> -->
                     <td>{{role.authorities}}</td>
                     <td>
                         <button type="button" (click)="deleteRole(role.authorities)" class="btn btn-danger btn-sm">
@@ -35,7 +33,6 @@
                         </button>
                     </td>
                 </tr>
-
             </tbody>
         </table>
     </div>

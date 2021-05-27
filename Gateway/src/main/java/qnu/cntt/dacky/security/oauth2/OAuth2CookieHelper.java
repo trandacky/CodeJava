@@ -250,12 +250,12 @@ public class OAuth2CookieHelper {
      * @param domain   the domain for which the cookie is valid. If {@code null}, then will fall back to default.
      */
     private void setCookieProperties(Cookie cookie, boolean isSecure, String domain) {
-        cookie.setHttpOnly(true);
+//        cookie.setHttpOnly(false);
         cookie.setPath("/");
-        cookie.setSecure(isSecure);       //if the request comes per HTTPS set the secure option on the cookie
-        if (domain != null) {
-            cookie.setDomain(domain);
-        }
+//        cookie.setSecure(isSecure);       //if the request comes per HTTPS set the secure option on the cookie
+//        if (domain != null) {
+//            cookie.setDomain(domain);
+//        }
     }
 
     /**

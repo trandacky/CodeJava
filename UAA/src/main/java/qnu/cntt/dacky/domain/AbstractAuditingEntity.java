@@ -46,12 +46,11 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @LastModifiedBy
     @Column(name = "update_by", length = 50)
     @JsonIgnore
-    private String updateBy="Client";
+    private String updateBy;
 
     @LastModifiedDate
     @Column(name = "update_date")
-    
-    private Instant updateDate = Instant.now();
+    private Instant updateDate;
     
 
     public String getCreatedBy() {
